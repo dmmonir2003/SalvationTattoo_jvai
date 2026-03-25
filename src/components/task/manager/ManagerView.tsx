@@ -1,10 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-
-// import { useAppSelector } from "@/redux/store";
-// import {
-//   selectCurrentUser,
-//   selectUserRole,
-// } from "@/redux/features/auth/authSlice";
 
 import {
   ChevronDown,
@@ -14,36 +9,26 @@ import {
   ChevronRight,
 } from "lucide-react";
 import TaskItem from "./TaskItem";
+import { useState } from "react";
+import { TaskActionModal } from "../admin/TaskActionModal";
 
 export default function ManagerView() {
-  // const user = useAppSelector(selectCurrentUser);
-  // const role = useAppSelector(selectUserRole);
+  const [isActionModalOpen, setIsActionModalOpen] = useState(false);
+  const [taskToEdit, setTaskToEdit] = useState<any | null>(null);
 
-  // const getStatusColor = (status: string) => {
-  //   switch (status) {
-  //     case "completed":
-  //       return "bg-green-500/20 text-green-500";
-  //     case "in_progress":
-  //       return "bg-amber-500/20 text-amber-500";
-  //     case "pending":
-  //       return "bg-gray-500/20 text-gray-500";
-  //     default:
-  //       return "bg-gray-500/20 text-gray-500";
-  //   }
-  // };
+  const handleOpenCreate = () => {
+    setTaskToEdit(null); // Reset for creation
+    setIsActionModalOpen(true);
+  };
 
-  // const getPriorityColor = (priority: string) => {
-  //   switch (priority) {
-  //     case "high":
-  //       return "text-red-500";
-  //     case "medium":
-  //       return "text-amber-500";
-  //     case "low":
-  //       return "text-blue-500";
-  //     default:
-  //       return "text-gray-500";
-  //   }
-  // };
+  const handleSaveTask = (formData: any) => {
+    if (taskToEdit) {
+      console.log("Updating existing task:", formData);
+    } else {
+      console.log("Creating new task:", formData);
+    }
+    // Add logic here to update your tasks array or call API
+  };
 
   return (
     <div className="space-y-6">
@@ -56,7 +41,10 @@ export default function ManagerView() {
               Create and assign tasks across all locations
             </p>
           </div>
-          <button className="bg-white text-black px-4 py-2 rounded-lg font-semibold flex items-center gap-2 hover:bg-gray-200 transition-colors">
+          <button
+            onClick={handleOpenCreate}
+            className="bg-white text-black px-6 py-3 rounded-2xl font-bold hover:bg-gray-200 flex items-center gap-2"
+          >
             <Plus size={18} /> Create Task
           </button>
         </div>
@@ -150,6 +138,13 @@ export default function ManagerView() {
         </div>
       </div>
       );
+      {/* REUSABLE MODAL */}
+      <TaskActionModal
+        isOpen={isActionModalOpen}
+        onClose={() => setIsActionModalOpen(false)}
+        initialData={taskToEdit}
+        onSave={handleSaveTask}
+      />
     </div>
   );
 }

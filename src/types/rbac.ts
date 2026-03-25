@@ -63,6 +63,7 @@ export const ROLE_PERMISSIONS: RolePermissions[] = [
       // Performance
       "performance:view",
       "qr-section",
+      "profile",
     ],
   },
   {
@@ -86,6 +87,7 @@ export const ROLE_PERMISSIONS: RolePermissions[] = [
       // "performance:view",
 
       "qr-section",
+      "profile",
     ],
   },
 ];

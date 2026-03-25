@@ -1,18 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React, { useState } from "react";
 import { useAppSelector } from "@/redux/store";
-import {
-  selectCurrentUser,
-  selectUserRole,
-} from "@/redux/features/auth/authSlice";
+import { selectCurrentUser } from "@/redux/features/auth/authSlice";
 import {
   CheckSquare,
   Clock,
-  Calendar,
   ListTodo,
-  Users,
-  AlertCircle,
   Search,
   Plus,
   Eye,
@@ -22,6 +17,7 @@ import {
 import { cn } from "@/lib/utils";
 import RejectModal from "./RejectModal";
 import TaskDetailsModal from "./TaskDetailsModal";
+import { TaskActionModal } from "./TaskActionModal";
 
 // --- DUMMY DATA ---
 const taskStats = [
@@ -128,10 +124,33 @@ export default function AdminView() {
   const user = useAppSelector(selectCurrentUser);
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Modal States
   const [selectedTask, setSelectedTask] = useState<any | null>(null);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [isRejectOpen, setIsRejectOpen] = useState(false);
+
+  const [isActionModalOpen, setIsActionModalOpen] = useState(false);
+  const [taskToEdit, setTaskToEdit] = useState<any | null>(null);
+
+  const handleOpenCreate = () => {
+    setTaskToEdit(null); // Reset for creation
+    setIsActionModalOpen(true);
+  };
+
+  // const handleOpenEdit = (task: any) => {
+  //   setTaskToEdit(task); // Set specific task for editing
+  //   setIsActionModalOpen(true);
+  // };
+
+  const handleSaveTask = (formData: any) => {
+    if (taskToEdit) {
+      console.log("Updating existing task:", formData);
+    } else {
+      console.log("Creating new task:", formData);
+    }
+    // Add logic here to update your tasks array or call API
+  };
+
+  // Modal States
 
   const handleViewDetails = (task: any) => {
     // Transform table data to match TaskDetailsModal structure
@@ -165,7 +184,10 @@ export default function AdminView() {
             Salvation Tattoo Lounge · Admin Panel
           </p>
         </div>
-        <button className="flex items-center gap-2 bg-white text-black px-6 py-3 rounded-2xl font-bold hover:bg-gray-200 transition-all">
+        <button
+          onClick={handleOpenCreate}
+          className="bg-white text-black px-6 py-3 rounded-2xl font-bold hover:bg-gray-200 flex items-center gap-2"
+        >
           <Plus size={18} /> Create Task
         </button>
       </div>
@@ -340,6 +362,14 @@ export default function AdminView() {
         onConfirm={(reason) =>
           console.log(`Rejected task with reason: ${reason}`)
         }
+      />
+
+      {/* REUSABLE MODAL */}
+      <TaskActionModal
+        isOpen={isActionModalOpen}
+        onClose={() => setIsActionModalOpen(false)}
+        initialData={taskToEdit}
+        onSave={handleSaveTask}
       />
     </div>
   );
