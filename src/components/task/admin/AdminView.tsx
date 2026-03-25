@@ -2,8 +2,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { useAppSelector } from "@/redux/store";
-import { selectCurrentUser } from "@/redux/features/auth/authSlice";
+// import { useAppSelector } from "@/redux/store";
+// import { selectCurrentUser } from "@/redux/features/auth/authSlice";
 import {
   CheckSquare,
   Clock,
@@ -121,7 +121,7 @@ const tasksDummyData = [
 ];
 
 export default function AdminView() {
-  const user = useAppSelector(selectCurrentUser);
+  // const user = useAppSelector(selectCurrentUser);
   const [searchQuery, setSearchQuery] = useState("");
 
   const [selectedTask, setSelectedTask] = useState<any | null>(null);
