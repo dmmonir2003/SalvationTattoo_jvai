@@ -395,7 +395,7 @@ export default function DashboardPage() {
 
   // Dispatcher Logic
   switch (role) {
-    case "admin":
+    case "super_admin":
       return <DashboardAdmin />;
     case "manager":
       return <DashboardManager />;

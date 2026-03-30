@@ -168,12 +168,12 @@ function SidebarContent({
           <div className="flex items-center gap-3 mb-3">
             <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
               <span className="text-sm font-medium text-primary-foreground">
-                {user?.name?.charAt(0) || "U"}
+                {user?.username?.charAt(0) || "U"}
               </span>
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-sidebar-foreground truncate">
-                {user?.name || "User"}
+                {user?.username || "User"}
               </p>
               <p className="text-xs text-muted-foreground truncate">
                 {user?.email || "user@example.com"}

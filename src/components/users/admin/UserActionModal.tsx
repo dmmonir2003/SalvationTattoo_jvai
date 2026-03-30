@@ -99,7 +99,7 @@ export const UserActionModal = ({
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
       <div
         className="absolute inset-0 bg-black/90 backdrop-blur-sm"
         onClick={onClose}
@@ -269,7 +269,7 @@ export const UserActionModal = ({
                           onClick={() =>
                             setActivePicker({ index, field: "start" })
                           }
-                          className="bg-[#111] border border-[#262626] px-3 py-1.5 rounded-lg text-[11px] text-white hover:bg-[#161616] flex items-center gap-2 min-w-[70px]"
+                          className="bg-[#111] border border-[#262626] px-3 py-1.5 rounded-lg text-[11px] text-white hover:bg-[#161616] flex items-center gap-2 min-w-17.5"
                         >
                           <Clock size={12} className="text-gray-600" />{" "}
                           {item.start}

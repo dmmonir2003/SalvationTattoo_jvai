@@ -1,12 +1,16 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, Loader2, Mail } from "lucide-react";
 import { useForgotPasswordMutation } from "@/services/auth";
+import { redirect, useRouter } from "next/navigation";
 
 export default function ForgotPasswordPage() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
+  const params = new URLSearchParams();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState("");
 
@@ -17,50 +21,17 @@ export default function ForgotPasswordPage() {
     setError("");
 
     try {
-      await forgotPassword({ email }).unwrap();
-      setIsSubmitted(true);
+      const res = await forgotPassword({ email }).unwrap();
+      params.set("email", email);
+      params.set("temp_token", res.temp_token);
+      router.push(`/auth/verify-otp?${params.toString()}`);
     } catch (err) {
       setError("Failed to send reset email. Please check your email address.");
     }
   };
 
-  if (isSubmitted) {
-    return (
-      <div className="glass rounded-2xl p-8 shadow-2xl">
-        {/* Logo */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-foreground">
-            Salvation<span className="text-primary">Tattoo</span>
-          </h1>
-          <p className="text-muted-foreground mt-2">Management System</p>
-        </div>
-
-        {/* Success Message */}
-        <div className="text-center">
-          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-green-500/20 flex items-center justify-center">
-            <Mail className="w-8 h-8 text-green-500" />
-          </div>
-          <h2 className="text-xl font-semibold text-foreground mb-2">
-            Check Your Email
-          </h2>
-          <p className="text-muted-foreground mb-6">
-            We&apos;ve sent a password reset link to <br />
-            <span className="text-foreground font-medium">{email}</span>
-          </p>
-          <Link
-            href="/auth/signin"
-            className="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors"
-          >
-            <ArrowLeft size={16} />
-            Back to Sign In
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="glass rounded-2xl p-8 shadow-2xl">
+    <div className=" p-8 ">
       {/* Logo */}
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-foreground">
@@ -80,7 +51,7 @@ export default function ForgotPasswordPage() {
         </Link>
         <h2 className="text-2xl font-bold text-foreground">Forgot Password?</h2>
         <p className="text-muted-foreground mt-2">
-          Enter your email address and we&apos;ll send you a link to reset your
+          Enter your email address and we&apos;ll send you otp to reset your
           password.
         </p>
       </div>
@@ -122,7 +93,7 @@ export default function ForgotPasswordPage() {
               Sending...
             </>
           ) : (
-            "Send Reset Link"
+            "Send otp "
           )}
         </button>
       </form>

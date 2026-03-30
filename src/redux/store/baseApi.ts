@@ -10,29 +10,16 @@ export const baseApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: BASE_URL,
     prepareHeaders: (headers, { getState }) => {
-      // Get token from Redux state
+      // Pull token from auth slice
       const token = (getState() as RootState).auth.token;
-
-      // If we have a token, add it to the headers
       if (token) {
         headers.set("authorization", `Bearer ${token}`);
       }
-
-      // Set default headers
       headers.set("Content-Type", "application/json");
-
       return headers;
     },
   }),
-  tagTypes: [
-    "User",
-    "Task",
-    "Location",
-    "Attendance",
-    "Report",
-    "Notification",
-    "Performance",
-  ],
+  tagTypes: ["User"],
   endpoints: () => ({}),
 });
 

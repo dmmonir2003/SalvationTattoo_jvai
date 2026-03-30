@@ -5,7 +5,7 @@ export {
   useForgotPasswordMutation,
   useResetPasswordMutation,
   useVerifyOTPMutation,
-  useGetCurrentUserQuery,
-  useUpdateProfileMutation,
-  useLogoutMutation,
+  // useGetCurrentUserQuery,
+  // useUpdateProfileMutation,
+  // useLogoutMutation,
 } from "./auth";

@@ -25,7 +25,7 @@ export default function VerificationsPage() {
 
   // Dispatcher Logic - only admin and manager have verifications access
   switch (role) {
-    case "admin":
+    case "super_admin":
       return <VerificationsAdmin />;
     case "manager":
       return <VerificationsManager />;

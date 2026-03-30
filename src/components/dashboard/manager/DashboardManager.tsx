@@ -86,7 +86,7 @@ export default function DashboardManager() {
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-foreground">
-            Welcome back, {user?.name || "User"}!
+            Welcome back, {user?.username || "User"}!
           </h1>
           <p className="text-muted-foreground">
             Here is what is happening at Salvation Tattoo Lounge today.

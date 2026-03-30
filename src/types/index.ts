@@ -1,17 +1,14 @@
 // User & Auth Types
-export type UserRole = "admin" | "manager" | "branch_manager";
+export type UserRole = "super_admin" | "manager" | "branch_manager";
 
 export interface User {
-  id: string;
+  id: number;
   email: string;
-  name: string;
-  role: UserRole;
-  avatar?: string;
-  locationId?: string;
-  createdAt: string;
-  updatedAt: string;
+  username: string;
+  role: UserRole; // Added union for better type safety
+  role_display: string;
+  is_super_admin: boolean;
 }
-
 export interface AuthState {
   user: User | null;
   token: string | null;
@@ -146,12 +143,12 @@ export interface PerformanceMetric {
 }
 
 // API Response Types
-export interface ApiResponse<T> {
-  success: boolean;
-  data: T;
-  message?: string;
-  error?: string;
-}
+// export interface ApiResponse<T> {
+//   success: boolean;
+//   data: T;
+//   message?: string;
+//   error?: string;
+// }
 
 export interface PaginatedResponse<T> {
   success: boolean;

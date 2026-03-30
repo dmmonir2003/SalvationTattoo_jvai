@@ -1,109 +1,109 @@
 import { baseApi } from "@/redux/store/baseApi";
-import type { User, ApiResponse } from "@/types";
 
-interface LoginCredentials {
+// --- AUTH INTERFACES ---
+export interface User {
+  id: number;
+  email: string;
+  username: string;
+  role: string;
+  role_display: string;
+  is_super_admin: boolean;
+}
+
+export interface LoginCredentials {
   email: string;
   password: string;
 }
 
 interface LoginResponse {
+  refresh: string;
+  access: string; // Change 'token' to 'access' here
   user: User;
-  token: string;
 }
 
-interface ForgotPasswordRequest {
+export interface ForgotPasswordRequest {
   email: string;
 }
 
-interface ResetPasswordRequest {
-  token: string;
-  newPassword: string;
+export interface ForgotPasswordResponse {
+  message: string;
+  temp_token: string; // From your 2nd Postman image
 }
 
-interface VerifyOTPRequest {
-  email: string;
+export interface VerifyOTPRequest {
+  temp_token: string;
   otp: string;
 }
 
+export interface VerifyOTPResponse {
+  message: string;
+}
+
+export interface ResetPasswordRequest {
+  temp_token: string;
+  new_password: string; // Matches Postman snake_case
+  confirm_password: string; // Matches Postman snake_case
+}
+
+export interface ResetPasswordResponse {
+  message: string;
+}
+
+// --- API ENDPOINTS ---
 export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    // Login
-    login: builder.mutation<ApiResponse<LoginResponse>, LoginCredentials>({
+    // 1. Login
+    // POST /api/admin/login/
+    login: builder.mutation<LoginResponse, LoginCredentials>({
       query: (credentials) => ({
-        url: "/auth/login",
+        url: "/admin/login/",
         method: "POST",
         body: credentials,
       }),
     }),
 
-    // Forgot Password
+    // 2. Forgot Password
+    // POST /api/admin/forgot-password/
     forgotPassword: builder.mutation<
-      ApiResponse<{ message: string }>,
+      ForgotPasswordResponse,
       ForgotPasswordRequest
     >({
       query: (body) => ({
-        url: "/auth/forgot-password",
+        url: "/admin/forgot-password/",
         method: "POST",
         body,
       }),
     }),
 
-    // Reset Password
+    // 3. Verify OTP
+    // POST /api/admin/verify-otp/
+    verifyOTP: builder.mutation<VerifyOTPResponse, VerifyOTPRequest>({
+      query: (body) => ({
+        url: "/admin/verify-otp/",
+        method: "POST",
+        body,
+      }),
+    }),
+
+    // 4. Reset Password
+    // POST /api/admin/reset-password/
     resetPassword: builder.mutation<
-      ApiResponse<{ message: string }>,
+      ResetPasswordResponse,
       ResetPasswordRequest
     >({
       query: (body) => ({
-        url: "/auth/reset-password",
+        url: "/admin/reset-password/",
         method: "POST",
         body,
-      }),
-    }),
-
-    // Verify OTP
-    verifyOTP: builder.mutation<
-      ApiResponse<{ verified: boolean }>,
-      VerifyOTPRequest
-    >({
-      query: (body) => ({
-        url: "/auth/verify-otp",
-        method: "POST",
-        body,
-      }),
-    }),
-
-    // Get current user
-    getCurrentUser: builder.query<ApiResponse<User>, void>({
-      query: () => "/auth/me",
-      providesTags: ["User"],
-    }),
-
-    // Update profile
-    updateProfile: builder.mutation<ApiResponse<User>, Partial<User>>({
-      query: (body) => ({
-        url: "/auth/profile",
-        method: "PATCH",
-        body,
-      }),
-      invalidatesTags: ["User"],
-    }),
-
-    // Logout (invalidate tokens)
-    logout: builder.mutation<ApiResponse<{ message: string }>, void>({
-      query: () => ({
-        url: "/auth/logout",
-        method: "POST",
       }),
     }),
   }),
 });
 
+// --- EXPORT HOOKS ---
 export const {
   useLoginMutation,
   useForgotPasswordMutation,
-  useResetPasswordMutation,
   useVerifyOTPMutation,
-  useGetCurrentUserQuery,
-  useUpdateProfileMutation,
-  useLogoutMutation,
+  useResetPasswordMutation,
 } = authApi;

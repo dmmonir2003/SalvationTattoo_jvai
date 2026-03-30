@@ -9,6 +9,8 @@ const initialState: AuthState = {
   error: null,
 };
 
+// ... inside reducers:
+
 const authSlice = createSlice({
   name: "auth",
   initialState,

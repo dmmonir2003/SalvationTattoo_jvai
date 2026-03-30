@@ -21,7 +21,7 @@ export default function PerformancePage() {
 
   // Dispatcher Logic
   switch (role) {
-    case "admin":
+    case "super_admin":
       return <PerformanceAdmin />;
     case "manager":
       return <PerformanceManager />;

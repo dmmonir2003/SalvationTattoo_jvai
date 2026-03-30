@@ -18,7 +18,7 @@ export default function ResetPasswordPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get("email") || "";
-  const otp = searchParams.get("otp") || "";
+  const temp_token = searchParams.get("temp_token") || "";
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -43,11 +43,6 @@ export default function ResetPasswordPage() {
     e.preventDefault();
     setError("");
 
-    if (!allRequirementsMet) {
-      setError("Please meet all password requirements");
-      return;
-    }
-
     if (!passwordsMatch) {
       setError("Passwords do not match");
       return;
@@ -55,8 +50,9 @@ export default function ResetPasswordPage() {
 
     try {
       await resetPassword({
-        token: otp,
-        newPassword: password,
+        temp_token: temp_token,
+        confirm_password: confirmPassword,
+        new_password: password,
       }).unwrap();
       setIsSuccess(true);
       // Redirect to signin after 2 seconds
@@ -70,7 +66,7 @@ export default function ResetPasswordPage() {
 
   if (isSuccess) {
     return (
-      <div className="glass rounded-2xl p-8 shadow-2xl">
+      <div className=" p-8 ">
         {/* Logo */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-foreground">
@@ -98,28 +94,13 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <div className="glass rounded-2xl p-8 shadow-2xl">
+    <div className=" p-8 ">
       {/* Logo */}
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-foreground">
           Salvation<span className="text-primary">Tattoo</span>
         </h1>
         <p className="text-muted-foreground mt-2">Management System</p>
-      </div>
-
-      {/* Header */}
-      <div className="mb-6">
-        <Link
-          href="/auth/verify-otp"
-          className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors mb-4"
-        >
-          <ArrowLeft size={14} />
-          Back
-        </Link>
-        <h2 className="text-2xl font-bold text-foreground">Reset Password</h2>
-        <p className="text-muted-foreground mt-2">
-          Create a new password for your account.
-        </p>
       </div>
 
       {/* Form */}
@@ -186,29 +167,6 @@ export default function ResetPasswordPage() {
           </div>
         </div>
 
-        {/* Password Requirements */}
-        <div className="space-y-2 p-4 rounded-lg bg-background/50">
-          <p className="text-sm font-medium text-foreground mb-2">
-            Password requirements:
-          </p>
-          <div className="grid grid-cols-2 gap-2">
-            {passwordRequirements.map((req, index) => (
-              <div
-                key={index}
-                className={`flex items-center gap-2 text-sm ${
-                  req.met ? "text-green-500" : "text-muted-foreground"
-                }`}
-              >
-                <CheckCircle
-                  size={14}
-                  className={req.met ? "opacity-100" : "opacity-30"}
-                />
-                {req.label}
-              </div>
-            ))}
-          </div>
-        </div>
-
         {/* Match indicator */}
         {confirmPassword && (
           <div
@@ -223,13 +181,7 @@ export default function ResetPasswordPage() {
 
         <button
           type="submit"
-          disabled={
-            isLoading ||
-            !allRequirementsMet ||
-            !passwordsMatch ||
-            !email ||
-            !otp
-          }
+          disabled={isLoading || !passwordsMatch}
           className="w-full py-3 px-4 rounded-lg bg-primary text-primary-foreground font-medium hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-background disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
         >
           {isLoading ? (

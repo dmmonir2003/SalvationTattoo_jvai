@@ -79,7 +79,7 @@ export function useProtectedRoute(redirectTo: string = "/auth/signin") {
 
 // Hook for role-based route access
 export function useRoleAccess(
-  allowedRoles: ("admin" | "manager" | "branch_manager")[],
+  allowedRoles: ("super_admin" | "manager" | "branch_manager")[],
   redirectTo: string = "/dashboard",
 ) {
   const role = useAppSelector(selectUserRole);
@@ -115,12 +115,12 @@ export function useDemoLogin() {
       dispatch(
         setCredentials({
           user: {
-            id: "1",
+            id: 1,
             email: "admin@salvationlounge.com",
-            name: "Admin User",
-            role: "admin",
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
+            username: "Admin User",
+            role: "super_admin",
+            role_display: "Super Admin",
+            is_super_admin: true,
           },
           token: "demo-token-admin",
         }),
@@ -136,12 +136,12 @@ export function useDemoLogin() {
       dispatch(
         setCredentials({
           user: {
-            id: "2",
+            id: 2,
             email: "manager@salvationlounge.com",
-            name: "Manager User",
+            username: "Manager User",
             role: "manager",
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
+            role_display: "Manager",
+            is_super_admin: false,
           },
           token: "demo-token-manager",
         }),
@@ -157,13 +157,12 @@ export function useDemoLogin() {
       dispatch(
         setCredentials({
           user: {
-            id: "3",
+            id: 1,
             email: "branch@salvationlounge.com",
-            name: "Branch Manager",
+            username: "Branch Manager",
             role: "branch_manager",
-            locationId: "loc-1",
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
+            role_display: "Branch Manager",
+            is_super_admin: false,
           },
           token: "demo-token-branch",
         }),

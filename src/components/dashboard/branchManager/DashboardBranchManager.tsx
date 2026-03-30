@@ -97,7 +97,7 @@ export default function DashboardBranchManager() {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold text-white tracking-tight">
-            Good morning, {user?.name || "Marcus"} 👋
+            Good morning, {user?.username || "Marcus"} 👋
           </h1>
           <p className="text-gray-500 text-sm">
             Wednesday, February 25, 2026 — Inkhaus Studio

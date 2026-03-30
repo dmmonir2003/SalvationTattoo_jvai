@@ -3,7 +3,7 @@ import { UserRole, Permission, RolePermissions } from "./index";
 // RBAC Configuration - Role-based permissions for Salvation Tattoo Lounge
 export const ROLE_PERMISSIONS: RolePermissions[] = [
   {
-    role: "admin",
+    role: "super_admin",
     permissions: [
       // Dashboard
       "dashboard:view",
@@ -30,8 +30,8 @@ export const ROLE_PERMISSIONS: RolePermissions[] = [
       "locations:edit",
       "locations:delete",
       // Notifications
-      "notifications:view",
-      "notifications:manage",
+      // "notifications:view",
+      // "notifications:manage",
       // Instructions
       "instructions:view",
       "instructions:manage",

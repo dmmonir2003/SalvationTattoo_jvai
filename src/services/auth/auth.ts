@@ -1,5 +1,5 @@
 import { baseApi } from "@/redux/store/baseApi";
-import type { User, ApiResponse } from "@/types";
+import type { User } from "@/types";
 
 interface LoginCredentials {
   email: string;
@@ -8,7 +8,7 @@ interface LoginCredentials {
 
 interface LoginResponse {
   user: User;
-  token: string;
+  access: string;
 }
 
 interface ForgotPasswordRequest {
@@ -16,21 +16,22 @@ interface ForgotPasswordRequest {
 }
 
 interface ResetPasswordRequest {
-  token: string;
-  newPassword: string;
+  temp_token: string;
+  confirm_password: string;
+  new_password: string;
 }
 
 interface VerifyOTPRequest {
-  email: string;
+  temp_token: string;
   otp: string;
 }
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // Login
-    login: builder.mutation<ApiResponse<LoginResponse>, LoginCredentials>({
+    login: builder.mutation<LoginResponse, LoginCredentials>({
       query: (credentials) => ({
-        url: "/auth/login",
+        url: "/admin/login/",
         method: "POST",
         body: credentials,
       }),
@@ -38,50 +39,44 @@ export const authApi = baseApi.injectEndpoints({
 
     // Forgot Password
     forgotPassword: builder.mutation<
-      ApiResponse<{ message: string }>,
+      { message: string; temp_token: string },
       ForgotPasswordRequest
     >({
       query: (body) => ({
-        url: "/auth/forgot-password",
+        url: "/admin/forgot-password/",
         method: "POST",
         body,
       }),
     }),
 
     // Reset Password
-    resetPassword: builder.mutation<
-      ApiResponse<{ message: string }>,
-      ResetPasswordRequest
-    >({
+    resetPassword: builder.mutation<{ message: string }, ResetPasswordRequest>({
       query: (body) => ({
-        url: "/auth/reset-password",
+        url: "/admin/reset-password/",
         method: "POST",
         body,
       }),
     }),
 
     // Verify OTP
-    verifyOTP: builder.mutation<
-      ApiResponse<{ verified: boolean }>,
-      VerifyOTPRequest
-    >({
+    verifyOTP: builder.mutation<{ message: string }, VerifyOTPRequest>({
       query: (body) => ({
-        url: "/auth/verify-otp",
+        url: "/admin/verify-otp/",
         method: "POST",
         body,
       }),
     }),
 
     // Get current user
-    getCurrentUser: builder.query<ApiResponse<User>, void>({
-      query: () => "/auth/me",
+    getCurrentUser: builder.query<User, void>({
+      query: () => "/admin/me",
       providesTags: ["User"],
     }),
 
     // Update profile
-    updateProfile: builder.mutation<ApiResponse<User>, Partial<User>>({
+    updateProfile: builder.mutation<User, Partial<User>>({
       query: (body) => ({
-        url: "/auth/profile",
+        url: "/admin/profile",
         method: "PATCH",
         body,
       }),
@@ -89,9 +84,9 @@ export const authApi = baseApi.injectEndpoints({
     }),
 
     // Logout (invalidate tokens)
-    logout: builder.mutation<ApiResponse<{ message: string }>, void>({
+    logout: builder.mutation<void, void>({
       query: () => ({
-        url: "/auth/logout",
+        url: "/admin/logout",
         method: "POST",
       }),
     }),

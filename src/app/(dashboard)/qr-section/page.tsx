@@ -27,7 +27,7 @@ export default function QrSectionpage() {
 
   // Dispatcher Logic
   switch (role) {
-    case "admin":
+    case "super_admin":
       return <ReportsAdmin />;
     case "manager":
       return <ManagerQrSection />;
