@@ -27,7 +27,7 @@ export default function TaskPage() {
   switch (role) {
     case "super_admin":
       return <AdminView />;
-    case "manager":
+    case "district_manager":
       return <ManagerView />;
     case "branch_manager":
       return <BranchManagerView />;

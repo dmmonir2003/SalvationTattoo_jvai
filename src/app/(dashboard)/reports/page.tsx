@@ -28,7 +28,7 @@ export default function ReportsPage() {
   switch (role) {
     case "super_admin":
       return <ReportsAdmin />;
-    case "manager":
+    case "district_manager":
       return <ReportsManager />;
     case "branch_manager":
       return <ReportsBranchManager />;

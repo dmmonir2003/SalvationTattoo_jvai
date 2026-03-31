@@ -10,7 +10,7 @@ import {
   setCredentials,
   logout as logoutAction,
   setLoading,
-  setError,
+  // setError,
 } from "@/redux/features/auth/authSlice";
 import { hasPermission, getPermissions } from "@/types/rbac";
 import type { User, Permission } from "@/types";
@@ -79,7 +79,7 @@ export function useProtectedRoute(redirectTo: string = "/auth/signin") {
 
 // Hook for role-based route access
 export function useRoleAccess(
-  allowedRoles: ("super_admin" | "manager" | "branch_manager")[],
+  allowedRoles: ("super_admin" | "district_manager" | "branch_manager")[],
   redirectTo: string = "/dashboard",
 ) {
   const role = useAppSelector(selectUserRole);
@@ -139,8 +139,8 @@ export function useDemoLogin() {
             id: 2,
             email: "manager@salvationlounge.com",
             username: "Manager User",
-            role: "manager",
-            role_display: "Manager",
+            role: "district_manager",
+            role_display: "District Manager",
             is_super_admin: false,
           },
           token: "demo-token-manager",

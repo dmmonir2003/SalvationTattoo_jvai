@@ -23,7 +23,7 @@ export default function PerformancePage() {
   switch (role) {
     case "super_admin":
       return <PerformanceAdmin />;
-    case "manager":
+    case "district_manager":
       return <PerformanceManager />;
     // case "branch_manager":
     //   return <PerformanceBranchManager />;

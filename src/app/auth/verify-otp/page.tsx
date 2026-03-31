@@ -267,7 +267,7 @@ export default function VerifyOTPPage() {
     try {
       await resendOTP({ email }).unwrap();
       setSuccessMsg("A new code has been sent to your email.");
-      setTimer(60000); // Reset timer
+      setTimer(200); // Reset timer
       setOtp(["", "", "", "", ""]); // Clear old OTP
       inputRefs.current[0]?.focus();
     } catch (err: any) {
@@ -370,7 +370,7 @@ export default function VerifyOTPPage() {
       <div className="mb-6">
         <Link
           href="/auth/forgot-password"
-          className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors mb-4"
+          className="inline-flex items-center gap-1 text-sm text-primary hover:text-primary/80 transition-colors mb-4"
         >
           <ArrowLeft size={14} /> Back
         </Link>
@@ -412,7 +412,7 @@ export default function VerifyOTPPage() {
               value={digit}
               onChange={(e) => handleChange(index, e.target.value)}
               onKeyDown={(e) => handleKeyDown(index, e)}
-              className="w-12 h-12 text-center text-xl font-bold rounded-lg bg-background border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+              className="w-12 h-12 text-center text-xl font-bold rounded-lg border border-white text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all bg-transparent"
             />
           ))}
         </div>

@@ -1,6 +1,207 @@
+// "use client";
+
+// import { useState } from "react";
+// import Link from "next/link";
+// import { usePathname } from "next/navigation";
+// import { useAppSelector } from "@/redux/store";
+// import {
+//   selectCurrentUser,
+//   selectUserRole,
+// } from "@/redux/features/auth/authSlice";
+// import { getFilteredSidebarItems, type SidebarItem } from "@/types/rbac";
+// import { cn } from "@/lib/utils";
+// import {
+//   LayoutDashboard,
+//   CheckSquare,
+//   ClipboardCheck,
+//   BarChart3,
+//   Users,
+//   MapPin,
+//   Bell,
+//   FileText,
+//   TrendingUp,
+//   ChevronLeft,
+//   ChevronRight,
+//   QrCode,
+//   LogOut,
+//   Smartphone,
+//   User,
+// } from "lucide-react";
+
+// const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+//   LayoutDashboard,
+//   CheckSquare,
+//   ClipboardCheck,
+//   BarChart3,
+//   Users,
+//   MapPin,
+//   Bell,
+//   FileText,
+//   TrendingUp,
+//   QrCode,
+//   Smartphone,
+//   User,
+// };
+
+// interface SidebarProps {
+//   collapsed?: boolean;
+//   onToggle?: () => void;
+// }
+
+// export function Sidebar({
+//   collapsed: controlledCollapsed,
+//   onToggle: controlledOnToggle,
+// }: SidebarProps) {
+//   // Internal state for sidebar collapse (desktop)
+//   const [internalCollapsed, setInternalCollapsed] = useState(false);
+
+//   // Use controlled state if provided, otherwise use internal state
+//   const collapsed = controlledCollapsed ?? internalCollapsed;
+
+//   const handleToggle = () => {
+//     if (controlledOnToggle) {
+//       controlledOnToggle();
+//     } else {
+//       setInternalCollapsed(!internalCollapsed);
+//     }
+//   };
+
+//   const pathname = usePathname();
+//   // const user = useAppSelector(selectCurrentUser);
+//   const role = useAppSelector(selectUserRole);
+
+//   const sidebarItems = role ? getFilteredSidebarItems(role) : [];
+
+//   // Desktop Sidebar
+//   return (
+//     <aside
+//       className={cn(
+//         "fixed left-0 top-0 z-40 h-screen bg-sidebar border-r border-sidebar-border transition-all duration-300 hidden lg:block",
+//         collapsed ? "w-16" : "w-64",
+//       )}
+//     >
+//       <SidebarContent
+//         items={sidebarItems}
+//         collapsed={collapsed}
+//         pathname={pathname}
+//         onToggle={handleToggle}
+//         iconMap={iconMap}
+//       />
+//     </aside>
+//   );
+// }
+
+// interface SidebarContentProps {
+//   items: SidebarItem[];
+//   collapsed: boolean;
+//   pathname: string;
+//   onToggle: () => void;
+//   iconMap: Record<string, React.ComponentType<{ className?: string }>>;
+// }
+
+// function SidebarContent({
+//   items,
+//   collapsed,
+//   pathname,
+//   onToggle,
+//   iconMap,
+// }: SidebarContentProps) {
+//   const user = useAppSelector(selectCurrentUser);
+
+//   return (
+//     <div className="flex flex-col h-full">
+//       {/* Logo */}
+//       <div
+//         className={cn(
+//           "flex items-center h-16 border-b border-sidebar-border px-4",
+//           collapsed ? "justify-center" : "justify-between",
+//         )}
+//       >
+//         {!collapsed && (
+//           <h1 className="text-lg font-bold text-foreground">
+//             Salvation<span className="text-primary">Tattoo</span>
+//           </h1>
+//         )}
+//         <button
+//           onClick={onToggle}
+//           className="p-2 rounded-lg hover:bg-sidebar-accent transition-colors"
+//         >
+//           {collapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
+//         </button>
+//       </div>
+
+//       {/* Navigation Items */}
+//       <nav className="flex-1 overflow-y-auto py-4 px-2 scrollbar-thin">
+//         <ul className="space-y-1">
+//           {items.map((item) => {
+//             const Icon = iconMap[item.icon] || LayoutDashboard;
+//             const isActive =
+//               pathname === item.href || pathname.startsWith(`${item.href}/`);
+
+//             return (
+//               <li key={item.id}>
+//                 <Link
+//                   href={item.href}
+//                   className={cn(
+//                     "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all",
+//                     collapsed && "justify-center px-2",
+//                     isActive
+//                       ? "bg-primary/10 text-primary border-l-2 border-primary"
+//                       : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+//                   )}
+//                   title={collapsed ? item.label : undefined}
+//                 >
+//                   <Icon className="w-5 h-5 shrink-0" />
+//                   {!collapsed && (
+//                     <span className="text-sm font-medium">{item.label}</span>
+//                   )}
+//                 </Link>
+//               </li>
+//             );
+//           })}
+//         </ul>
+//       </nav>
+
+//       {/* User Info at Bottom */}
+//       <div className="border-t border-sidebar-border p-4">
+//         {!collapsed && (
+//           <div className="flex items-center gap-3 mb-3">
+//             <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+//               <span className="text-sm font-medium text-primary-foreground">
+//                 {user?.username?.charAt(0) || "U"}
+//               </span>
+//             </div>
+//             <div className="flex-1 min-w-0">
+//               <p className="text-sm font-medium text-sidebar-foreground truncate">
+//                 {user?.username || "User"}
+//               </p>
+//               <p className="text-xs text-muted-foreground truncate">
+//                 {user?.email || "user@example.com"}
+//               </p>
+//             </div>
+//           </div>
+//         )}
+//         <button
+//           onClick={() => {
+//             // Dispatch logout action or redirect
+//             window.location.href = "/auth/signin";
+//           }}
+//           className={cn(
+//             "flex items-center gap-3 w-full px-3 py-2 rounded-lg text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors",
+//             collapsed && "justify-center px-2",
+//           )}
+//           title={collapsed ? "Logout" : undefined}
+//         >
+//           <LogOut className="w-5 h-5" />
+//           {!collapsed && <span className="text-sm font-medium">Logout</span>}
+//         </button>
+//       </div>
+//     </div>
+//   );
+// }
+
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAppSelector } from "@/redux/store";
@@ -26,6 +227,7 @@ import {
   LogOut,
   Smartphone,
   User,
+  X,
 } from "lucide-react";
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -44,50 +246,54 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 };
 
 interface SidebarProps {
-  collapsed?: boolean;
-  onToggle?: () => void;
+  collapsed: boolean;
+  onToggle: () => void;
+  mobileOpen: boolean;
+  setMobileOpen: (open: boolean) => void;
 }
 
 export function Sidebar({
-  collapsed: controlledCollapsed,
-  onToggle: controlledOnToggle,
+  collapsed,
+  onToggle,
+  mobileOpen,
+  setMobileOpen,
 }: SidebarProps) {
-  // Internal state for sidebar collapse (desktop)
-  const [internalCollapsed, setInternalCollapsed] = useState(false);
-
-  // Use controlled state if provided, otherwise use internal state
-  const collapsed = controlledCollapsed ?? internalCollapsed;
-
-  const handleToggle = () => {
-    if (controlledOnToggle) {
-      controlledOnToggle();
-    } else {
-      setInternalCollapsed(!internalCollapsed);
-    }
-  };
-
   const pathname = usePathname();
-  // const user = useAppSelector(selectCurrentUser);
   const role = useAppSelector(selectUserRole);
-
   const sidebarItems = role ? getFilteredSidebarItems(role) : [];
 
-  // Desktop Sidebar
   return (
-    <aside
-      className={cn(
-        "fixed left-0 top-0 z-40 h-screen bg-sidebar border-r border-sidebar-border transition-all duration-300 hidden lg:block",
-        collapsed ? "w-16" : "w-64",
-      )}
-    >
-      <SidebarContent
-        items={sidebarItems}
-        collapsed={collapsed}
-        pathname={pathname}
-        onToggle={handleToggle}
-        iconMap={iconMap}
+    <>
+      {/* Mobile Overlay: visible only when sidebar is open on mobile */}
+      <div
+        className={cn(
+          "fixed inset-0 z-40 bg-background/80 backdrop-blur-sm lg:hidden transition-opacity duration-300",
+          mobileOpen ? "opacity-100" : "opacity-0 pointer-events-none",
+        )}
+        onClick={() => setMobileOpen(false)}
       />
-    </aside>
+
+      <aside
+        className={cn(
+          "fixed left-0 top-0 z-50 h-screen bg-sidebar border-r border-sidebar-border transition-all duration-300",
+          // Mobile Logic: Slide off screen
+          mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
+          // Desktop Logic: Width toggle
+          collapsed ? "lg:w-16" : "lg:w-64",
+          "w-64", // Mobile default width
+        )}
+      >
+        <SidebarContent
+          items={sidebarItems}
+          collapsed={collapsed}
+          pathname={pathname}
+          onToggle={onToggle}
+          iconMap={iconMap}
+          setMobileOpen={setMobileOpen}
+          mobileOpen={mobileOpen}
+        />
+      </aside>
+    </>
   );
 }
 
@@ -97,6 +303,8 @@ interface SidebarContentProps {
   pathname: string;
   onToggle: () => void;
   iconMap: Record<string, React.ComponentType<{ className?: string }>>;
+  setMobileOpen: (open: boolean) => void;
+  mobileOpen: boolean;
 }
 
 function SidebarContent({
@@ -105,32 +313,42 @@ function SidebarContent({
   pathname,
   onToggle,
   iconMap,
+  setMobileOpen,
+  mobileOpen,
 }: SidebarContentProps) {
   const user = useAppSelector(selectCurrentUser);
 
   return (
     <div className="flex flex-col h-full">
-      {/* Logo */}
+      {/* Logo Section */}
       <div
         className={cn(
           "flex items-center h-16 border-b border-sidebar-border px-4",
-          collapsed ? "justify-center" : "justify-between",
+          collapsed ? "lg:justify-center" : "justify-between",
         )}
       >
-        {!collapsed && (
+        {(!collapsed || mobileOpen) && (
           <h1 className="text-lg font-bold text-foreground">
             Salvation<span className="text-primary">Tattoo</span>
           </h1>
         )}
+
+        {/* Desktop toggle / Mobile close button */}
         <button
-          onClick={onToggle}
+          onClick={mobileOpen ? () => setMobileOpen(false) : onToggle}
           className="p-2 rounded-lg hover:bg-sidebar-accent transition-colors"
         >
-          {collapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
+          {mobileOpen ? (
+            <X size={20} />
+          ) : collapsed ? (
+            <ChevronRight size={20} />
+          ) : (
+            <ChevronLeft size={20} />
+          )}
         </button>
       </div>
 
-      {/* Navigation Items */}
+      {/* Navigation */}
       <nav className="flex-1 overflow-y-auto py-4 px-2 scrollbar-thin">
         <ul className="space-y-1">
           {items.map((item) => {
@@ -142,17 +360,18 @@ function SidebarContent({
               <li key={item.id}>
                 <Link
                   href={item.href}
+                  onClick={() => setMobileOpen(false)} // Fixes the setState error
                   className={cn(
                     "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all",
-                    collapsed && "justify-center px-2",
+                    collapsed && !mobileOpen && "lg:justify-center lg:px-2",
                     isActive
                       ? "bg-primary/10 text-primary border-l-2 border-primary"
                       : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
                   )}
-                  title={collapsed ? item.label : undefined}
+                  title={collapsed && !mobileOpen ? item.label : undefined}
                 >
                   <Icon className="w-5 h-5 shrink-0" />
-                  {!collapsed && (
+                  {(!collapsed || mobileOpen) && (
                     <span className="text-sm font-medium">{item.label}</span>
                   )}
                 </Link>
@@ -162,11 +381,11 @@ function SidebarContent({
         </ul>
       </nav>
 
-      {/* User Info at Bottom */}
+      {/* User Info Footer */}
       <div className="border-t border-sidebar-border p-4">
-        {!collapsed && (
+        {(!collapsed || mobileOpen) && (
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+            <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0">
               <span className="text-sm font-medium text-primary-foreground">
                 {user?.username?.charAt(0) || "U"}
               </span>
@@ -182,18 +401,17 @@ function SidebarContent({
           </div>
         )}
         <button
-          onClick={() => {
-            // Dispatch logout action or redirect
-            window.location.href = "/auth/signin";
-          }}
+          onClick={() => (window.location.href = "/auth/signin")}
           className={cn(
-            "flex items-center gap-3 w-full px-3 py-2 rounded-lg text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors",
-            collapsed && "justify-center px-2",
+            "flex items-center gap-3 w-full px-3 py-2 rounded-lg text-sidebar-foreground hover:bg-sidebar-accent transition-colors",
+            collapsed && !mobileOpen && "lg:justify-center lg:px-2",
           )}
-          title={collapsed ? "Logout" : undefined}
+          title={collapsed && !mobileOpen ? "Logout" : undefined}
         >
           <LogOut className="w-5 h-5" />
-          {!collapsed && <span className="text-sm font-medium">Logout</span>}
+          {(!collapsed || mobileOpen) && (
+            <span className="text-sm font-medium">Logout</span>
+          )}
         </button>
       </div>
     </div>

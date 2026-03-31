@@ -27,7 +27,7 @@ export default function VerificationsPage() {
   switch (role) {
     case "super_admin":
       return <VerificationsAdmin />;
-    case "manager":
+    case "district_manager":
       return <VerificationsManager />;
     case "branch_manager":
       return <VerificationsBranchManager />;

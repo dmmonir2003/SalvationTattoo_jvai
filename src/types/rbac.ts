@@ -30,8 +30,8 @@ export const ROLE_PERMISSIONS: RolePermissions[] = [
       "locations:edit",
       "locations:delete",
       // Notifications
-      // "notifications:view",
-      // "notifications:manage",
+      "notifications:view",
+      "notifications:manage",
       // Instructions
       "instructions:view",
       "instructions:manage",
@@ -45,7 +45,7 @@ export const ROLE_PERMISSIONS: RolePermissions[] = [
     ],
   },
   {
-    role: "manager",
+    role: "district_manager",
     permissions: [
       // Dashboard
       "dashboard:view",

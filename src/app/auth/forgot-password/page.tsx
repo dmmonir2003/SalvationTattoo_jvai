@@ -44,7 +44,7 @@ export default function ForgotPasswordPage() {
       <div className="mb-6">
         <Link
           href="/auth/signin"
-          className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors mb-4"
+          className="inline-flex  items-center gap-1 text-sm text-primary hover:text-primary/80 transition-colors mb-4"
         >
           <ArrowLeft size={14} />
           Back to Sign In
@@ -77,7 +77,7 @@ export default function ForgotPasswordPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="admin@salvationlounge.com"
-            className="w-full px-4 py-3 rounded-lg bg-background border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+            className="w-full px-4 py-3 rounded-lg border border-white text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all bg-transparent"
             required
           />
         </div>

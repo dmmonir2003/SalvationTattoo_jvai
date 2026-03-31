@@ -397,7 +397,7 @@ export default function DashboardPage() {
   switch (role) {
     case "super_admin":
       return <DashboardAdmin />;
-    case "manager":
+    case "district_manager":
       return <DashboardManager />;
     case "branch_manager":
       return <DashboardBranchManager />;

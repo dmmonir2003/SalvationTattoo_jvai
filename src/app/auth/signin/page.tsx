@@ -144,6 +144,7 @@ import { useRouter } from "next/navigation";
 import { useLoginMutation } from "@/services/auth";
 import { useAppDispatch } from "@/redux/store";
 import { setCredentials } from "@/redux/features/auth/authSlice";
+import { useDemoLogin } from "@/hooks/useAuth";
 
 export default function SignInPage() {
   const [email, setEmail] = useState("");
@@ -153,7 +154,7 @@ export default function SignInPage() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [login, { isLoading }] = useLoginMutation();
-
+  const { loginAsAdmin, loginAsManager, loginAsBranchManager } = useDemoLogin();
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -165,7 +166,7 @@ export default function SignInPage() {
       // 2. Dispatch to Redux using the correct keys from your JSON
       dispatch(
         setCredentials({
-          user: response.user, // Matches "user" in your JSON
+          user: response?.user, // Matches "user" in your JSON
           token: response.access, // Matches "access" in your JSON
         }),
       );
@@ -256,6 +257,32 @@ export default function SignInPage() {
           )}
         </button>
       </form>
+
+      <div className="mt-8 pt-6 border-t border-border">
+        <p className="text-sm text-muted-foreground text-center mb-4">
+          Demo Login (Click to sign in)
+        </p>
+        <div className="grid grid-cols-3 gap-2">
+          <button
+            onClick={loginAsAdmin}
+            className="py-2 px-3 text-xs font-medium rounded-lg bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors"
+          >
+            Admin
+          </button>
+          <button
+            onClick={loginAsManager}
+            className="py-2 px-3 text-xs font-medium rounded-lg bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors"
+          >
+            Manager
+          </button>
+          <button
+            onClick={loginAsBranchManager}
+            className="py-2 px-3 text-xs font-medium rounded-lg bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors"
+          >
+            Branch
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

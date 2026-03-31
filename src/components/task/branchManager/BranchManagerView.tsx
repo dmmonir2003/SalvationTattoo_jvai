@@ -67,7 +67,7 @@ export default function BranchManagerView() {
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 bg-[#0A0A0A] border border-[#262626] rounded-xl px-4 py-2.5 text-sm cursor-pointer min-w-[140px]">
+            <div className="flex items-center gap-2 bg-[#0A0A0A] border border-[#262626] rounded-xl px-4 py-2.5 text-sm cursor-pointer min-width: 140px;">
               All Location{" "}
               <ChevronDown size={16} className="ml-auto text-gray-500" />
             </div>

@@ -51,7 +51,7 @@ export default function ManagerView() {
 
         {/* 2. Controls Section (Search & Filter) */}
         <div className="flex flex-wrap items-center gap-4 mb-8">
-          <div className="relative flex-1 min-w-[300px]">
+          <div className="relative flex-1 min-w-75">
             <Search
               className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
               size={18}
@@ -64,7 +64,7 @@ export default function ManagerView() {
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 bg-[#0A0A0A] border border-[#262626] rounded-xl px-4 py-2.5 text-sm cursor-pointer min-w-[140px]">
+            <div className="flex items-center gap-2 bg-[#0A0A0A] border border-[#262626] rounded-xl px-4 py-2.5 text-sm cursor-pointer min-w-35">
               All Location{" "}
               <ChevronDown size={16} className="ml-auto text-gray-500" />
             </div>

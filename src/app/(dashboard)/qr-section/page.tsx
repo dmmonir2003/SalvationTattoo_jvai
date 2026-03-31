@@ -7,8 +7,8 @@ import {
 
 import { Loader2 } from "lucide-react";
 import ReportsAdmin from "@/components/reports/admin/ReportsAdmin";
-import ReportsManager from "@/components/reports/manager/ManagerView";
-import ReportsBranchManager from "@/components/reports/branchManager/ReportsBranchManager";
+// import ReportsManager from "@/components/reports/manager/ManagerView";
+// import ReportsBranchManager from "@/components/reports/branchManager/ReportsBranchManager";
 import { useAppSelector } from "@/redux/store";
 import BranchManagerQrSection from "@/components/qr-section/branchManager/BranchManagerQrSection";
 import ManagerQrSection from "@/components/qr-section/manager/ManagerQrSection";
@@ -29,7 +29,7 @@ export default function QrSectionpage() {
   switch (role) {
     case "super_admin":
       return <ReportsAdmin />;
-    case "manager":
+    case "district_manager":
       return <ManagerQrSection />;
     case "branch_manager":
       return <BranchManagerQrSection />;
