@@ -171,7 +171,10 @@ export default function SignInPage() {
         }),
       );
 
-      // 3. Redirect
+      // 3. Set cookie for middleware to detect login
+      document.cookie = `accessToken=${response.access}; path=/; max-age=86400`;
+
+      // 4. Redirect
       router.push("/dashboard");
     } catch (err: any) {
       console.error("Login Error:", err);

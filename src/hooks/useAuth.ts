@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import {
@@ -33,8 +33,12 @@ export function useAuth() {
 
   const logout = useCallback(() => {
     dispatch(logoutAction());
-    router.push("/auth/signin");
-  }, [dispatch, router]);
+    // Clear cookie on logout
+    document.cookie =
+      "accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    // Clear persisted Redux state from localStorage
+    localStorage.removeItem("persist:root");
+  }, [dispatch]);
 
   return {
     isAuthenticated,
@@ -66,13 +70,14 @@ export function usePermissions(): Permission[] {
 // Hook for protected route
 export function useProtectedRoute(redirectTo: string = "/auth/signin") {
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
-  const router = useRouter();
+  // const router = useRouter();
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      router.push(redirectTo);
-    }
-  }, [isAuthenticated, router, redirectTo]);
+  // Disabled automatic redirect - users can stay on page after logout
+  // useEffect(() => {
+  //   if (!isAuthenticated) {
+  //     router.push(redirectTo);
+  //   }
+  // }, [isAuthenticated, router, redirectTo]);
 
   return isAuthenticated;
 }
@@ -83,19 +88,20 @@ export function useRoleAccess(
   redirectTo: string = "/dashboard",
 ) {
   const role = useAppSelector(selectUserRole);
-  const router = useRouter();
+  // const router = useRouter();
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      router.push("/auth/signin");
-      return;
-    }
-
-    if (role && !allowedRoles.includes(role)) {
-      router.push(redirectTo);
-    }
-  }, [role, isAuthenticated, router, allowedRoles, redirectTo]);
+  // Disabled automatic redirect - users can stay on page after logout
+  // useEffect(() => {
+  //   if (!isAuthenticated) {
+  //     router.push("/auth/signin");
+  //     return;
+  //   }
+  //
+  //   if (role && !allowedRoles.includes(role)) {
+  //     router.push(redirectTo);
+  //   }
+  // }, [role, isAuthenticated, router, allowedRoles, redirectTo]);
 
   return {
     hasAccess: role ? allowedRoles.includes(role) : false,
@@ -125,6 +131,8 @@ export function useDemoLogin() {
           token: "demo-token-admin",
         }),
       );
+      // Set cookie for middleware to detect demo login
+      document.cookie = "accessToken=demo-token-admin; path=/; max-age=86400";
       dispatch(setLoading(false));
       router.push("/dashboard");
     }, 500);
@@ -146,6 +154,8 @@ export function useDemoLogin() {
           token: "demo-token-manager",
         }),
       );
+      // Set cookie for middleware to detect demo login
+      document.cookie = "accessToken=demo-token-manager; path=/; max-age=86400";
       dispatch(setLoading(false));
       router.push("/dashboard");
     }, 500);
@@ -167,6 +177,8 @@ export function useDemoLogin() {
           token: "demo-token-branch",
         }),
       );
+      // Set cookie for middleware to detect demo login
+      document.cookie = "accessToken=demo-token-branch; path=/; max-age=86400";
       dispatch(setLoading(false));
       router.push("/dashboard");
     }, 500);

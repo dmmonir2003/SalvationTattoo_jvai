@@ -70,7 +70,7 @@ export const authApi = baseApi.injectEndpoints({
     // Get current user
     getCurrentUser: builder.query<User, void>({
       query: () => "/admin/me",
-      providesTags: ["User"],
+      providesTags: ["Users"],
     }),
 
     // Update profile
@@ -80,7 +80,7 @@ export const authApi = baseApi.injectEndpoints({
         method: "PATCH",
         body,
       }),
-      invalidatesTags: ["User"],
+      invalidatesTags: ["Users"],
     }),
 
     // Logout (invalidate tokens)
