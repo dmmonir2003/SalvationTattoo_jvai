@@ -17,7 +17,7 @@ const AdminStatCard = ({
   iconColor,
   bgColor,
 }: AdminStatProps) => (
-  <div className="bg-[#0A0A0A] border border-[#262626] rounded-2xl p-6 flex-1 min-w-50 hover:border-[#404040] transition-colors">
+  <div className="bg-[#0A0A0A] border border-[#968B79]/60 rounded-2xl p-6 flex-1 min-w-50 hover:border-[#404040] transition-colors">
     <div
       className={cn(
         "w-10 h-10 rounded-xl flex items-center justify-center mb-6",

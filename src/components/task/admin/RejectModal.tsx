@@ -19,7 +19,7 @@ const RejectModal = ({ isOpen, onClose, onConfirm }: RejectModalProps) => {
   };
 
   return (
-    <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-110 flex items-center justify-center p-4">
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/90 backdrop-blur-sm"
@@ -36,7 +36,7 @@ const RejectModal = ({ isOpen, onClose, onConfirm }: RejectModalProps) => {
         <h2 className="text-2xl font-bold text-white mb-3 tracking-tight">
           Reject Task
         </h2>
-        <p className="text-gray-500 text-sm mb-8 leading-relaxed max-w-[280px]">
+        <p className="text-gray-500 text-sm mb-8 leading-relaxed max-w-70">
           Provide a reason for rejecting this task. The employee will receive
           this feedback.
         </p>
@@ -50,7 +50,7 @@ const RejectModal = ({ isOpen, onClose, onConfirm }: RejectModalProps) => {
             value={reason}
             onChange={(e) => setReason(e.target.value)}
             placeholder="Explain why the task was rejected..."
-            className="w-full bg-[#141414] border border-[#262626] rounded-2xl p-4 text-sm text-white focus:outline-none focus:border-red-500/50 min-h-[140px] resize-none transition-colors placeholder:text-gray-700"
+            className="w-full bg-[#141414] border border-[#262626] rounded-2xl p-4 text-sm text-white focus:outline-none focus:border-red-500/50 min-h-35 resize-none transition-colors placeholder:text-gray-700"
           />
         </div>
 
@@ -67,7 +67,7 @@ const RejectModal = ({ isOpen, onClose, onConfirm }: RejectModalProps) => {
             disabled={!reason.trim()}
             className="flex-1 py-4 bg-red-500 text-white rounded-2xl font-bold hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-red-500/20"
           >
-            Send
+            Send Feedback
           </button>
         </div>
       </div>

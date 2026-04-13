@@ -9,17 +9,64 @@ export const baseApi = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
     baseUrl: BASE_URL,
+    // prepareHeaders: (headers, { getState }) => {
+    //   // Pull token from auth slice
+    //   const state = getState() as RootState;
+    //   const token = state?.auth?.token;
+
+    //   // Debug: Log token info
+    //   if (typeof window !== "undefined") {
+    //     console.log(
+    //       "baseApi prepareHeaders - Token:",
+    //       token ? "✓ Present" : "✗ Missing",
+    //     );
+    //   }
+
+    //   if (token) {
+    //     headers.set("authorization", `Bearer ${token}`);
+    //     console.log("✓ Authorization header set with token");
+    //   } else {
+    //     console.warn("✗ No token available in Redux");
+    //   }
+
+    //   headers.set("Content-Type", "application/json");
+    //   return headers;
+    // },
     prepareHeaders: (headers, { getState }) => {
-      // Pull token from auth slice
-      const token = (getState() as RootState).auth.token;
-      if (token) {
-        headers.set("authorization", `Bearer ${token}`);
+      // 1. Check if the "no-auth" header was passed from the endpoint
+      const skipAuth = headers.get("no-auth");
+
+      if (skipAuth) {
+        // Remove the flag so it's not sent to the backend
+        headers.delete("no-auth");
+      } else {
+        // 2. Standard Auth Logic (Only runs if no-auth is NOT present)
+        const state = getState() as RootState;
+        const token = state?.auth?.token;
+
+        if (token) {
+          headers.set("authorization", `Bearer ${token}`);
+        }
       }
+
       headers.set("Content-Type", "application/json");
       return headers;
     },
   }),
-  tagTypes: ["Users"],
+  tagTypes: [
+    "Users",
+    "Locations",
+    "Tasks",
+    "Instructions",
+    "AppContent",
+    "FAQs",
+    "Profile",
+    "BranchManagerQrSession",
+    "Performance",
+    "AdminReports",
+    "AdminDashboard",
+    "BranchManagerTasks",
+  ],
   endpoints: () => ({}),
 });
 

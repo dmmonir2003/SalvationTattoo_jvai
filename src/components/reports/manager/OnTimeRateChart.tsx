@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import {
   BarChart,
@@ -12,7 +13,7 @@ import {
 
 const OnTimeRateChart = ({ data }: { data: any[] }) => {
   return (
-    <div className="bg-[#0A0A0A] border border-[#262626] rounded-2xl p-6 h-full">
+    <div className="bg-[#0A0A0A] border  border-[#968B79]/60 rounded-2xl p-6 h-full">
       <h3 className="text-white font-bold mb-1">On-Time Rate by Staff</h3>
       <p className="text-gray-500 text-xs mb-8">
         Punctuality across selected location(s)

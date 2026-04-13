@@ -1,7 +1,7 @@
 import { Send, ChevronDown } from "lucide-react";
 
 export const SendNotificationForm = () => (
-  <div className="bg-[#0A0A0A] border border-[#262626] rounded-3xl p-8 h-full flex flex-col">
+  <div className="bg-[#0A0A0A] border border-[#968B79]/60 rounded-3xl p-8 h-full flex flex-col">
     <div className="flex items-center gap-3 mb-8">
       <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center border border-white/10">
         <Send size={18} className="text-gray-400" />
@@ -23,7 +23,7 @@ export const SendNotificationForm = () => (
           <input
             type="text"
             placeholder="employee@inkempire.com"
-            className="w-full bg-black border border-[#262626] rounded-xl p-4 text-sm text-white focus:border-[#404040] outline-none"
+            className="w-full bg-black border border-[#968B79]/60 rounded-xl p-4 text-sm text-white focus:border-[#404040] outline-none"
           />
         </div>
         <div className="space-y-2">
@@ -31,7 +31,7 @@ export const SendNotificationForm = () => (
             User Type
           </label>
           <div className="relative">
-            <select className="w-full bg-black border border-[#262626] rounded-xl p-4 text-sm text-white appearance-none outline-none">
+            <select className="w-full bg-black border border-[#968B79]/60 rounded-xl p-4 text-sm text-white appearance-none outline-none">
               <option>Select Type</option>
               <option>Tattoo Artists</option>
               <option>Managers</option>

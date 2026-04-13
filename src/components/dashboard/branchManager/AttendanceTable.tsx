@@ -63,7 +63,7 @@ const attendanceData = [
 
 const AttendanceTable = () => {
   return (
-    <div className="bg-[#0A0A0A] border border-[#262626] rounded-2xl p-6 w-full flex flex-col h-[450px]">
+    <div className="bg-[#0A0A0A] border  border-[#968B79]/60 rounded-2xl p-6 w-full flex flex-col h-112.5">
       <div className="flex justify-between items-center mb-6">
         <div>
           <h3 className="text-white text-lg font-bold">Attendance Summary</h3>
@@ -86,7 +86,7 @@ const AttendanceTable = () => {
       <div className="flex-1 overflow-y-scroll pr-2 scroll-smooth custom-scrollbar">
         <table className="w-full text-left border-separate border-spacing-0">
           <thead className="sticky top-0 bg-[#0A0A0A] z-10">
-            <tr className="text-gray-500 text-xs uppercase tracking-wider">
+            <tr className="text-white text-xs uppercase tracking-wider">
               <th className="pb-4 font-medium">Employee Name</th>
               <th className="pb-4 font-medium">Location</th>
               <th className="pb-4 font-medium">Present</th>

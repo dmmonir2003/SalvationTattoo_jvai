@@ -4,7 +4,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, Loader2, Mail } from "lucide-react";
-import { useForgotPasswordMutation } from "@/services/auth";
+import { useForgotPasswordMutation } from "@/redux/services/auth";
 import { redirect, useRouter } from "next/navigation";
 
 export default function ForgotPasswordPage() {
@@ -35,9 +35,10 @@ export default function ForgotPasswordPage() {
       {/* Logo */}
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-foreground">
-          Salvation<span className="text-primary">Tattoo</span>
+          {/* Salvation<span className="text-primary">Tattoo</span> */}
+          Forgot Password!
         </h1>
-        <p className="text-muted-foreground mt-2">Management System</p>
+        {/* <p className="text-muted-foreground mt-2">Management System</p> */}
       </div>
 
       {/* Header */}
@@ -85,7 +86,7 @@ export default function ForgotPasswordPage() {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full py-3 px-4 rounded-lg bg-primary text-primary-foreground font-medium hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-background disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
+          className="w-full py-3 px-4 rounded-lg bg-primary text-white font-medium hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-background disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
         >
           {isLoading ? (
             <>

@@ -140,7 +140,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useLoginMutation } from "@/services/auth";
+import { useLoginMutation } from "@/redux/services/auth";
 import { useAppDispatch } from "@/redux/store";
 import { setCredentials } from "@/redux/features/auth/authSlice";
 import { useDemoLogin } from "@/hooks/useAuth";
@@ -154,26 +154,21 @@ export default function SignInPage() {
   const dispatch = useAppDispatch();
   const [login, { isLoading }] = useLoginMutation();
   const { loginAsAdmin, loginAsManager, loginAsBranchManager } = useDemoLogin();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      // 1. Trigger the mutation
       const response = await login({ email, password }).unwrap();
-
       console.log("Login Success:", response);
 
-      // 2. Dispatch to Redux using the correct keys from your JSON
       dispatch(
         setCredentials({
-          user: response?.user, // Matches "user" in your JSON
-          token: response.access, // Matches "access" in your JSON
+          user: response?.user,
+          token: response.access,
         }),
       );
 
-      // 3. Set cookie for middleware to detect login
       document.cookie = `accessToken=${response.access}; path=/; max-age=86400`;
-
-      // 4. Redirect
       router.push("/dashboard");
     } catch (err: any) {
       console.error("Login Error:", err);
@@ -184,10 +179,7 @@ export default function SignInPage() {
   return (
     <div className="p-8">
       <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-foreground">
-          Salvation<span className="text-primary">Tattoo</span>
-        </h1>
-        <p className="text-muted-foreground mt-2">Management System</p>
+        <h1 className="text-3xl font-bold text-white">Sign in</h1>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -217,12 +209,6 @@ export default function SignInPage() {
             >
               Password
             </label>
-            <Link
-              href="/auth/forgot-password"
-              className="text-sm text-primary hover:text-primary/80 transition-colors"
-            >
-              Forgot password?
-            </Link>
           </div>
           <div className="relative">
             <input
@@ -234,6 +220,7 @@ export default function SignInPage() {
               className="w-full px-4 py-3 rounded-lg border border-white text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all bg-transparent"
               required
             />
+
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
@@ -242,12 +229,22 @@ export default function SignInPage() {
               {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
           </div>
+
+          {/* Moved to Bottom Right using flex justify-end */}
+          <div className="flex justify-end">
+            <Link
+              href="/auth/forgot-password"
+              className="text-sm text-muted-foreground hover:text-white transition-colors"
+            >
+              Forgot password?
+            </Link>
+          </div>
         </div>
 
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full py-3 px-4 rounded-lg bg-primary text-primary-foreground font-medium hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-background disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
+          className="w-full py-3 px-4 rounded-lg bg-primary text-white font-medium hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-background disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
         >
           {isLoading ? (
             <>
@@ -275,13 +272,13 @@ export default function SignInPage() {
             onClick={loginAsManager}
             className="py-2 px-3 text-xs font-medium rounded-lg bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors"
           >
-            Manager
+            District Manager
           </button>
           <button
             onClick={loginAsBranchManager}
             className="py-2 px-3 text-xs font-medium rounded-lg bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors"
           >
-            Branch
+            Store Manager
           </button>
         </div>
       </div>

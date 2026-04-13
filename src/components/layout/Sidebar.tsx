@@ -28,6 +28,8 @@ import {
   User,
   X,
 } from "lucide-react";
+import Image from "next/image";
+import logo from "../../../public/assets/logo.svg";
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   LayoutDashboard,
@@ -123,14 +125,21 @@ function SidebarContent({
       {/* Logo Section */}
       <div
         className={cn(
-          "flex items-center h-16 border-b border-sidebar-border px-4",
+          "flex items-center min-h-16 border-b border-[#968B79]/20 px-4 ",
           collapsed ? "lg:justify-center" : "justify-between",
         )}
       >
         {(!collapsed || mobileOpen) && (
-          <h1 className="text-lg font-bold text-foreground">
-            Salvation<span className="text-primary">Tattoo</span>
-          </h1>
+          // <h1 className="text-lg font-bold text-foreground">
+          //   Salvation<span className="text-primary">Tattoo</span>
+          // </h1>
+          <Image
+            src={logo}
+            alt="Salvation Tattoo Lounge Logo"
+            width={200}
+            height={120}
+            className="py-4"
+          ></Image>
         )}
 
         {/* Desktop toggle / Mobile close button */}
@@ -165,7 +174,7 @@ function SidebarContent({
                     "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all",
                     collapsed && !mobileOpen && "lg:justify-center lg:px-2",
                     isActive
-                      ? "bg-primary/10 text-primary border-l-2 border-primary"
+                      ? " text-[#968B79] border border-[#968B79]/60  "
                       : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
                   )}
                   title={collapsed && !mobileOpen ? item.label : undefined}
@@ -182,7 +191,7 @@ function SidebarContent({
       </nav>
 
       {/* User Info Footer */}
-      <div className="border-t border-sidebar-border p-4">
+      <div className="border-t border-[#968B79]/30 p-4">
         {(!collapsed || mobileOpen) && (
           <div className="flex items-center gap-3 mb-3">
             <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0">

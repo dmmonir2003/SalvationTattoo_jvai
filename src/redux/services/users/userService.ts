@@ -86,7 +86,7 @@ export const userApi = baseApi.injectEndpoints({
 
     // 2. Add User
     // POST /api/admin/users/
-    createUser: builder.mutation<UserDetails, CreateUserRequest>({
+    addUser: builder.mutation<UserDetails, CreateUserRequest>({
       query: (body) => ({
         url: "/admin/users/",
         method: "POST",
@@ -121,7 +121,7 @@ export const userApi = baseApi.injectEndpoints({
 // --- EXPORT HOOKS ---
 export const {
   useGetUsersQuery,
-  useCreateUserMutation,
+  useAddUserMutation,
   useUpdateUserMutation,
   useDeleteUserMutation,
 } = userApi;

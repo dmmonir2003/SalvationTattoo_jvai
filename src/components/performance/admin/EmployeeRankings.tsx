@@ -117,7 +117,7 @@
 import { cn } from "@/lib/utils";
 
 export const EmployeeRankings = ({ rankings }: { rankings: any[] }) => (
-  <div className="bg-[#0A0A0A] border border-[#262626] rounded-[2rem] overflow-hidden mt-8">
+  <div className="bg-[#0A0A0A] border border-[#968B79]/60 rounded-[2rem] overflow-hidden mt-8">
     {/* Header */}
     <div className="p-6 md:p-8 border-b border-[#1A1A1A]">
       <h3 className="text-white font-bold text-lg">Employee Rankings</h3>
@@ -130,7 +130,7 @@ export const EmployeeRankings = ({ rankings }: { rankings: any[] }) => (
     <div className="hidden lg:block overflow-x-auto">
       <table className="w-full text-left border-collapse">
         <thead>
-          <tr className="text-gray-600 text-[10px] uppercase font-bold tracking-widest border-b border-[#1A1A1A]">
+          <tr className="text-white text-[10px] uppercase font-bold tracking-widest border-b border-[#1A1A1A]">
             <th className="px-8 py-5">Rank</th>
             <th className="px-8 py-5">Employee</th>
             <th className="px-8 py-5 text-center">Tasks Completed</th>

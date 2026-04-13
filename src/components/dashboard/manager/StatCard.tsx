@@ -19,7 +19,7 @@ const StatCard = ({
   iconColor,
 }: StatCardProps) => {
   return (
-    <div className="bg-[#0A0A0A] border border-[#262626] rounded-2xl p-6 flex flex-col gap-4 min-w-[280px] flex-1">
+    <div className="bg-[#0A0A0A] border border-[#968B79]/60 rounded-2xl p-6 flex flex-col gap-4 min-w-[280px] flex-1">
       {/* Icon Container */}
       <div
         className={`w-12 h-12 rounded-xl flex items-center justify-center ${iconBgColor}`}

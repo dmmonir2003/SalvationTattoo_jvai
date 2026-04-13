@@ -226,7 +226,7 @@ import { ArrowLeft, Loader2, CheckCircle } from "lucide-react";
 import {
   useVerifyOTPMutation,
   useForgotPasswordMutation,
-} from "@/services/auth";
+} from "@/redux/services/auth";
 
 export default function VerifyOTPPage() {
   const router = useRouter();
@@ -339,9 +339,10 @@ export default function VerifyOTPPage() {
       <div className="p-8">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-foreground">
-            Salvation<span className="text-primary">Tattoo</span>
+            {/* Salvation<span className="text-primary">Tattoo</span> */}
+            Verify OTP
           </h1>
-          <p className="text-muted-foreground mt-2">Management System</p>
+          {/* <p className="text-muted-foreground mt-2">Management System</p> */}
         </div>
         <div className="text-center">
           <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-green-500/20 flex items-center justify-center">
@@ -362,9 +363,10 @@ export default function VerifyOTPPage() {
     <div className="p-8">
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-foreground">
-          Salvation<span className="text-primary">Tattoo</span>
+          {/* Salvation<span className="text-primary">Tattoo</span> */}
+          Verify OTP
         </h1>
-        <p className="text-muted-foreground mt-2">Management System</p>
+        {/* <p className="text-muted-foreground mt-2">Management System</p> */}
       </div>
 
       <div className="mb-6">
@@ -420,7 +422,7 @@ export default function VerifyOTPPage() {
         <button
           type="submit"
           disabled={isLoading || otp.join("").length !== 5}
-          className="w-full py-3 px-4 rounded-lg bg-primary text-primary-foreground font-medium hover:bg-primary/90 disabled:opacity-50 flex items-center justify-center gap-2 transition-all"
+          className="w-full py-3 px-4 rounded-lg bg-primary text-white font-medium hover:bg-primary/90 disabled:opacity-50 flex items-center justify-center gap-2 transition-all"
         >
           {isLoading ? (
             <>

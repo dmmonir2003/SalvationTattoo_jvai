@@ -45,6 +45,7 @@ export type Permission =
   | "settings:manage"
   | "qr-section"
   | "app-content"
+  | "users_attendance"
   | "profile";
 
 export interface RolePermissions {

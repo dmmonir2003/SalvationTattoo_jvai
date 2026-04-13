@@ -1,7 +1,7 @@
 "use client";
 import { Calendar, Users, ClipboardCheck } from "lucide-react";
 import StatCard from "./StatCard";
-import OverdueBanner from "./OverdueBanner";
+
 import { StaffList, TaskActivity } from "./DashboardLists";
 import { useAppSelector } from "@/redux/store";
 import { selectCurrentUser } from "@/redux/features/auth/authSlice";
@@ -112,8 +112,8 @@ export default function DashboardBranchManager() {
         ))}
       </div>
 
-      {/* 2. Overdue Banner */}
-      <OverdueBanner count={2} />
+      {/* 2. Overdue Banner
+      <OverdueBanner count={2} /> */}
 
       {/* 3. Lists Row */}
       <div className="flex flex-col lg:flex-row gap-6">

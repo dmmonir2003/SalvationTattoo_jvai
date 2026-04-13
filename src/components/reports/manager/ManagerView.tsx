@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React, { useState } from "react";
@@ -130,7 +131,7 @@ export default function ReportsManager() {
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="bg-[#0A0A0A] border border-[#262626] p-1 rounded-xl flex gap-1">
+          <div className="bg-[#0A0A0A] border  border-[#968B79]/60 p-1 rounded-xl flex gap-1">
             {["Week", "Month", "Quarter"].map((t) => (
               <button
                 key={t}
@@ -146,14 +147,14 @@ export default function ReportsManager() {
               </button>
             ))}
           </div>
-          <button className="flex items-center gap-3 bg-[#0A0A0A] border border-[#262626] px-4 py-2 rounded-xl text-xs font-bold text-white hover:bg-[#111111]">
+          <button className="flex items-center gap-3 bg-[#0A0A0A] border  border-[#968B79]/60 px-4 py-2 rounded-xl text-xs font-bold text-white hover:bg-[#111111]">
             All Location <ChevronDown size={14} className="text-gray-500" />
           </button>
         </div>
       </div>
 
       {/* 2. Tab Switcher */}
-      <div className="bg-[#0A0A0A] border border-[#262626] p-1 rounded-2xl flex gap-1 w-fit">
+      <div className="bg-[#0A0A0A] border  border-[#968B79]/60 p-1 rounded-2xl flex gap-1 w-fit">
         <button
           onClick={() => setActiveTab("overview")}
           className={cn(
@@ -252,7 +253,7 @@ function OverviewSection({ comparisonData, categoriesData, summaryData }: any) {
 
 function ReportStatCard({ title, subtitle, icon: Icon, iconColor }: any) {
   return (
-    <div className="bg-[#0A0A0A] border border-[#262626] rounded-2xl p-6 hover:border-[#404040] transition-colors group">
+    <div className="bg-[#0A0A0A] border  border-[#968B79]/60 rounded-2xl p-6  transition-colors group">
       <div
         className={cn(
           "w-10 h-10 rounded-xl bg-black border border-[#262626] flex items-center justify-center mb-4 group-hover:border-[#404040]",

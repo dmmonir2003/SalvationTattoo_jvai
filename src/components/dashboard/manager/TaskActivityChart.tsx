@@ -20,7 +20,7 @@ const data = [
 
 const TaskActivityChart = () => {
   return (
-    <div className="bg-[#0A0A0A] border border-[#262626] rounded-2xl p-6 w-full h-112.5">
+    <div className="bg-[#0A0A0A] border  border-[#968B79]/60 rounded-2xl p-6 w-full h-112.5">
       <div className="flex justify-between items-start mb-6">
         <div>
           <h3 className="text-white text-lg font-bold">Weekly Task Activity</h3>

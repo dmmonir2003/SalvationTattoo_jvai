@@ -12,7 +12,7 @@ const TopPerformers = ({ performers }: { performers: Performer[] }) => {
   const rankColors = ["text-yellow-500", "text-gray-400", "text-orange-600"];
 
   return (
-    <div className="bg-[#0A0A0A] border border-[#262626] rounded-2xl p-6 h-full">
+    <div className="bg-[#0A0A0A] border  border-[#968B79]/60 rounded-2xl p-6 h-full">
       <div className="flex items-center gap-2 mb-6">
         <span className="text-yellow-500">🏆</span>
         <h3 className="text-white font-bold">Top Performers</h3>

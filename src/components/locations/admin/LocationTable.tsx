@@ -97,7 +97,7 @@ export const LocationTable = ({
     <div className="hidden md:block overflow-x-auto bg-[#0A0A0A] border border-[#262626] rounded-[32px] overflow-hidden">
       <table className="w-full text-left border-collapse">
         <thead>
-          <tr className="text-gray-600 text-[10px] uppercase font-bold tracking-widest border-b border-[#1A1A1A]">
+          <tr className="text-white text-[10px] uppercase font-bold tracking-widest border-b border-[#1A1A1A]">
             <th className="px-6 py-5">Location</th>
             <th className="px-6 py-5">Address</th>
             <th className="px-6 py-5">City</th>
@@ -108,10 +108,7 @@ export const LocationTable = ({
         </thead>
         <tbody className="divide-y divide-[#1A1A1A]">
           {locations.map((loc) => (
-            <tr
-              key={loc.id}
-              className="hover:bg-white/[0.02] transition-all group"
-            >
+            <tr key={loc.id} className="hover:bg-white/2 transition-all group">
               <td className="px-6 py-6">
                 <div className="flex items-center gap-4">
                   <div className="w-10 h-10 rounded-full border border-[#262626] flex items-center justify-center bg-[#0D0D0D] shrink-0">

@@ -59,17 +59,17 @@ export default function ManagerView() {
             <input
               type="text"
               placeholder="Search tasks..."
-              className="w-full bg-[#0A0A0A] border border-[#262626] rounded-xl py-2.5 pl-10 pr-4 text-sm focus:outline-none focus:border-indigo-500 transition-colors"
+              className="w-full bg-[#0A0A0A] border border-[#262626] rounded-xl py-2.5 pl-10 pr-4 text-sm focus:outline-none focus:border-[#968B79]/60 transition-colors"
             />
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 bg-[#0A0A0A] border border-[#262626] rounded-xl px-4 py-2.5 text-sm cursor-pointer min-w-35">
+            <div className="flex items-center gap-2 bg-[#0A0A0A] border border-[#968B79]/60 rounded-xl px-4 py-2.5 text-sm cursor-pointer min-w-35">
               All Location{" "}
               <ChevronDown size={16} className="ml-auto text-gray-500" />
             </div>
 
-            <div className="bg-[#0A0A0A] border border-[#262626] rounded-xl p-1 flex gap-1">
+            {/* <div className="bg-[#0A0A0A] border border-[#968B79]/60 rounded-xl p-1 flex gap-1">
               {["All", "Pending", "In-Progress", "Completed", "Overdue"].map(
                 (tab) => (
                   <button
@@ -80,7 +80,7 @@ export default function ManagerView() {
                   </button>
                 ),
               )}
-            </div>
+            </div> */}
           </div>
         </div>
 

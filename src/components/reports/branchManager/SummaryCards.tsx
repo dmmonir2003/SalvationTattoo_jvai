@@ -21,7 +21,7 @@ export default function PerformanceSummaryCard({
   };
 
   return (
-    <div className="bg-[#0A0A0A] border border-[#262626] rounded-2xl p-5 flex-1 min-w-50">
+    <div className="bg-[#0A0A0A] border border-[#968B79]/60 rounded-2xl p-5 flex-1 min-w-50">
       <div className="flex items-center gap-2 mb-4">
         {icons[type]}
         <span className="text-gray-400 text-xs font-medium">{label}</span>

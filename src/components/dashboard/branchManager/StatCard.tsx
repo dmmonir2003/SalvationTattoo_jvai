@@ -21,7 +21,7 @@ export default function StatCard({
   progressData,
 }: StatCardProps) {
   return (
-    <div className="bg-[#0A0A0A] border border-[#262626] rounded-2xl p-6 flex-1 min-w-75">
+    <div className="bg-[#0A0A0A] border  border-[#968B79]/60 rounded-2xl p-6 flex-1 min-w-75">
       <div className="flex justify-between items-start mb-4">
         <div>
           <p className="text-gray-500 text-[10px] uppercase font-bold tracking-widest mb-1">

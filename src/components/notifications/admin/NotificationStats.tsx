@@ -7,7 +7,7 @@ export const NotificationStats = ({ stats }: { stats: any[] }) => (
     {stats.map((stat, i) => (
       <div
         key={i}
-        className="bg-[#0A0A0A] border border-[#262626] rounded-2xl p-6 min-h-35 flex flex-col justify-between"
+        className="bg-[#0A0A0A] border border-[#968B79]/60 rounded-2xl p-6 min-h-35 flex flex-col justify-between"
       >
         <div
           className={cn(

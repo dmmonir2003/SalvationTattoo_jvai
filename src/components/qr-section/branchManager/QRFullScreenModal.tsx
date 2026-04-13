@@ -1,5 +1,5 @@
 import React from "react";
-import { X, Download, Share2 } from "lucide-react";
+import { X } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 
 interface QRModalProps {

@@ -6,7 +6,7 @@ import {
 } from "@/redux/features/auth/authSlice";
 
 import { Loader2 } from "lucide-react";
-import ReportsAdmin from "@/components/reports/admin/ReportsAdmin";
+// import ReportsAdmin from "@/components/reports/admin/ReportsAdmin";
 // import ReportsManager from "@/components/reports/manager/ManagerView";
 // import ReportsBranchManager from "@/components/reports/branchManager/ReportsBranchManager";
 import { useAppSelector } from "@/redux/store";
@@ -27,8 +27,8 @@ export default function QrSectionpage() {
 
   // Dispatcher Logic
   switch (role) {
-    case "super_admin":
-      return <ReportsAdmin />;
+    // case "super_admin":
+    //   return <ReportsAdmin />;
     case "district_manager":
       return <ManagerQrSection />;
     case "branch_manager":

@@ -1,7 +1,7 @@
 import { ArrowUpRight, Clock, XCircle } from "lucide-react";
 
 const OverdueTasksBanner = () => (
-  <div className="bg-[#1C0D0D] border border-red-900/30 rounded-2xl p-6">
+  <div className="bg-[#1C0D0D] border border-[#968B79]/60 rounded-2xl p-6">
     <div className="flex items-start gap-4 mb-4">
       <div className="p-2 bg-red-500/10 rounded-lg">
         <Clock className="text-red-500 w-5 h-5" />

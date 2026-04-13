@@ -11,7 +11,7 @@ const historyData = [
 
 const QRHistory = () => {
   return (
-    <div className="bg-[#0A0A0A] border border-[#262626] rounded-2xl p-8">
+    <div className="bg-[#0A0A0A] border  border-[#968B79]/60 rounded-2xl p-8">
       <div className="mb-8">
         <h3 className="text-white font-bold text-lg mb-1">QR History</h3>
         <p className="text-gray-500 text-sm">
@@ -22,7 +22,7 @@ const QRHistory = () => {
       <div className="overflow-x-auto">
         <table className="w-full text-left">
           <thead>
-            <tr className="text-gray-600 text-[10px] uppercase font-bold tracking-[0.15em] border-b border-[#1A1A1A]">
+            <tr className="text-white text-[10px] uppercase font-bold tracking-[0.15em] border-b border-[#1A1A1A]">
               <th className="pb-4 font-medium">QR Preview</th>
               <th className="pb-4 font-medium">Generated Date</th>
               <th className="pb-4 font-medium text-center">Present</th>

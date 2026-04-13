@@ -31,7 +31,7 @@ const QRGenerator = () => {
   };
 
   return (
-    <div className="bg-[#0A0A0A] border border-[#262626] rounded-2xl p-8">
+    <div className="bg-[#0A0A0A] border  border-[#968B79]/60 rounded-2xl p-8">
       <h3 className="text-white font-bold mb-6 text-lg">QR Generator</h3>
 
       <div className="flex flex-col lg:flex-row gap-12 items-center lg:items-start">
@@ -68,7 +68,7 @@ const QRGenerator = () => {
               QR Refresh Interval
             </label>
             <div className="relative">
-              <select className="w-full bg-black border border-[#262626] text-white rounded-xl py-3 px-4 text-sm appearance-none focus:outline-none focus:border-white/20 cursor-pointer">
+              <select className="w-full bg-black border  border-[#968B79]/60 text-white rounded-xl py-3 px-4 text-sm appearance-none focus:outline-none focus:border-white/20 cursor-pointer">
                 <option>Every 3 minutes</option>
                 <option>Every 5 minutes</option>
                 <option>Manual only</option>

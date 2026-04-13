@@ -46,10 +46,9 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Mail, MapPin, Calendar } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 export const NotificationFeed = ({ history }: { history: any[] }) => (
-  <div className="bg-[#0A0A0A] border border-[#262626] rounded-[2rem] p-5 md:p-8 h-full">
+  <div className="bg-[#0A0A0A] border border-[#968B79]/60 rounded-[2rem] p-5 md:p-8 h-full">
     {/* Header */}
     <div className="mb-6 md:mb-8">
       <h3 className="text-white font-bold text-lg md:text-base">
@@ -65,7 +64,7 @@ export const NotificationFeed = ({ history }: { history: any[] }) => (
       {history.map((item, i) => (
         <div
           key={i}
-          className="bg-[#111] border border-[#262626] rounded-2xl p-4 md:p-5 hover:border-[#404040] transition-all group"
+          className="bg-[#111] border border-[#968B79]/60 rounded-2xl p-4 md:p-5 hover:border-[#404040] transition-all group"
         >
           {/* Recipient & Status */}
           <div className="flex flex-wrap justify-between items-center gap-3 mb-3">

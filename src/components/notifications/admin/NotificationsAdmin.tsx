@@ -51,14 +51,14 @@ export default function NotificationsAdmin() {
   return (
     <div className="space-y-8 p-4 bg-black min-h-screen text-white">
       {/* Header */}
-      <div>
+      {/* <div>
         <h1 className="text-3xl font-bold tracking-tight">
           Notification Center
         </h1>
         <p className="text-gray-500 text-[10px] mt-1 uppercase font-bold tracking-widest">
           Salvation Tattoo Lounge · Super Admin Panel
         </p>
-      </div>
+      </div> */}
 
       {/* 1. Stats Grid */}
       <NotificationStats stats={stats} />

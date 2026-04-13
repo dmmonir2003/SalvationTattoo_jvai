@@ -1,8 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useAppSelector } from "@/redux/store";
 import { selectCurrentUser } from "@/redux/features/auth/authSlice";
+import { ChevronDown } from "lucide-react"; // Install lucide-react if you haven't
 
 import OverdueTasksBanner from "./OverdueTasksBanner";
 import ComparisonBar from "./ComparisonBar";
@@ -10,10 +11,11 @@ import PerformanceRadial from "./PerformanceRadial";
 import PunctualityTable from "./PunctualityTable";
 import PerformanceStatCard from "./PerformanceStatCard";
 
-// Import your new components
-
 export default function PerformanceManager() {
   const user = useAppSelector(selectCurrentUser);
+
+  // 1. Add State for the filter
+  const [selectedLocation, setSelectedLocation] = useState("All Location");
 
   const staffPerformanceData = [
     {
@@ -150,33 +152,99 @@ export default function PerformanceManager() {
     },
   ];
 
-  // Example: Mapping your Redux/Mock data to the new UI
   const locations = [
-    { name: "Downtown Ink", value: 78, color: "bg-indigo-500" },
-    { name: "Westside Studio", value: 61, color: "bg-amber-500" },
-    { name: "Northgate Tattoo", value: 55, color: "bg-emerald-500" },
-    { name: "East End Parlor", value: 84, color: "bg-red-500" },
+    {
+      name: "Downtown Ink",
+      taskCompletion: 78,
+      attendanceRate: 92,
+      timeliness: 85,
+      ratingScore: 90,
+      staffScore: 70,
+      color: "#6366F1",
+    }, // Blue
+    {
+      name: "Westside Studio",
+      taskCompletion: 61,
+      attendanceRate: 85,
+      timeliness: 75,
+      ratingScore: 95,
+      staffScore: 60,
+      color: "#F59E0B",
+    }, // Orange
+    {
+      name: "Northgate Tattoo",
+      taskCompletion: 55,
+      attendanceRate: 88,
+      timeliness: 80,
+      ratingScore: 92,
+      staffScore: 65,
+      color: "#10B981",
+    }, // Green
+    {
+      name: "East End Parlor",
+      taskCompletion: 84,
+      attendanceRate: 95,
+      timeliness: 84,
+      ratingScore: 95,
+      staffScore: 69,
+      color: "#EF4444",
+    }, // Red
   ];
+
+  // 2. Filter Logic
+  const filteredStaffData =
+    selectedLocation === "All Location"
+      ? staffPerformanceData
+      : staffPerformanceData.filter(
+          (staff) => staff.location === selectedLocation,
+        );
+
+  const filteredLocations =
+    selectedLocation === "All Location"
+      ? locations
+      : locations.filter((loc) => loc.name === selectedLocation);
 
   return (
     <div className="p-8 bg-black min-h-screen space-y-8">
-      {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-white">
-          Performance Monitoring
-        </h1>
-        <p className="text-gray-500 text-sm">
-          Compare locations and monitor staff punctuality
-        </p>
+      {/* --- Updated Header Section --- */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-white">
+            Performance Monitoring
+          </h1>
+          <p className="text-gray-500 text-sm">
+            Compare locations and monitor staff punctuality
+          </p>
+        </div>
+
+        {/* Styled Filter Dropdown */}
+        <div className="relative inline-block">
+          <select
+            value={selectedLocation}
+            onChange={(e) => setSelectedLocation(e.target.value)}
+            className="appearance-none bg-black text-white text-sm border border-[#968B79] rounded-lg px-4 py-2 pr-10 focus:outline-none cursor-pointer hover:bg-[#1A1A1A] transition-colors"
+          >
+            <option value="All Location">All Location</option>
+            {locations.map((loc) => (
+              <option key={loc.name} value={loc.name}>
+                {loc.name}
+              </option>
+            ))}
+          </select>
+          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-[#968B79]">
+            <ChevronDown size={16} />
+          </div>
+        </div>
       </div>
+      {/* ------------------------------ */}
 
       {/* 1. Top Stat Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {locations.map((loc) => (
+        {filteredLocations.map((loc) => (
           <PerformanceStatCard
             key={loc.name}
             location={loc.name}
-            percentage={loc.value}
+            percentage={loc.taskCompletion}
             color={loc.color}
           />
         ))}
@@ -185,45 +253,122 @@ export default function PerformanceManager() {
       {/* 3. Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Left: Comparison (Bars) */}
-        <div className="bg-[#0A0A0A] border border-[#262626] rounded-2xl p-6">
-          <h3 className="text-white font-bold mb-1">Location Comparison</h3>
-          <p className="text-gray-500 text-xs mb-6">
+        <div className="bg-[#0A0A0A] border border-[#968B79]/60 rounded-2xl p-6">
+          <h3 className="text-white font-bold mb-1 text-lg">
+            Location Comparison
+          </h3>
+          <p className="text-gray-500 text-xs mb-8">
             Task completion vs attendance rates
           </p>
-          <ComparisonBar
-            label={locations[0].name}
-            value={locations[0].value}
-            color={locations[0].color}
-          />
-          <ComparisonBar
-            label={locations[1].name}
-            value={locations[1].value}
-            color={locations[1].color}
-          />
-          <ComparisonBar
-            label={locations[2].name}
-            value={locations[2].value}
-            color={locations[2].color}
-          />
-          <ComparisonBar
-            label={locations[3].name}
-            value={locations[3].value}
-            color={locations[3].color}
-          />
+
+          {/* --- TASK COMPLETION SUB-SECTION --- */}
+          <div className="mb-8">
+            <h4 className="text-[10px] font-bold text-gray-400 tracking-widest mb-4 uppercase">
+              Task Completion
+            </h4>
+            <div className="space-y-4">
+              {filteredLocations.map((loc) => (
+                <ComparisonBar
+                  key={`${loc.name}-task`}
+                  label={loc.name}
+                  value={loc.taskCompletion}
+                  color={loc.color}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Subtle Divider Line */}
+          <div className="border-t border-gray-800/50 my-6" />
+
+          {/* --- ATTENDANCE RATE SUB-SECTION --- */}
+          <div>
+            <h4 className="text-[10px] font-bold text-gray-400 tracking-widest mb-4 uppercase">
+              Attendance Rate
+            </h4>
+            <div className="space-y-4">
+              {filteredLocations.map((loc) => (
+                <ComparisonBar
+                  key={`${loc.name}-attendance`}
+                  label={loc.name}
+                  value={loc.attendanceRate}
+                  color={loc.color}
+                />
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Right: Overview (Radials) */}
-        <div className="bg-[#0A0A0A] border border-[#262626] rounded-2xl p-6">
-          <h3 className="text-white font-bold mb-1">
-            Location Performance Overview
-          </h3>
-          <p className="text-gray-500 text-xs mb-6">
-            All performance dimensions per location
-          </p>
-          <div className="grid grid-cols-3 gap-4">
-            <PerformanceRadial label="Task Completion" value={70} />
-            <PerformanceRadial label="Attendance Rate" value={90} />
-            <PerformanceRadial label="Timeliness" value={81} />
+        {/* Right: Overview (Multi-colored Radials) */}
+        <div className="bg-[#0A0A0A] border border-[#968B79]/60 rounded-3xl p-8 flex flex-col justify-between">
+          <div>
+            <h3 className="text-white font-bold mb-1 text-lg">
+              Location Performance Overview
+            </h3>
+            <p className="text-gray-500 text-xs mb-10">
+              All performance dimensions per location
+            </p>
+
+            {/* The 5-Chart Grid */}
+            <div className="grid grid-cols-3 gap-y-12 gap-x-4 mb-12">
+              <PerformanceRadial
+                label="Task Completion"
+                avgValue={70}
+                locations={locations.map((l) => ({
+                  name: l.name,
+                  color:
+                    l.color.replace("bg-", "") === l.color
+                      ? l.color
+                      : "#6366F1" /* Fallback if using tailwind classes */,
+                }))}
+              />
+              <PerformanceRadial
+                label="Attendance Rate"
+                avgValue={90}
+                locations={locations.map((l) => ({
+                  name: l.name,
+                  color: l.color,
+                }))}
+              />
+              <PerformanceRadial
+                label="Timeliness"
+                avgValue={81}
+                locations={locations.map((l) => ({
+                  name: l.name,
+                  color: l.color,
+                }))}
+              />
+              <PerformanceRadial
+                label="Rating Score"
+                avgValue={93}
+                locations={locations.map((l) => ({
+                  name: l.name,
+                  color: l.color,
+                }))}
+              />
+              <PerformanceRadial
+                label="Staff Score"
+                avgValue={66}
+                locations={locations.map((l) => ({
+                  name: l.name,
+                  color: l.color,
+                }))}
+              />
+            </div>
+          </div>
+
+          {/* Legend at the bottom */}
+          <div className="flex flex-wrap items-center justify-start gap-x-6 gap-y-2 pt-6 border-t border-gray-800/50">
+            {locations.map((loc) => (
+              <div key={loc.name} className="flex items-center gap-2">
+                <div
+                  className="w-3 h-3 rounded-full"
+                  style={{ backgroundColor: loc.color }}
+                />
+                <span className="text-gray-400 text-xs">{loc.name}</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -232,7 +377,7 @@ export default function PerformanceManager() {
       <OverdueTasksBanner />
 
       {/* 4. Staff Punctuality Table */}
-      <PunctualityTable data={staffPerformanceData} />
+      <PunctualityTable data={filteredStaffData} />
     </div>
   );
 }

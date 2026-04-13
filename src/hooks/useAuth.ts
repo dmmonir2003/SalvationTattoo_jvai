@@ -145,8 +145,8 @@ export function useDemoLogin() {
         setCredentials({
           user: {
             id: 2,
-            email: "manager@salvationlounge.com",
-            username: "Manager User",
+            email: "districtmanager@salvationlounge.com",
+            username: "District Manager",
             role: "district_manager",
             role_display: "District Manager",
             is_super_admin: false,
@@ -168,8 +168,8 @@ export function useDemoLogin() {
         setCredentials({
           user: {
             id: 1,
-            email: "branch@salvationlounge.com",
-            username: "Branch Manager",
+            email: "storemanger@salvationlounge.com",
+            username: "Store Manager",
             role: "branch_manager",
             role_display: "Branch Manager",
             is_super_admin: false,

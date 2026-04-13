@@ -1,88 +1,89 @@
 import React from "react";
-import {
-  CheckCircle2,
-  Clock,
-  Circle,
-  User,
-  Briefcase,
-  Calendar,
-} from "lucide-react";
+import { Pencil, Trash2, CheckSquare } from "lucide-react";
 
 interface TaskProps {
   title: string;
   description: string;
   assignee: string;
-  role: string;
   dueDate: string;
+  submittedDate?: string; // New prop for the image design
   status: "Completed" | "In Progress" | "Pending" | "Overdue";
+  onEdit?: () => void;
+  onDelete?: () => void;
 }
 
 const TaskItem = ({
   title,
   description,
   assignee,
-  role,
   dueDate,
+  submittedDate,
   status,
+  onEdit,
+  onDelete,
 }: TaskProps) => {
-  // Define status-specific styles
-  const statusConfig = {
-    Completed: {
-      icon: <CheckCircle2 className="text-emerald-500" size={20} />,
-      badge: "bg-emerald-500/10 text-emerald-500",
-      bg: "bg-emerald-500/5",
-    },
-    "In Progress": {
-      icon: <Clock className="text-blue-500" size={20} />,
-      badge: "bg-blue-500/10 text-blue-500",
-      bg: "bg-blue-500/5",
-    },
-    Pending: {
-      icon: <Circle className="text-gray-500" size={20} />,
-      badge: "bg-gray-500/10 text-gray-400",
-      bg: "bg-transparent",
-    },
-    Overdue: {
-      icon: <Circle className="text-red-500" size={20} />,
-      badge: "bg-red-500/10 text-red-500",
-      bg: "bg-red-500/5",
-    },
+  // Define status-specific badge styles
+  const statusStyles = {
+    Completed: "border-emerald-500/50 text-emerald-500",
+    "In Progress": "border-blue-500/50 text-blue-500",
+    Pending: "border-indigo-500/50 text-indigo-500",
+    Overdue: "border-red-500/50 text-red-500",
   };
 
-  const config = statusConfig[status];
-
   return (
-    <div
-      className={`group flex items-center justify-between p-5 border border-[#262626] rounded-2xl transition-all hover:border-[#404040] ${config.bg}`}
-    >
+    <div className="flex items-center justify-between p-4 bg-black border-b border-[#1A1A1A] hover:bg-[#050505] transition-colors group">
       <div className="flex items-start gap-4">
-        {/* Status Icon */}
-        <div className="mt-1">{config.icon}</div>
+        {/* Leading Icon Container */}
+        <div className="mt-1 flex items-center justify-center w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-500">
+          <CheckSquare size={20} />
+        </div>
 
-        <div className="space-y-2">
-          <h3 className="text-white font-semibold text-base">{title}</h3>
-          <p className="text-gray-500 text-sm max-w-xl">{description}</p>
+        {/* Content Area */}
+        <div className="flex flex-col">
+          <div className="flex items-center gap-3">
+            <h3 className="text-gray-200 font-bold text-sm underline decoration-gray-600 underline-offset-4 cursor-pointer hover:text-white">
+              {title}
+            </h3>
+            <span
+              className={`px-3 py-0.5 rounded border text-[10px] font-medium bg-transparent ${statusStyles[status]}`}
+            >
+              {status}
+            </span>
+          </div>
 
-          {/* Metadata */}
-          <div className="flex flex-wrap items-center gap-4 pt-1">
-            <div className="flex items-center gap-1.5 text-xs text-gray-400">
-              <User size={14} /> {assignee}
-            </div>
-            <div className="flex items-center gap-1.5 text-xs text-gray-400">
-              <Briefcase size={14} /> {role}
-            </div>
-            <div className="flex items-center gap-1.5 text-xs text-gray-400">
-              <Calendar size={14} /> Due {dueDate}
-            </div>
+          <p className="text-gray-500 text-xs mt-1">{description}</p>
+
+          {/* Metadata Row */}
+          <div className="flex items-center gap-3 mt-3 text-[11px] text-gray-400 font-medium">
+            <span className="underline cursor-pointer hover:text-white">
+              {assignee}
+            </span>
+            <span className="text-gray-700">:</span>
+            <span>Due {dueDate}</span>
+            {submittedDate && (
+              <>
+                <span className="text-gray-700">:</span>
+                <span>Submitted {submittedDate}</span>
+              </>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Status Badge */}
-      <div
-        className={`px-4 py-1.5 rounded-lg text-xs font-medium ${config.badge}`}
-      >
-        {status}
+      {/* Action Buttons (Right Side) */}
+      <div className="flex items-center gap-2">
+        <button
+          onClick={onEdit}
+          className="p-2 text-gray-400 hover:text-white border border-[#262626] rounded-lg transition-all"
+        >
+          <Pencil size={16} />
+        </button>
+        <button
+          onClick={onDelete}
+          className="p-2 text-red-500/80 hover:text-red-500 border border-red-900/30 rounded-lg transition-all hover:bg-red-500/5"
+        >
+          <Trash2 size={16} />
+        </button>
       </div>
     </div>
   );

@@ -26,7 +26,7 @@ export default function TaskLog({ data }: { data: TaskEntry[] }) {
   };
 
   return (
-    <div className="bg-[#0A0A0A] border border-[#262626] rounded-3xl overflow-hidden">
+    <div className="bg-[#0A0A0A] border border-[#968B79]/60 rounded-3xl overflow-hidden">
       <div className="p-6 border-b border-[#1A1A1A]">
         <h3 className="text-white font-bold text-lg">Task Log</h3>
         <p className="text-gray-500 text-xs mt-1">{data.length} tasks total</p>
@@ -34,7 +34,7 @@ export default function TaskLog({ data }: { data: TaskEntry[] }) {
       <div className="overflow-x-auto">
         <table className="w-full text-left">
           <thead>
-            <tr className="text-gray-600 text-[10px] uppercase font-bold tracking-widest border-b border-[#1A1A1A]">
+            <tr className="text-white text-[10px] uppercase font-bold tracking-widest border-b border-[#1A1A1A]">
               <th className="px-6 py-4">Task</th>
               <th className="px-6 py-4">Assigned To</th>
               <th className="px-6 py-4">Due Date</th>

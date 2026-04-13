@@ -4,7 +4,7 @@ import { CheckSquare } from "lucide-react";
 
 export function StaffList({ staff }: { staff: any[] }) {
   return (
-    <div className="bg-[#0A0A0A] border border-[#262626] rounded-2xl p-6 flex-1">
+    <div className="bg-[#0A0A0A] border  border-[#968B79]/60 rounded-2xl p-6 flex-1">
       <div className="flex justify-between items-center mb-6">
         <h3 className="text-white font-bold">Today&apos;s Staff</h3>
         <span className="text-gray-500 text-xs uppercase font-bold tracking-tighter">
@@ -47,7 +47,7 @@ export function StaffList({ staff }: { staff: any[] }) {
 
 export function TaskActivity({ tasks }: { tasks: any[] }) {
   return (
-    <div className="bg-[#0A0A0A] border border-[#262626] rounded-2xl p-6 flex-[1.5]">
+    <div className="bg-[#0A0A0A] border  border-[#968B79]/60 rounded-2xl p-6 flex-[1.5]">
       <div className="flex justify-between items-center mb-6">
         <h3 className="text-white font-bold">Recent Task Activity</h3>
         <button className="text-indigo-400 text-xs font-bold hover:underline">

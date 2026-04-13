@@ -7,28 +7,35 @@ export const ROLE_PERMISSIONS: RolePermissions[] = [
     permissions: [
       // Dashboard
       "dashboard:view",
-      // Tasks
-      "tasks:view",
-      "tasks:create",
-      "tasks:edit",
-      "tasks:delete",
+
       // Verifications
       // "verifications:view",
       // "verifications:approve",
       // "verifications:reject",
-      // Reports
-      "reports:view",
-      "reports:export",
+
       // Users
       "users:view",
       "users:create",
       "users:edit",
       "users:delete",
+
+      "users_attendance",
+
       // Locations
       "locations:view",
       "locations:create",
       "locations:edit",
       "locations:delete",
+
+      // Tasks
+      "tasks:view",
+      "tasks:create",
+      "tasks:edit",
+      "tasks:delete",
+
+      // Reports
+      "reports:view",
+      "reports:export",
       // Notifications
       "notifications:view",
       "notifications:manage",
@@ -63,7 +70,7 @@ export const ROLE_PERMISSIONS: RolePermissions[] = [
       // Performance
       "performance:view",
       "qr-section",
-      "profile",
+      // "profile",
     ],
   },
   {
@@ -87,7 +94,7 @@ export const ROLE_PERMISSIONS: RolePermissions[] = [
       // "performance:view",
 
       "qr-section",
-      "profile",
+      // "profile",
     ],
   },
 ];
@@ -123,6 +130,20 @@ export const SIDEBAR_ITEMS: SidebarItem[] = [
     permission: "dashboard:view",
   },
   {
+    id: "users",
+    label: "Users",
+    icon: "Users",
+    href: "/users",
+    permission: "users:view",
+  },
+  {
+    id: "locations",
+    label: "Locations",
+    icon: "MapPin",
+    href: "/locations",
+    permission: "locations:view",
+  },
+  {
     id: "tasks",
     label: "Tasks",
     icon: "CheckSquare",
@@ -143,20 +164,7 @@ export const SIDEBAR_ITEMS: SidebarItem[] = [
     href: "/reports",
     permission: "reports:view",
   },
-  {
-    id: "users",
-    label: "Users",
-    icon: "Users",
-    href: "/users",
-    permission: "users:view",
-  },
-  {
-    id: "locations",
-    label: "Locations",
-    icon: "MapPin",
-    href: "/locations",
-    permission: "locations:view",
-  },
+
   {
     id: "notifications",
     label: "Notifications",

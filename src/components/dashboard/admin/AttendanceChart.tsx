@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { GitCommitHorizontal } from "lucide-react";
 import React from "react";
 import {
   AreaChart,
@@ -11,7 +12,7 @@ import {
 } from "recharts";
 
 export const AttendanceChart = ({ data }: { data: any[] }) => (
-  <div className="bg-[#0A0A0A] border border-[#262626] rounded-2xl p-6 h-full">
+  <div className="bg-[#0A0A0A] border border-[#968B79]/60 rounded-2xl p-6 h-full">
     <div className="mb-6">
       <h3 className="text-white font-bold text-lg">Attendance Overview</h3>
       <p className="text-gray-500 text-xs mt-1">Last 7 days · All locations</p>
@@ -75,14 +76,15 @@ export const AttendanceChart = ({ data }: { data: any[] }) => (
       </ResponsiveContainer>
     </div>
     <div className="flex justify-center gap-6 mt-4">
-      <span className="flex items-center gap-2 text-[10px] text-gray-400 uppercase font-bold">
-        <div className="w-2 h-2 rounded-full bg-[#d4af37]" /> Present
+      <span className="flex items-center gap-2 text-[10px] text-[#d4af37] uppercase font-bold">
+        <GitCommitHorizontal className="" />
+        Present
       </span>
-      <span className="flex items-center gap-2 text-[10px] text-gray-400 uppercase font-bold">
-        <div className="w-2 h-2 rounded-full bg-[#ef4444]" /> Absent
+      <span className="flex items-center gap-2 text-[10px] text-[#ef4444] uppercase font-bold">
+        <GitCommitHorizontal className="" /> Absent
       </span>
-      <span className="flex items-center gap-2 text-[10px] text-gray-400 uppercase font-bold">
-        <div className="w-2 h-2 rounded-full bg-[#f59e0b]" /> Late
+      <span className="flex items-center gap-2 text-[10px] text-[#f59e0b] uppercase font-bold">
+        <GitCommitHorizontal className="" /> Late
       </span>
     </div>
   </div>

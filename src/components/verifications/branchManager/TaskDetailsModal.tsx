@@ -1,8 +1,6 @@
 import React from "react";
 import {
-  X,
   Eye,
-  User,
   CheckCircle2,
   Calendar,
   Check,

@@ -190,7 +190,7 @@ export default function ReportsBranchManager() {
             View attendance, task completion, and performance metrics.
           </p>
         </div>
-        <button className="bg-[#121212] border border-[#262626] px-4 py-2 rounded-xl text-xs font-bold hover:bg-[#1A1A1A] flex items-center gap-3 transition-colors">
+        <button className="bg-[#121212] border border-[#968B79]/60 px-4 py-2 rounded-xl text-xs font-bold hover:bg-[#1A1A1A] flex items-center gap-3 transition-colors">
           All Employees <ChevronDown size={14} className="text-gray-500" />
         </button>
       </div>
@@ -205,7 +205,7 @@ export default function ReportsBranchManager() {
       {/* 3. Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Task Completion Bar Chart */}
-        <div className="bg-[#0A0A0A] border border-[#262626] rounded-3xl p-6 h-100">
+        <div className="bg-[#0A0A0A] border border-[#968B79]/60 rounded-3xl p-6 h-100">
           <div className="flex justify-between items-center mb-8">
             <div>
               <h3 className="font-bold text-white">
@@ -270,7 +270,7 @@ export default function ReportsBranchManager() {
         </div>
 
         {/* Attendance Rate Bar Chart */}
-        <div className="bg-[#0A0A0A] border border-[#262626] rounded-3xl p-6 h-100">
+        <div className="bg-[#0A0A0A] border border-[#968B79]/60 rounded-3xl p-6 h-100">
           <h3 className="font-bold text-white mb-1">Attendance Rate</h3>
           <p className="text-gray-500 text-[10px] uppercase font-bold tracking-widest mt-1 mb-8">
             Percentage this month
@@ -321,8 +321,8 @@ export default function ReportsBranchManager() {
 
       {/* 5. Time Range Selector */}
       <div className="flex justify-end mt-4">
-        <div className="bg-[#0A0A0A] border border-[#262626] p-1 rounded-xl flex gap-1">
-          {["Week", "Month", "Quarter"].map((t) => (
+        <div className="bg-[#0A0A0A] border border-[#968B79]/60 p-1 rounded-xl flex gap-1">
+          {["Weekly", "Monthly", "Yearly"].map((t) => (
             <button
               key={t}
               onClick={() => setTimeRange(t)}

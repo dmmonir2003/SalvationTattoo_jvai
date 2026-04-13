@@ -10,7 +10,7 @@ import {
 } from "recharts";
 
 const AttendanceComparison = ({ data }: { data: any[] }) => (
-  <div className="bg-[#0A0A0A] border border-[#262626] rounded-2xl p-6">
+  <div className="bg-[#0A0A0A] border  border-[#968B79]/60 rounded-2xl p-6">
     <h3 className="text-white font-bold mb-1">
       Completion vs Attendance by Location
     </h3>

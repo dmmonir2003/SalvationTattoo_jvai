@@ -1,8 +1,20 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React, { useState, useRef } from "react";
-import { X, Upload, Users, Briefcase, FileText } from "lucide-react";
+import {
+  X,
+  Upload,
+  Users,
+  Briefcase,
+  FileText,
+  AlertCircle,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
+import {
+  useCreateInstructionMutation,
+  CreateInstructionRequest,
+} from "@/redux/services/instructions/instructionApi";
 
 export const AddInstructionModal = ({
   isOpen,
@@ -12,14 +24,17 @@ export const AddInstructionModal = ({
   onClose: () => void;
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [createInstruction, { isLoading, error }] =
+    useCreateInstructionMutation();
 
   // State for the entire form
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    selectedRole: "tattoo", // default selection
+    selectedRole: "tattoo_artist", // Match backend values: "tattoo_artist", "body_piercer", "staff"
   });
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   if (!isOpen) return null;
 
@@ -33,27 +48,64 @@ export const AddInstructionModal = ({
     }
   };
 
-  const handleSubmit = () => {
-    // Collect all data for the API call
-    const finalData = {
-      ...formData,
-      file: selectedFile,
-    };
-    console.log("Submitting Instruction:", finalData);
-    // Add your submit logic here (e.g., upload to Firebase/Server)
-    onClose();
+  const handleSubmit = async () => {
+    setSubmitError(null);
+
+    // Validation
+    if (!formData.title.trim()) {
+      setSubmitError("Title is required");
+      return;
+    }
+    if (!formData.description.trim()) {
+      setSubmitError("Description is required");
+      return;
+    }
+    if (!formData.selectedRole) {
+      setSubmitError("Please select a role");
+      return;
+    }
+
+    try {
+      // Create instruction request payload
+      const instructionData: CreateInstructionRequest = {
+        title: formData.title,
+        description: formData.description,
+        role_visibility: formData.selectedRole,
+        pdf_file: selectedFile || undefined,
+      };
+
+      // Call mutation - it automatically handles FormData vs JSON
+      await createInstruction(instructionData).unwrap();
+
+      // Reset form on success
+      setFormData({
+        title: "",
+        description: "",
+        selectedRole: "tattoo_artist",
+      });
+      setSelectedFile(null);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+
+      // Close modal
+      onClose();
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to create instruction";
+      setSubmitError(errorMessage);
+      console.error("Failed to create instruction:", err);
+    }
   };
 
   const roles = [
     {
-      id: "tattoo",
+      id: "tattoo_artist",
       label: "Tattoo Artists",
       icon: Users,
       color: "text-blue-400",
       bg: "bg-blue-500/10",
     },
     {
-      id: "piercers",
+      id: "body_piercer",
       label: "Body Piercers",
       icon: Users,
       color: "text-purple-400",
@@ -98,6 +150,26 @@ export const AddInstructionModal = ({
         </div>
 
         <div className="p-8 space-y-6">
+          {/* ERROR MESSAGE ALERT */}
+          {(submitError || error) && (
+            <div className="p-4 rounded-xl border border-red-500/30 bg-red-500/10 flex gap-3">
+              <AlertCircle
+                size={18}
+                className="text-red-500 flex-shrink-0 mt-0.5"
+              />
+              <div>
+                <p className="text-sm font-medium text-red-400">
+                  {submitError || "Failed to create instruction"}
+                </p>
+                {error && typeof error === "object" && "data" in error && (
+                  <p className="text-xs text-red-300/70 mt-1">
+                    {(error.data as any)?.message || "Please try again"}
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
+
           {/* TITLE FIELD */}
           <div className="space-y-1.5">
             <label className="text-[10px] uppercase font-bold text-gray-500 tracking-widest ml-1">
@@ -110,11 +182,12 @@ export const AddInstructionModal = ({
                 setFormData({ ...formData, title: e.target.value })
               }
               placeholder="e.g., Health & Safety Protocol"
-              className="w-full bg-black border border-[#262626] rounded-xl p-4 text-sm text-white outline-none focus:border-[#404040]"
+              disabled={isLoading}
+              className="w-full bg-black border border-[#262626] rounded-xl p-4 text-sm text-white outline-none focus:border-[#404040] disabled:opacity-50"
             />
           </div>
 
-          {/* DESCRIPTION FIELD (Added back) */}
+          {/* DESCRIPTION FIELD */}
           <div className="space-y-1.5">
             <label className="text-[10px] uppercase font-bold text-gray-500 tracking-widest ml-1">
               Short Description
@@ -125,20 +198,22 @@ export const AddInstructionModal = ({
                 setFormData({ ...formData, description: e.target.value })
               }
               placeholder="Brief description of the instruction..."
-              className="w-full bg-black border border-[#262626] rounded-xl p-4 text-sm text-white min-h-25 resize-none outline-none focus:border-[#404040]"
+              disabled={isLoading}
+              className="w-full bg-black border border-[#262626] rounded-xl p-4 text-sm text-white min-h-25 resize-none outline-none focus:border-[#404040] disabled:opacity-50"
             />
           </div>
 
-          {/* FILE UPLOAD SECTION */}
+          {/* FILE UPLOAD SECTION (OPTIONAL) */}
           <div className="space-y-1.5">
             <label className="text-[10px] uppercase font-bold text-gray-500 tracking-widest ml-1">
-              Upload PDF File
+              Upload PDF File <span className="text-gray-600">(Optional)</span>
             </label>
             <input
               type="file"
               ref={fileInputRef}
               onChange={handleFileChange}
               accept=".pdf"
+              disabled={isLoading}
               className="hidden"
             />
             <div className="flex gap-2">
@@ -148,7 +223,8 @@ export const AddInstructionModal = ({
               <button
                 type="button"
                 onClick={handleBrowseClick}
-                className="bg-[#111] border border-[#262626] px-6 rounded-xl text-xs font-bold text-white flex items-center gap-2 hover:bg-[#1A1A1A] transition-colors"
+                disabled={isLoading}
+                className="bg-[#111] border border-[#262626] px-6 rounded-xl text-xs font-bold text-white flex items-center gap-2 hover:bg-[#1A1A1A] transition-colors disabled:opacity-50"
               >
                 <Upload size={14} /> Browse
               </button>
@@ -168,8 +244,9 @@ export const AddInstructionModal = ({
                   onClick={() =>
                     setFormData({ ...formData, selectedRole: role.id })
                   }
+                  disabled={isLoading}
                   className={cn(
-                    "p-4 rounded-2xl border flex flex-col items-center gap-2 transition-all",
+                    "p-4 rounded-2xl border flex flex-col items-center gap-2 transition-all disabled:opacity-50",
                     formData.selectedRole === role.id
                       ? "bg-white/5 border-white/20"
                       : "bg-black border-[#262626] hover:border-white/10",
@@ -189,15 +266,24 @@ export const AddInstructionModal = ({
         <div className="p-6 border-t border-[#1A1A1A] flex gap-3 bg-[#0D0D0D]">
           <button
             onClick={onClose}
-            className="flex-1 py-4 border border-[#262626] text-white rounded-2xl font-bold hover:bg-[#1A1A1A] transition-all"
+            disabled={isLoading}
+            className="flex-1 py-4 border border-[#262626] text-white rounded-2xl font-bold hover:bg-[#1A1A1A] transition-all disabled:opacity-50"
           >
             Cancel
           </button>
           <button
             onClick={handleSubmit}
-            className="flex-1 py-4 bg-white text-black rounded-2xl font-bold hover:bg-gray-200 shadow-lg active:scale-[0.98] transition-all"
+            disabled={isLoading}
+            className="flex-1 py-4 bg-white text-black rounded-2xl font-bold hover:bg-gray-200 shadow-lg active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-2"
           >
-            Add Instruction
+            {isLoading ? (
+              <>
+                <div className="w-4 h-4 border-2 border-gray-300 border-t-black rounded-full animate-spin" />
+                Creating...
+              </>
+            ) : (
+              "Add Instruction"
+            )}
           </button>
         </div>
       </div>

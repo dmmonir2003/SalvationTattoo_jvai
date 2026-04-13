@@ -4,34 +4,50 @@ import React, { useState } from "react";
 import { cn } from "@/lib/utils";
 import { SplashScreenManager } from "./SplashScreenManager";
 import { FAQManager } from "./FAQManager";
+import { useAppSelector } from "@/redux/store";
+import { selectCurrentToken } from "@/redux/features/auth/authSlice";
+import {
+  useGetFAQsQuery,
+  useCreateFAQMutation,
+  useUpdateFAQMutation,
+  useDeleteFAQMutation,
+  useGetSplashScreenQuery,
+} from "@/redux/services/appContent/appContentApi";
+import { Loader2 } from "lucide-react";
 
 export default function AppContentAdmin() {
   const [activeTab, setActiveTab] = useState("splash");
 
-  // --- DUMMY DATA ---
-  const splashImage =
-    "https://images.unsplash.com/photo-1590212151175-e58edd96185b?q=80&w=600";
+  // Get token from Redux
+  const token = useAppSelector(selectCurrentToken);
 
-  const faqData = [
-    {
-      id: 1,
-      question: "How do I clock in for my shift?",
-      answer:
-        "Open the mobile app, navigate to the attendance section, and tap the 'Clock In' button. Make sure your location services are enabled for accuracy.",
-    },
-    {
-      id: 2,
-      question: "Where can I view my assigned tasks?",
-      answer:
-        "Go to the Tasks tab in the app to see all tasks assigned to you. You can filter by status and location.",
-    },
-    {
-      id: 3,
-      question: "How do I update my availability?",
-      answer:
-        "Navigate to your profile settings and select 'Availability'. You can set your preferred working days and hours there.",
-    },
-  ];
+  // Splash Screen Query
+  const {
+    data: splashData,
+    isLoading: splashLoading,
+    refetch: refetchSplash,
+  } = useGetSplashScreenQuery(undefined, { skip: !token });
+
+  // FAQ Queries & Mutations
+  const {
+    data: faqData,
+    isLoading: faqLoading,
+    refetch: refetchFAQs,
+  } = useGetFAQsQuery({ page: 1 }, { skip: !token });
+  const [createFAQ, { isLoading: isCreating }] = useCreateFAQMutation();
+  const [updateFAQ, { isLoading: isUpdating }] = useUpdateFAQMutation();
+  const [deleteFAQ, { isLoading: isDeleting }] = useDeleteFAQMutation();
+
+  // Automatically refetch when token becomes available
+  React.useEffect(() => {
+    if (token) {
+      refetchSplash();
+      refetchFAQs();
+    }
+  }, [token, refetchSplash, refetchFAQs]);
+
+  // Extract FAQs from response
+  const faqs = faqData?.results || [];
 
   return (
     <div className="space-y-8 p-4 bg-black min-h-screen text-white">
@@ -46,39 +62,57 @@ export default function AppContentAdmin() {
       </div>
 
       {/* Main Container */}
-      <div className="bg-[#080808] border border-[#1A1A1A] rounded-[40px] p-2">
+      <div className="bg-[#968B79]/10 border border-[#1A1A1A] rounded-[40px] p-2">
         {/* Tabs Bar */}
         <div className="flex gap-2 p-4 border-b border-[#1A1A1A]">
           <button
             onClick={() => setActiveTab("splash")}
             className={cn(
-              "px-6 py-2 rounded-xl text-xs font-bold transition-all",
+              "px-6 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2",
               activeTab === "splash"
                 ? "bg-[#111] text-white border border-[#262626]"
                 : "text-gray-500 hover:text-gray-300",
             )}
           >
             Splash Screen
+            {activeTab === "splash" && splashLoading && (
+              <Loader2 size={14} className="animate-spin" />
+            )}
           </button>
           <button
             onClick={() => setActiveTab("faq")}
             className={cn(
-              "px-6 py-2 rounded-xl text-xs font-bold transition-all",
+              "px-6 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2",
               activeTab === "faq"
                 ? "bg-[#111] text-white border border-[#262626]"
                 : "text-gray-500 hover:text-gray-300",
             )}
           >
             FAQ
+            {activeTab === "faq" && faqLoading && (
+              <Loader2 size={14} className="animate-spin" />
+            )}
           </button>
         </div>
 
         {/* Dynamic Content */}
         <div className="p-8">
           {activeTab === "splash" ? (
-            <SplashScreenManager currentImage={splashImage} />
+            <SplashScreenManager
+              currentImage={splashData?.image_url}
+              onRefresh={refetchSplash}
+            />
           ) : (
-            <FAQManager faqs={faqData} />
+            <FAQManager
+              faqs={faqs}
+              onCreateFAQ={createFAQ}
+              onUpdateFAQ={updateFAQ}
+              onDeleteFAQ={deleteFAQ}
+              isCreating={isCreating}
+              isUpdating={isUpdating}
+              isDeleting={isDeleting}
+              onRefresh={() => refetchFAQs()}
+            />
           )}
         </div>
       </div>

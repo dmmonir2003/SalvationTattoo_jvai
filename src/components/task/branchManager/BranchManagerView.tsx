@@ -62,55 +62,29 @@ export default function BranchManagerView() {
             <input
               type="text"
               placeholder="Search tasks..."
-              className="w-full bg-[#0A0A0A] border border-[#262626] rounded-xl py-2.5 pl-10 pr-4 text-sm focus:outline-none focus:border-indigo-500 transition-colors"
+              className="w-full bg-[#0A0A0A] border border-[#968B79]/60 rounded-xl py-2.5 pl-10 pr-4 text-sm focus:outline-none focus:border-indigo-500 transition-colors"
             />
-          </div>
-
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 bg-[#0A0A0A] border border-[#262626] rounded-xl px-4 py-2.5 text-sm cursor-pointer min-width: 140px;">
-              All Location{" "}
-              <ChevronDown size={16} className="ml-auto text-gray-500" />
-            </div>
-
-            <div className="bg-[#0A0A0A] border border-[#262626] rounded-xl p-1 flex gap-1">
-              {["All", "Pending", "In-Progress", "Completed", "Overdue"].map(
-                (tab) => (
-                  <button
-                    key={tab}
-                    className={`px-4 py-1.5 rounded-lg text-xs font-medium transition-all ${tab === "All" ? "bg-white text-black" : "text-gray-400 hover:text-white"}`}
-                  >
-                    {tab}
-                  </button>
-                ),
-              )}
-            </div>
           </div>
         </div>
 
         {/* 3. Tasks List */}
-        <div className="space-y-3 mb-10">
+        <div className="border border-[#1A1A1A] rounded-2xl overflow-hidden bg-black">
           <TaskItem
-            title="Complete weekly sterilization log"
-            description="Document all sterilization equipment checks for the week"
-            assignee="Marcus Chen"
-            role="Tattoo Artist"
-            dueDate="2026-02-22"
-            status="Completed"
-          />
-          <TaskItem
-            title="Update client consent forms"
-            description="Ensure all consent forms are updated per new regulation"
-            assignee="Marcus Chen"
-            role="Staff"
-            dueDate="2026-02-22"
-            status="In Progress"
+            title="Clean & sterilize all workstations"
+            description="Ensure all tattoo stations are fully sterilized and documented before opening."
+            assignee="Sofia Delgado"
+            dueDate="2026-02-25"
+            submittedDate="2/25/2026"
+            status="Pending"
+            onEdit={() => console.log("Edit click")}
+            onDelete={() => console.log("Delete click")}
           />
           <TaskItem
             title="Portfolio review & client showcase update"
             description="Add latest completed work to the studio portfolio display"
             assignee="Aria Thompson"
-            role="Staff"
             dueDate="2026-02-28"
+            submittedDate="2/28/2026"
             status="Pending"
           />
         </div>

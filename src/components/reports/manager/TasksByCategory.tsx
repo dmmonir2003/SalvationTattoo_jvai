@@ -12,7 +12,7 @@ const COLORS = [
 
 const TasksByCategory = ({ data }: { data: any[] }) => {
   return (
-    <div className="bg-[#0A0A0A] border border-[#262626] rounded-2xl p-6 h-full">
+    <div className="bg-[#0A0A0A] border  border-[#968B79]/60 rounded-2xl p-6 h-full">
       <h3 className="text-white font-bold mb-1">Tasks by Category</h3>
       <p className="text-gray-500 text-[10px] mb-4">
         Distribution of task types

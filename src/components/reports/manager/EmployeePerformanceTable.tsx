@@ -3,7 +3,7 @@ import React from "react";
 
 const EmployeePerformanceTable = ({ data }: { data: any[] }) => {
   return (
-    <div className="bg-[#0A0A0A] border border-[#262626] rounded-2xl overflow-hidden mt-6">
+    <div className="bg-[#0A0A0A] border  border-[#968B79]/60 rounded-2xl overflow-hidden mt-6">
       <div className="p-6 border-b border-[#1A1A1A]">
         <h3 className="text-white font-bold">Employee Performance Report</h3>
         <p className="text-gray-500 text-xs">3 employees - all locations</p>
@@ -11,7 +11,7 @@ const EmployeePerformanceTable = ({ data }: { data: any[] }) => {
       <div className="overflow-x-auto">
         <table className="w-full text-left">
           <thead>
-            <tr className="text-gray-600 text-[10px] uppercase font-bold tracking-widest bg-[#0D0D0D]/50">
+            <tr className="text-white text-[10px] uppercase font-bold tracking-widest bg-[#0D0D0D]/50">
               <th className="px-6 py-4">Employee</th>
               <th className="px-6 py-4">Location</th>
               <th className="px-6 py-4">Role</th>

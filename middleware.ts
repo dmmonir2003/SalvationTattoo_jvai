@@ -1,21 +1,3 @@
-// import { proxy } from "./src/proxy";
-// import type { NextRequest } from "next/server";
-
-// export function middleware(request: NextRequest) {
-//   return proxy(request);
-// }
-
-// export const config = {
-//   matcher: [
-//     "/dashboard/:path*",
-//     "/tasks/:path*",
-//     "/users/:path*",
-//     "/profile/:path*",
-//     "/auth/signin",
-//     "/auth/register",
-//   ],
-// };
-
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
@@ -23,11 +5,10 @@ export function middleware(request: NextRequest) {
   const token = request.cookies.get("accessToken")?.value;
   const { pathname } = request.nextUrl;
 
-  const isProtectedRoute =
-    pathname.startsWith("/dashboard") ||
-    pathname.startsWith("/tasks") ||
-    pathname.startsWith("/users") ||
-    pathname.startsWith("/profile");
+  const isProtectedRoute = pathname.startsWith("/dashboard");
+  // pathname.startsWith("/tasks") ||
+  // pathname.startsWith("/users") ||
+  // pathname.startsWith("/profile");
 
   const isAuthRoute = pathname === "/auth/signin" || pathname === "/";
 
@@ -45,9 +26,9 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     "/dashboard/:path*",
-    "/tasks/:path*",
-    "/users/:path*",
-    "/profile/:path*",
+    // "/tasks/:path*",
+    // "/users/:path*",
+    // "/profile/:path*",
     "/auth/signin",
     "/",
   ],
