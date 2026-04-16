@@ -26,7 +26,7 @@ export interface RankingResult extends PerformerBase {
 }
 
 export interface PerformanceRankingResponse {
-  period: "daily" | "weekly" | "monthly";
+  period: "daily" | "weekly" | "monthly" | "yearly";
   stats: PerformanceStats;
   top_performer: PerformerBase;
   rankings: {
@@ -38,7 +38,7 @@ export interface PerformanceRankingResponse {
 }
 
 interface PerformanceQueryParams {
-  period?: "daily" | "weekly" | "monthly";
+  period?: "daily" | "weekly" | "monthly" | "yearly";
   page?: number;
 }
 

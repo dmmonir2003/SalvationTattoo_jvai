@@ -32,7 +32,7 @@ const TaskItem = ({
   const statusConfig = {
     Pending: {
       icon: <Circle className="text-gray-400" size={20} />,
-      badge: "bg-gray-500/10 text-gray-400 border-gray-500/20",
+      badge: "border-blue-500/30 text-blue-500 bg-blue-500/5",
     },
   };
 

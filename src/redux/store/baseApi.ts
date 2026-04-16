@@ -66,6 +66,7 @@ export const baseApi = createApi({
     "AdminReports",
     "AdminDashboard",
     "BranchManagerTasks",
+    "Attendance",
   ],
   endpoints: () => ({}),
 });

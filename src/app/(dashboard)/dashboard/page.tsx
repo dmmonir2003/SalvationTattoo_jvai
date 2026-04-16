@@ -375,17 +375,28 @@ import {
 } from "@/redux/features/auth/authSlice";
 
 import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 import { useAppSelector } from "@/redux/store";
 import DashboardAdmin from "@/components/dashboard/admin/AdminDashboard";
 import DashboardManager from "@/components/dashboard/manager/DashboardManager";
 import DashboardBranchManager from "@/components/dashboard/branchManager/DashboardBranchManager";
+import TaskDashboard from "@/components/demoTask/TaskManagementSystem";
 
 export default function DashboardPage() {
   const role = useAppSelector(selectUserRole);
+  const router = useRouter();
   // const user = useAppSelector(selectCurrentUser);
 
-  if (!role) {
+  useEffect(() => {
+    // Redirect QR Attendees to their dedicated page
+    if (role === "qr_attendee") {
+      router.replace("/qr-attendee");
+    }
+  }, [role, router]);
+
+  if (!role || role === "qr_attendee") {
     return (
       <div className="flex h-[70vh] items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-primary" />
@@ -397,6 +408,7 @@ export default function DashboardPage() {
   switch (role) {
     case "super_admin":
       return <DashboardAdmin />;
+
     case "district_manager":
       return <DashboardManager />;
     case "branch_manager":

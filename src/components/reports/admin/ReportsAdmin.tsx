@@ -550,8 +550,8 @@ export default function ReportsAdmin() {
         />
       </div>
 
-      {/* Log Table */}
-      <AttendanceLog data={data?.attendance_log || []} />
+      {/* Log Table
+      <AttendanceLog data={data?.attendance_log || []} /> */}
     </div>
   );
 }

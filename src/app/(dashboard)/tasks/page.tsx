@@ -6,10 +6,11 @@ import {
 } from "@/redux/features/auth/authSlice";
 
 import { Loader2 } from "lucide-react";
-import AdminView from "@/components/task/admin/AdminView";
+// import AdminView from "@/components/task/admin/AdminView";
 import ManagerView from "@/components/task/manager/ManagerView";
 import BranchManagerView from "@/components/task/branchManager/BranchManagerView";
 import { useAppSelector } from "@/redux/store";
+import TaskManagementSystem from "@/components/demoTask/TaskManagementSystem";
 
 export default function TaskPage() {
   const role = useAppSelector(selectUserRole);
@@ -26,7 +27,8 @@ export default function TaskPage() {
   // Dispatcher Logic
   switch (role) {
     case "super_admin":
-      return <AdminView />;
+      // return <AdminView />;
+      return <TaskManagementSystem />;
     case "district_manager":
       return <ManagerView />;
     case "branch_manager":

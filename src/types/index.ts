@@ -1,5 +1,9 @@
 // User & Auth Types
-export type UserRole = "super_admin" | "district_manager" | "branch_manager";
+export type UserRole =
+  | "super_admin"
+  | "district_manager"
+  | "branch_manager"
+  | "qr_attendee";
 
 export interface User {
   id: number;

@@ -84,7 +84,12 @@ export function useProtectedRoute(redirectTo: string = "/auth/signin") {
 
 // Hook for role-based route access
 export function useRoleAccess(
-  allowedRoles: ("super_admin" | "district_manager" | "branch_manager")[],
+  allowedRoles: (
+    | "super_admin"
+    | "district_manager"
+    | "branch_manager"
+    | "qr_attendee"
+  )[],
   redirectTo: string = "/dashboard",
 ) {
   const role = useAppSelector(selectUserRole);
@@ -184,9 +189,34 @@ export function useDemoLogin() {
     }, 500);
   }, [dispatch, router]);
 
+  const loginAsQRAttendee = useCallback(() => {
+    dispatch(setLoading(true));
+    setTimeout(() => {
+      dispatch(
+        setCredentials({
+          user: {
+            id: 3,
+            email: "attendee@salvationlounge.com",
+            username: "QR Attendee",
+            role: "qr_attendee",
+            role_display: "QR Attendee",
+            is_super_admin: false,
+          },
+          token: "demo-token-qr-attendee",
+        }),
+      );
+      // Set cookie for middleware to detect demo login
+      document.cookie =
+        "accessToken=demo-token-qr-attendee; path=/; max-age=86400";
+      dispatch(setLoading(false));
+      router.push("/dashboard");
+    }, 500);
+  }, [dispatch, router]);
+
   return {
     loginAsAdmin,
     loginAsManager,
     loginAsBranchManager,
+    loginAsQRAttendee,
   };
 }

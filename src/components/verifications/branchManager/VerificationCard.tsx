@@ -48,7 +48,7 @@ export const VerificationCard = ({
       <div>
         <h3 className="text-white font-bold text-base">{data.taskName}</h3>
         <p className="text-gray-500 text-xs italic mt-1 leading-relaxed">
-          "{data.description}"
+          {data.description}
         </p>
         <div className="mt-2 text-[11px] text-gray-400">
           Assign By :{" "}

@@ -66,9 +66,28 @@ const VerificationData = [
     imageUrl:
       "https://images.unsplash.com/photo-1598331668826-20cecc596b86?auto=format&fit=crop&q=80&w=800",
   },
+  {
+    id: 5,
+    taskName: "Clean & sterilize all workstations",
+    description: "All stations sterilized and logged in the binder.",
+    employeeName: "Marcus Chen",
+    role: "Tattoo Artist",
+    location: "Midtown",
+    submittedTime: "Feb 25, 8:45 AM",
+    dueDate: "2026-02-22",
+    status: "rejected", // Current tab: Rejected
+    assignBy: "District Manager",
+    imageUrl:
+      "https://images.unsplash.com/photo-1598331668826-20cecc596b86?auto=format&fit=crop&q=80&w=800",
+  },
 ];
 
-type TabType = "awaiting_review" | "approved" | "pending" | "overdue";
+type TabType =
+  | "awaiting_review"
+  | "approved"
+  | "pending"
+  | "overdue"
+  | "rejected";
 
 export default function VerificationsManager() {
   const [selectedTab, setSelectedTab] = useState<TabType>("awaiting_review");
@@ -81,9 +100,10 @@ export default function VerificationsManager() {
   );
 
   const tabs: { id: TabType; label: string }[] = [
+    { id: "pending", label: "Pending" },
     { id: "awaiting_review", label: "Awaiting Review" },
     { id: "approved", label: "Approved" },
-    { id: "pending", label: "Pending" },
+    { id: "rejected", label: "Rejected" },
     { id: "overdue", label: "Overdue" },
   ];
 

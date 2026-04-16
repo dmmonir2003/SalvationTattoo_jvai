@@ -85,7 +85,7 @@ export const PerformanceComparison = ({
                         : "text-amber-500",
                   )}
                 >
-                  {percent}%
+                  {percent}
                 </span>
               </span>
             </div>

@@ -8,7 +8,9 @@ import { TopPerformer } from "./TopPerformer";
 import { EmployeeRankings } from "./EmployeeRankings";
 
 export default function PerformanceAdmin() {
-  const [timeframe, setTimeframe] = useState<"weekly" | "monthly">("weekly");
+  const [timeframe, setTimeframe] = useState<
+    "weekly" | "monthly" | "daily" | "yearly"
+  >("weekly");
 
   const { data, isLoading, error } = useGetPerformanceRankingsQuery({
     period: timeframe,
@@ -65,17 +67,17 @@ export default function PerformanceAdmin() {
   const rankingsData = data
     ? data.rankings.results.map((emp, index) => ({
         rank: emp.rank,
-        name: emp.name,
-        initials: emp.name
+        name: emp.name || "Unknown Employee", // Handle empty name
+        initials: (emp.name || "??")
           .split(" ")
           .map((n) => n[0])
           .join("")
           .toUpperCase(),
-        email: emp.email,
-        tasks: emp.tasks_completed,
-        overdue: emp.overdue,
+        email: emp.email || "No Email Provided",
+        tasks: emp.tasks_completed ?? 0, // Handle empty tasks
+        overdue: emp.overdue ? `${emp.overdue}%` : "0%", // Formatting as percentage
         attendance: emp.attendance ?? 0,
-        completion: emp.completion_rate,
+        completion: emp.completion_rate ?? 0,
         status:
           emp.status === "Top Performer"
             ? "Good"
@@ -132,7 +134,7 @@ export default function PerformanceAdmin() {
 
         {/* Weekly/Monthly Toggle */}
         <div className="bg-[#0A0A0A] border border-[#968B79]/60 p-1 rounded-xl flex gap-1 h-fit">
-          {(["weekly", "monthly"] as const).map((t) => (
+          {([, "daily", "weekly", "monthly", "yearly"] as const).map((t) => (
             <button
               key={t}
               onClick={() => setTimeframe(t)}

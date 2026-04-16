@@ -63,9 +63,27 @@ const VerificationData = [
     assignBy: "District Manager",
     imageUrl: null,
   },
+  {
+    id: 4,
+    taskName: "Deep clean lobby area",
+    description: "Focus on glass surfaces and floor.",
+    employeeName: "Sofia Delgado",
+    role: "Staff",
+    location: "Midtown",
+    submittedTime: "Feb 24, 6:00 PM",
+    dueDate: "2026-02-22",
+    status: "rejected",
+    assignBy: "District Manager",
+    imageUrl: null,
+  },
 ];
 
-type TabType = "awaiting_review" | "approved" | "pending" | "overdue";
+type TabType =
+  | "awaiting_review"
+  | "approved"
+  | "pending"
+  | "overdue"
+  | "rejected";
 
 export default function VerificationsBranchManager() {
   const [selectedTab, setSelectedTab] = useState<TabType>("awaiting_review");
@@ -78,9 +96,11 @@ export default function VerificationsBranchManager() {
   );
 
   const tabs: { id: TabType; label: string }[] = [
+    { id: "pending", label: "Pending" },
     { id: "awaiting_review", label: "Awaiting Review" },
     { id: "approved", label: "Approved" },
-    { id: "pending", label: "Pending" },
+    { id: "rejected", label: "Rejected" },
+
     { id: "overdue", label: "Overdue" },
   ];
 

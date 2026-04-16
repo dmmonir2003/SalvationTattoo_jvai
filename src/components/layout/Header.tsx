@@ -182,6 +182,7 @@ export function Header({ onMenuClick }: { onMenuClick: () => void }) {
                 {role === "super_admin" && "Super Admin"}
                 {role === "district_manager" && "District Manager"}
                 {role === "branch_manager" && "Store Manager"}
+                {role === "qr_attendee" && "QR Attendee"}
               </span>
             </div>
           </div>
@@ -208,6 +209,10 @@ function RoleBadge({ role }: { role: string }) {
     branch_manager: {
       label: "Store Manager",
       className: "bg-green-500/20 text-green-400 border-green-500/30",
+    },
+    qr_attendee: {
+      label: "QR Attendee",
+      className: "bg-amber-500/20 text-amber-400 border-amber-500/30",
     },
   };
 

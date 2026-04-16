@@ -153,7 +153,12 @@ export default function SignInPage() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [login, { isLoading }] = useLoginMutation();
-  const { loginAsAdmin, loginAsManager, loginAsBranchManager } = useDemoLogin();
+  const {
+    loginAsAdmin,
+    loginAsManager,
+    loginAsBranchManager,
+    loginAsQRAttendee,
+  } = useDemoLogin();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -261,7 +266,7 @@ export default function SignInPage() {
         <p className="text-sm text-muted-foreground text-center mb-4">
           Demo Login (Click to sign in)
         </p>
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
           <button
             onClick={loginAsAdmin}
             className="py-2 px-3 text-xs font-medium rounded-lg bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors"
@@ -279,6 +284,12 @@ export default function SignInPage() {
             className="py-2 px-3 text-xs font-medium rounded-lg bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors"
           >
             Store Manager
+          </button>
+          <button
+            onClick={loginAsQRAttendee}
+            className="py-2 px-3 text-xs font-medium rounded-lg bg-amber-600 text-white hover:bg-amber-700 transition-colors"
+          >
+            QR Attendee
           </button>
         </div>
       </div>

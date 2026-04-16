@@ -7,6 +7,11 @@ export interface SplashScreen {
   image_url: string;
   updated_at: string;
 }
+export interface AppSplashScreen {
+  id: number;
+  image_url: string;
+  updated_at: string;
+}
 
 export interface FAQ {
   id: number;
@@ -68,6 +73,17 @@ export const appContentApi = baseApi.injectEndpoints({
       invalidatesTags: ["AppContent"],
     }),
 
+
+    updateMobileSplashScreen: builder.mutation<AppSplashScreen, FormData>({
+      query: (formData) => ({
+        url: "/admin/app-content/splash-screen/mobile/",
+        method: "POST",
+        body: formData,
+      }),
+      invalidatesTags: ["AppContent"],
+    }),
+
+
     // --- FAQ Endpoints ---
 
     // GET: List FAQs with pagination (image_7a63f1.png)
@@ -122,6 +138,7 @@ export const appContentApi = baseApi.injectEndpoints({
 export const {
   useGetSplashScreenQuery,
   useUpdateSplashScreenMutation,
+  useUpdateMobileSplashScreenMutation,
   useGetFAQsQuery,
   useCreateFAQMutation,
   useUpdateFAQMutation,

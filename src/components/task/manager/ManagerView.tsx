@@ -92,7 +92,7 @@ export default function ManagerView() {
             assignee="Marcus Chen"
             role="Tattoo Artist"
             dueDate="2026-02-22"
-            status="Completed"
+            status="Pending"
           />
           <TaskItem
             title="Update client consent forms"
@@ -100,7 +100,7 @@ export default function ManagerView() {
             assignee="Marcus Chen"
             role="Staff"
             dueDate="2026-02-22"
-            status="In Progress"
+            status="Pending"
           />
           <TaskItem
             title="Portfolio review & client showcase update"

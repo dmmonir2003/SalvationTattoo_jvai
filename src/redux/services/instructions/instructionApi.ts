@@ -20,15 +20,15 @@ export interface InstructionStats {
   staff: number;
 }
 
-export interface InstructionListResponse {
-  stats: InstructionStats;
-  instructions: Instruction[];
-  grouped: {
-    tattoo_artist: Instruction[];
-    body_piercer: Instruction[];
-    staff: Instruction[];
-  };
-}
+// export interface InstructionListResponse {
+//   stats: InstructionStats;
+//   instructions: Instruction[];
+//   grouped: {
+//     tattoo_artist: Instruction[];
+//     body_piercer: Instruction[];
+//     staff: Instruction[];
+//   };
+// }
 
 export interface CreateInstructionRequest {
   title: string;
@@ -43,6 +43,23 @@ export interface CreateInstructionJsonRequest {
   role_visibility: string;
 }
 
+export interface InstructionStats {
+  total_instructions: number;
+  tattoo_artists: number;
+  body_piercers: number;
+  staff: number;
+  branch_managers: number; // Added
+  district_managers: number; // Added
+}
+
+export interface InstructionListResponse {
+  stats: InstructionStats;
+  grouped: Array<{
+    section: string;
+    document_count: number;
+    instructions: Instruction[];
+  }>;
+}
 // --- Helper Functions ---
 
 /**
@@ -75,11 +92,29 @@ export const prepareInstructionData = (
 export const instructionApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // GET: List all instructions and stats
-    getInstructions: builder.query<InstructionListResponse, void>({
-      query: () => ({
-        url: "/admin/instructions/",
-        method: "GET",
-      }),
+    // getInstructions: builder.query<InstructionListResponse, void>({
+    //   query: () => ({
+    //     url: "/admin/instructions/",
+    //     method: "GET",
+    //   }),
+    //   providesTags: ["Instructions"],
+    // }),
+
+    getInstructions: builder.query<
+      InstructionListResponse,
+      { role?: string; search?: string } | void
+    >({
+      query: (params) => {
+        const queryParams = new URLSearchParams();
+        if (params?.role && params.role !== "all")
+          queryParams.append("role", params.role);
+        if (params?.search) queryParams.append("search", params.search);
+
+        return {
+          url: `/admin/instructions/?${queryParams.toString()}`,
+          method: "GET",
+        };
+      },
       providesTags: ["Instructions"],
     }),
 

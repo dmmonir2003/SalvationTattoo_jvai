@@ -49,6 +49,7 @@ export const ROLE_PERMISSIONS: RolePermissions[] = [
       // Settings
       "settings:manage",
       "profile",
+      "qr-section",
     ],
   },
   {
@@ -69,7 +70,7 @@ export const ROLE_PERMISSIONS: RolePermissions[] = [
       "reports:export",
       // Performance
       "performance:view",
-      "qr-section",
+      // "qr-section",
       // "profile",
     ],
   },
@@ -93,8 +94,15 @@ export const ROLE_PERMISSIONS: RolePermissions[] = [
       // Performance
       // "performance:view",
 
-      "qr-section",
+      // "qr-section",
       // "profile",
+    ],
+  },
+  {
+    role: "qr_attendee",
+    permissions: [
+      // QR Attendees can only view QR codes for attendance
+      "qr-section",
     ],
   },
 ];
@@ -135,6 +143,13 @@ export const SIDEBAR_ITEMS: SidebarItem[] = [
     icon: "Users",
     href: "/users",
     permission: "users:view",
+  },
+  {
+    id: "users attendance",
+    label: "Users Attendance",
+    icon: "Users",
+    href: "/attendance",
+    permission: "users_attendance",
   },
   {
     id: "locations",

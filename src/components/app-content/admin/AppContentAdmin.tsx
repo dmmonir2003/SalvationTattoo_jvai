@@ -98,8 +98,14 @@ export default function AppContentAdmin() {
         {/* Dynamic Content */}
         <div className="p-8">
           {activeTab === "splash" ? (
+            // <SplashScreenManager
+            //   currentImage={splashData?.image_url}
+            //   onRefresh={refetchSplash}
+            // />
+
             <SplashScreenManager
-              currentImage={splashData?.image_url}
+              currentWebsiteImage={splashData?.image_url}
+              currentMobileImage={splashData?.image_url}
               onRefresh={refetchSplash}
             />
           ) : (
