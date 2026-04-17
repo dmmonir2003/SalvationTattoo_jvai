@@ -536,7 +536,7 @@ export default function ReportsBranchManager() {
       });
     }
 
-    // If search has value, filter to matching employee(s) and include _records for daily view
+    // If search has value, filter to matching employee(s) and include _records for today view
     return EMPLOYEES.map((emp) => {
       const nameMatch = emp.name.toLowerCase().includes(search.toLowerCase());
 
@@ -670,31 +670,31 @@ export default function ReportsBranchManager() {
             ))}
           </div>
 
-           <div className="flex justify-end">
-        <div className="bg-[#0A0A0A] border border-[#968B79]/60 p-1 rounded-xl flex gap-1 flex-wrap max-w-2xl">
-          {[
-            "All Status",
-            "Approved",
-            "Pending",
-            "Awaiting Review",
-            "Overdue",
-            "Rejected",
-          ].map((status) => (
-            <button
-              key={status}
-              onClick={() => setTaskStatus(status)}
-              className={cn(
-                "px-4 py-1.5 rounded-lg text-[11px] font-bold transition-all whitespace-nowrap",
-                taskStatus === status
-                  ? "bg-white text-black shadow-lg"
-                  : "text-gray-500 hover:text-gray-300",
-              )}
-            >
-              {status}
-            </button>
-          ))}
-        </div>
-      </div>
+          <div className="flex justify-end">
+            <div className="bg-[#0A0A0A] border border-[#968B79]/60 p-1 rounded-xl flex gap-1 flex-wrap max-w-2xl">
+              {[
+                "All Status",
+                "Approved",
+                "Pending",
+                "Awaiting Review",
+                "Overdue",
+                "Rejected",
+              ].map((status) => (
+                <button
+                  key={status}
+                  onClick={() => setTaskStatus(status)}
+                  className={cn(
+                    "px-4 py-1.5 rounded-lg text-[11px] font-bold transition-all whitespace-nowrap",
+                    taskStatus === status
+                      ? "bg-white text-black shadow-lg"
+                      : "text-gray-500 hover:text-gray-300",
+                  )}
+                >
+                  {status}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 
@@ -823,7 +823,6 @@ export default function ReportsBranchManager() {
       </div>
 
       {/* 4. Task Status Filter Section */}
-     
 
       {/* 5. Tables with Filtered Data */}
       <EmployeeBreakdown

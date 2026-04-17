@@ -9,7 +9,7 @@ import { EmployeeRankings } from "./EmployeeRankings";
 
 export default function PerformanceAdmin() {
   const [timeframe, setTimeframe] = useState<
-    "weekly" | "monthly" | "daily" | "yearly"
+    "weekly" | "monthly" | "today" | "yearly"
   >("weekly");
 
   const { data, isLoading, error } = useGetPerformanceRankingsQuery({
@@ -134,7 +134,7 @@ export default function PerformanceAdmin() {
 
         {/* Weekly/Monthly Toggle */}
         <div className="bg-[#0A0A0A] border border-[#968B79]/60 p-1 rounded-xl flex gap-1 h-fit">
-          {([, "daily", "weekly", "monthly", "yearly"] as const).map((t) => (
+          {([, "today", "weekly", "monthly", "yearly"] as const).map((t) => (
             <button
               key={t}
               onClick={() => setTimeframe(t)}

@@ -540,7 +540,7 @@
 //   completedBy: string;
 //   role: string;
 //   location: string;
-//   frequency?: string; // For filtering (Daily, Weekly, etc)
+//   frequency?: string; // For filtering (Today, Weekly, etc)
 // }
 
 // // --- Dummy Data ---
@@ -555,7 +555,7 @@
 //     completedBy: "Alex Kim",
 //     role: "Staff",
 //     location: "Downtown",
-//     frequency: "Daily",
+//     frequency: "Today",
 //   },
 //   {
 //     id: "2",
@@ -591,7 +591,7 @@
 //     completedBy: "Priya Sharma",
 //     role: "Staff",
 //     location: "Wicker Park",
-//     frequency: "Daily",
+//     frequency: "Today",
 //   },
 //   {
 //     id: "5",
@@ -725,7 +725,7 @@
 //           <FilterDropdown
 //             value={frequencyFilter}
 //             onChange={setFrequencyFilter}
-//             options={["Daily", "Weekly", "Monthly", "Yearly"]}
+//             options={["Today", "Weekly", "Monthly", "Yearly"]}
 //           />
 //           <FilterDropdown
 //             value={locationFilter}
@@ -1013,7 +1013,7 @@ const ALL_TASKS: Task[] = [
     completedBy: "Alex Kim",
     role: "Staff",
     location: "Downtown",
-    frequency: "Daily",
+    frequency: "Today",
     email: "alex@studio.com",
   },
   {
@@ -1039,7 +1039,7 @@ const ALL_TASKS: Task[] = [
     completedBy: "Priya Sharma",
     role: "Staff",
     location: "Wicker Park",
-    frequency: "Daily",
+    frequency: "Today",
     email: "priya@studio.com",
   },
   {
@@ -1201,7 +1201,7 @@ export default function TaskManagementSystem() {
           <FilterDropdown
             value={frequencyFilter}
             onChange={setFrequencyFilter}
-            options={["Daily", "Weekly", "Monthly", "Yearly"]}
+            options={["Today", "Weekly", "Monthly", "Yearly"]}
           />
           <FilterDropdown
             value={locationFilter}

@@ -20,13 +20,13 @@ export interface Task {
   description: string;
   location: number;
   location_name: string;
-  assigned_to_name:  string;
+  assigned_to_name: string;
   assigned_to_role: string;
   created_by: TaskUser;
   due_date: string;
   status: "pending" | "completed" | "approved" | "rejected";
   is_recurring: boolean;
-  frequency: "daily" | "weekly" | "monthly" | null;
+  frequency: "today" | "weekly" | "monthly" | null;
   requires_photo: boolean;
   photo_url: string | null;
   completed_by: number | null;
@@ -82,7 +82,7 @@ interface CreateTaskRequest {
   assigned_to: number;
   due_date: string;
   is_recurring: boolean;
-  frequency?: "daily" | "weekly" | "monthly";
+  frequency?: "today" | "weekly" | "monthly";
   requires_photo?: boolean;
 }
 // --- API Slice ---

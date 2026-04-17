@@ -36,7 +36,7 @@ export default function EmployeeBreakdown({
   const [page, setPage] = useState(1);
 
   if (showDailyRecords) {
-    // Daily Records View (when search is active)
+    // Today Records View (when search is active)
     const itemsPerPage = 10;
     const tableRows = useMemo(() => {
       const rows: any[] = [];
@@ -77,7 +77,7 @@ export default function EmployeeBreakdown({
         <div className="p-6 flex items-center justify-between border-b border-[#1A1A1A]">
           <div className="flex items-center gap-2">
             <Users className="w-5 h-5 text-gray-500" />
-            <h3 className="text-white font-bold">Employee Daily Records</h3>
+            <h3 className="text-white font-bold">Employee Today Records</h3>
           </div>
         </div>
 

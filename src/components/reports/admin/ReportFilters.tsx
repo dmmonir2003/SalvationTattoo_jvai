@@ -27,8 +27,8 @@ import { Filter, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface ReportFiltersProps {
-  currentPeriod: "daily" | "weekly" | "monthly" | "yearly";
-  setPeriod: (period: "daily" | "weekly" | "monthly" | "yearly") => void;
+  currentPeriod: "today" | "weekly" | "monthly" | "yearly";
+  setPeriod: (period: "today" | "weekly" | "monthly" | "yearly") => void;
 }
 
 export const ReportFilters = ({
@@ -40,7 +40,7 @@ export const ReportFilters = ({
   // Helper to handle selection
   const handleSelect = (
     e: React.MouseEvent,
-    period: "daily" | "weekly" | "monthly" | "yearly",
+    period: "today" | "weekly" | "monthly" | "yearly",
   ) => {
     e.stopPropagation(); // Prevents the click from hitting the overlay
     setPeriod(period);
@@ -106,15 +106,15 @@ export const ReportFilters = ({
               <div className="absolute top-full left-0 mt-2 w-full bg-[#0D0D0D] border border-[#968B79]/60 rounded-xl overflow-hidden shadow-2xl z-40 animate-in fade-in slide-in-from-top-2">
                 <button
                   type="button"
-                  onClick={(e) => handleSelect(e, "daily")}
+                  onClick={(e) => handleSelect(e, "today")}
                   className={cn(
                     "w-full text-left px-6 py-3 text-xs font-medium transition-colors hover:bg-white/5",
-                    currentPeriod === "daily"
+                    currentPeriod === "today"
                       ? "text-white bg-white/10"
                       : "text-gray-500",
                   )}
                 >
-                  Daily
+                  Today
                 </button>
                 <button
                   type="button"

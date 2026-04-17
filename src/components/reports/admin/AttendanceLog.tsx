@@ -55,7 +55,7 @@ export const AttendanceLog = ({ data }: { data: AttendanceSummaryEntry[] }) => {
       <div className="p-6 border-b border-[#1A1A1A]">
         <h3 className="text-white font-bold text-lg">Attendance Log</h3>
         <p className="text-gray-500 text-xs mt-1 italic">
-          Daily summary across all locations
+          Today summary across all locations
         </p>
       </div>
 
@@ -118,7 +118,7 @@ export const AttendanceLog = ({ data }: { data: AttendanceSummaryEntry[] }) => {
               <span>{row.location}</span>
             </div>
 
-            {/* Stats Grid for Daily Totals */}
+            {/* Stats Grid for Today Totals */}
             <div className="grid grid-cols-3 gap-2">
               <div className="bg-[#111] border border-[#1A1A1A] p-3 rounded-xl text-center">
                 <p className="text-[9px] uppercase text-gray-600 font-bold mb-1">

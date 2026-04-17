@@ -130,7 +130,7 @@ export default function EmployeeBreakdown({
   const [page, setPage] = useState(1);
   const itemsPerPage = showDailyRecords ? 10 : 5;
 
-  // For daily records view (when searching for specific employee)
+  // For today records view (when searching for specific employee)
   if (showDailyRecords) {
     const tableRows = data.flatMap((emp) => {
       if (!emp._records || emp._records.length === 0) return [];
@@ -168,7 +168,7 @@ export default function EmployeeBreakdown({
           <div className="flex items-center gap-2">
             <Users className="w-5 h-5 text-gray-500" />
             <h3 className="text-white font-bold">
-              Employee Breakdown (Daily Records)
+              Employee Breakdown (Today Records)
             </h3>
           </div>
         </div>

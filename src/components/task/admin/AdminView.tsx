@@ -177,8 +177,8 @@
 //           due_date: formData.dueDate,
 //           is_recurring: formData.isRecurring || false,
 //           frequency: formData.isRecurring
-//             ? formData.frequency || "daily"
-//             : "daily",
+//             ? formData.frequency || "today"
+//             : "today",
 //           requires_photo: formData.requirePhoto || false,
 //         }).unwrap();
 //         setIsActionModalOpen(false);
@@ -764,8 +764,8 @@ export default function AdminView() {
           due_date: formData.dueDate,
           is_recurring: formData.isRecurring || false,
           frequency: formData.isRecurring
-            ? formData.frequency || "daily"
-            : "daily",
+            ? formData.frequency || "today"
+            : "today",
           requires_photo: formData.requirePhoto || false,
         }).unwrap();
         setIsActionModalOpen(false);

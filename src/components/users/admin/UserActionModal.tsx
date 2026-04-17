@@ -613,10 +613,11 @@ const TIME_OPTIONS = [
 
 const ROLE_OPTIONS = [
   { value: "district_manager", label: "District Manager" },
-  { value: "branch_manager", label: "Branch Manager" },
+  { value: "branch_manager", label: "Store Manager" },
   { value: "tattoo_artist", label: "Tattoo Artist" },
   { value: "body_piercer", label: "Body Piercer" },
   { value: "staff", label: "Staff" },
+  { value: "Clock_in", label: "Clock In" },
 ];
 
 export const UserActionModal = ({

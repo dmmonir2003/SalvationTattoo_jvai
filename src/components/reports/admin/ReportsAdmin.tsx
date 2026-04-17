@@ -164,7 +164,7 @@
 //         <div className="bg-[#0A0A0A] border border-[#262626] rounded-3xl p-6 h-100">
 //           <h3 className="font-bold mb-1">Attendance Trend</h3>
 //           <p className="text-gray-500 text-[10px] uppercase font-bold tracking-widest mb-8">
-//             Daily attendance across all locations
+//             Today attendance across all locations
 //           </p>
 //           <ResponsiveContainer width="100%" height="70%">
 //             <AreaChart data={attendanceTrendData}>

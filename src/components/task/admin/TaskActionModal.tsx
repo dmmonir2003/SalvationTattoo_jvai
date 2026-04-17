@@ -50,7 +50,7 @@ export const TaskActionModal = ({
     dueDate: initialData?.dueDate || "",
     isRecurring: initialData?.isRecurring || false,
     // Add frequency here
-    frequency: initialData?.frequency || "daily",
+    frequency: initialData?.frequency || "today",
     requirePhoto: initialData?.requirePhoto || false,
   });
 
@@ -359,7 +359,7 @@ export const TaskActionModal = ({
             {/* Frequency Selection - Only shows if isRecurring is true */}
             {formData.isRecurring && (
               <div className="grid grid-cols-3 gap-2 mt-3 animate-in fade-in slide-in-from-top-2 duration-300">
-                {["daily", "weekly", "monthly"].map((freq) => (
+                {["today", "weekly", "monthly"].map((freq) => (
                   <button
                     key={freq}
                     type="button"

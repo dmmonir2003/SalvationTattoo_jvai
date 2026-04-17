@@ -1258,7 +1258,7 @@ export default function PerformanceManager() {
           emp.location === selectedLocation,
       );
     } else {
-      // Daily breakdown view: return employees matching search with filtered records
+      // Today breakdown view: return employees matching search with filtered records
       return EMPLOYEES.filter(
         (emp) =>
           (selectedLocation === "All Location" ||

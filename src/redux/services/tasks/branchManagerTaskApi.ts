@@ -36,7 +36,7 @@ export interface Task {
     | "overdue"
     | "completed";
   is_recurring: boolean;
-  frequency: "daily" | "weekly" | "monthly";
+  frequency: "today" | "weekly" | "monthly";
   requires_photo: boolean;
   photo_url?: string | null;
   completed_by?: number | null;
