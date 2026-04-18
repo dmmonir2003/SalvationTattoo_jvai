@@ -1,7 +1,14 @@
 import { baseApi } from "@/redux/store/baseApi";
 
 // --- Types & Interfaces ---
-
+export type InstructionRole =
+  | "staff"
+  | "tattoo_artist"
+  | "body_piercer"
+  | "district_manager"
+  | "branch_manager"
+  | "all"
+  | "qr_attendee";
 export interface Instruction {
   id: number;
   title: string;

@@ -281,7 +281,7 @@ const QRGenerator = () => {
             The QR code will automatically regenerate when the timer reaches
             00:00. Location:{" "}
             <span className="text-gray-300 font-bold">
-              {activeSession?.location_name || "Assigned Store"}
+              {activeSession?.location || "Assigned Store"}
             </span>
           </p>
         </div>

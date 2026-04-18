@@ -65,7 +65,7 @@ export interface AdminReportResponse {
 }
 
 export interface ReportQueryParams {
-  period?: "weekly" | "monthly";
+  period?: "today" | "weekly" | "monthly" | "yearly";
   location?: number;
   page?: number;
 }

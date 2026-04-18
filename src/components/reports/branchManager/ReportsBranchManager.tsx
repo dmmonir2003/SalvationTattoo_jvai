@@ -813,7 +813,9 @@ export default function ReportsBranchManager() {
                 {filteredEmployees.map((entry, index) => (
                   <Cell
                     key={`cell-${index}`}
-                    fill={entry?.attendanceRate >= 90 ? "#8B5CF6" : "#4C1D95"}
+                    fill={
+                      (entry?.attendanceRate ?? 0) >= 90 ? "#8B5CF6" : "#4C1D95"
+                    }
                   />
                 ))}
               </Bar>

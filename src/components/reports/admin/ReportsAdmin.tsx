@@ -313,7 +313,9 @@ import { AttendanceLog } from "./AttendanceLog";
 import { useGetAdminReportsQuery } from "@/redux/services/report/adminReportApi";
 
 export default function ReportsAdmin() {
-  const [period, setPeriod] = useState<"weekly" | "monthly">("weekly");
+  const [period, setPeriod] = useState<
+    "today" | "weekly" | "monthly" | "yearly"
+  >("weekly");
 
   // Fetch real data
   const { data, isLoading, isError } = useGetAdminReportsQuery({

@@ -5,7 +5,8 @@ export interface User {
   id: number;
   email: string;
   username: string;
-  role: string;
+  // role: string;
+  role: "super_admin" | "district_manager" | "branch_manager" | "qr_attendee"; // Added union for better
   role_display: string;
   is_super_admin: boolean;
 }

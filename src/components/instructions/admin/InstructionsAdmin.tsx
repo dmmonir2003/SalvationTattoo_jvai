@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // "use client";
 
@@ -302,6 +303,7 @@ import { InstructionCategory } from "./InstructionCategory";
 import {
   useGetInstructionsQuery,
   useDeleteInstructionMutation,
+  InstructionRole,
 } from "@/redux/services/instructions/instructionApi";
 import { FilterDropdown } from "./FilterDropdown";
 
@@ -314,7 +316,16 @@ export default function InstructionsAdmin() {
   const [deleteInstruction, { isLoading: isDeleting }] =
     useDeleteInstructionMutation();
 
-  const roleMap: Record<string, string> = {
+  // const roleMap: Record<string, string> = {
+  //   "All Roles": "all",
+  //   Staff: "staff",
+  //   "Tattoo Artist": "tattoo_artist",
+  //   "Body Piercers": "body_piercer",
+  //   "District Manager": "district_manager",
+  //   "Store Manager": "branch_manager",
+  // };
+
+  const roleMap: Record<string, InstructionRole | "all"> = {
     "All Roles": "all",
     Staff: "staff",
     "Tattoo Artist": "tattoo_artist",
@@ -328,29 +339,38 @@ export default function InstructionsAdmin() {
     search: searchQuery,
   });
 
+  // const displayGroups = useMemo(() => {
+  //   if (!instructionsData) return [];
+
+  //   if (instructionsData.grouped && instructionsData.grouped.length > 0) {
+  //     return instructionsData.grouped;
+  //   }
+
+  //   if (
+  //     instructionsData?.instructions &&
+  //     instructionsData?.instructions.length > 0
+  //   ) {
+  //     return [
+  //       {
+  //         section: `${selectedRole} Instructions`,
+  //         document_count: instructionsData.instructions.length,
+  //         instructions: instructionsData.instructions,
+  //       },
+  //     ];
+  //   }
+
+  //   return [];
+  // }, [instructionsData, selectedRole]);
+
   const displayGroups = useMemo(() => {
     if (!instructionsData) return [];
 
-    if (instructionsData.grouped && instructionsData.grouped.length > 0) {
+    if (instructionsData.grouped?.length > 0) {
       return instructionsData.grouped;
-    }
-
-    if (
-      instructionsData?.instructions &&
-      instructionsData?.instructions.length > 0
-    ) {
-      return [
-        {
-          section: `${selectedRole} Instructions`,
-          document_count: instructionsData.instructions.length,
-          instructions: instructionsData.instructions,
-        },
-      ];
     }
 
     return [];
   }, [instructionsData, selectedRole]);
-
   const stats = useMemo(() => {
     if (!instructionsData) return [];
     const s = instructionsData.stats;
