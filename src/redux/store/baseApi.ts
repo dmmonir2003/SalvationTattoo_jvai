@@ -1,8 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { RootState } from ".";
 
+//TODO: Move all report-related types here and export them for
 // Base URL for API - configurable via environment variable
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "/api";
+const BASE_URL = "https://stm9wlhp-8000.inc1.devtunnels.ms/api";
+// const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "/api";
 
 // Create the base API with RTK Query
 export const baseApi = createApi({
