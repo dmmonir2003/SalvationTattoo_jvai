@@ -12,7 +12,7 @@
 // import { cn } from "@/lib/utils";
 // import { useAppSelector } from "@/redux/store";
 // import { selectCurrentToken } from "@/redux/features/auth/authSlice";
-// import { useGetLocationsQuery } from "@/redux/services/location/locationApi";
+// import { useGetLocationsQuery } from "@/redux/services/admin/location/locationApi";
 
 // interface UserActionModalProps {
 //   isOpen: boolean;
@@ -571,7 +571,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useAppSelector } from "@/redux/store";
 import { selectCurrentToken } from "@/redux/features/auth/authSlice";
-import { useGetLocationsQuery } from "@/redux/services/location/locationApi";
+import { useGetLocationsQuery } from "@/redux/services/admin/location/locationApi";
 
 interface UserActionModalProps {
   isOpen: boolean;
@@ -581,14 +581,14 @@ interface UserActionModalProps {
   isLoading?: boolean;
 }
 
-const DEFAULT_SCHEDULE = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map(
-  (day) => ({
-    day,
-    enabled: true,
-    start: "09:00",
-    end: "20:00",
-  }),
-);
+// const DEFAULT_SCHEDULE = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map(
+//   (day) => ({
+//     day,
+//     enabled: true,
+//     start: "09:00",
+//     end: "20:00",
+//   }),
+// );
 
 const TIME_OPTIONS = [
   "5 AM",
@@ -617,7 +617,7 @@ const ROLE_OPTIONS = [
   { value: "tattoo_artist", label: "Tattoo Artist" },
   { value: "body_piercer", label: "Body Piercer" },
   { value: "staff", label: "Staff" },
-  { value: "Clock_in", label: "Clock In" },
+  { value: "clock_in_user", label: "Clock In User" },
 ];
 
 export const UserActionModal = ({
@@ -671,6 +671,7 @@ export const UserActionModal = ({
     formData.role !== "" &&
     formData.role !== "district_manager" &&
     formData.role !== "branch_manager" &&
+    formData.role !== "clock_in_user" &&
     (typeof formData.location === "number" || formData.location !== "");
 
   const toggleDay = (index: number) => {
@@ -936,7 +937,7 @@ export const UserActionModal = ({
                           onClick={() =>
                             setActivePicker({ index, field: "start" })
                           }
-                          className="bg-[#0D0D0D] border border-[#262626] px-4 py-2.5 rounded-[14px] text-xs font-medium text-white flex items-center gap-2 min-w-[100px] hover:border-[#404040] transition-colors"
+                          className="bg-[#0D0D0D] border border-[#262626] px-4 py-2.5 rounded-[14px] text-xs font-medium text-white flex items-center gap-2 min-w-25 hover:border-[#404040] transition-colors"
                         >
                           <Clock size={14} className="text-gray-500" />
                           {item.start}
@@ -958,7 +959,7 @@ export const UserActionModal = ({
                           onClick={() =>
                             setActivePicker({ index, field: "end" })
                           }
-                          className="bg-[#0D0D0D] border border-[#262626] px-4 py-2.5 rounded-[14px] text-xs font-medium text-white flex items-center gap-2 min-w-[100px] hover:border-[#404040] transition-colors"
+                          className="bg-[#0D0D0D] border border-[#262626] px-4 py-2.5 rounded-[14px] text-xs font-medium text-white flex items-center gap-2 min-w-25 hover:border-[#404040] transition-colors"
                         >
                           <Clock size={14} className="text-gray-500" />
                           {item.end}

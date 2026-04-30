@@ -29,7 +29,7 @@ export default function QrSectionpage() {
   switch (role) {
     case "super_admin":
       return <AdminQrSection />;
-    case "qr_attendee":
+    case "clock_in_user":
       return <QRAttendeeView />;
     // case "district_manager":
     //   return <ManagerQrSection />;

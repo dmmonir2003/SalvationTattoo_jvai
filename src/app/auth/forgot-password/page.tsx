@@ -4,7 +4,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, Loader2, Mail } from "lucide-react";
-import { useForgotPasswordMutation } from "@/redux/services/auth";
+import { useForgotPasswordMutation } from "@/redux/services/admin/auth";
 import { redirect, useRouter } from "next/navigation";
 
 export default function ForgotPasswordPage() {

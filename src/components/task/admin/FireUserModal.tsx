@@ -20,7 +20,7 @@ export default function FireUserModal({
   onClose,
   onConfirm,
   userData,
-  isLoading,
+  isLoading = false,
 }: FireUserModalProps) {
   const [reason, setReason] = useState("");
   const [error, setError] = useState(false);
@@ -86,15 +86,16 @@ export default function FireUserModal({
               Fire Reason
             </label>
             <textarea
-              placeholder="Explain why the task was rejected..."
+              placeholder="Explain why the user is being terminated..."
               value={reason}
               onChange={(e) => {
                 setReason(e.target.value);
                 if (error) setError(false);
               }}
+              disabled={isLoading}
               rows={4}
               className={cn(
-                "w-full bg-[#0D0D0D] border rounded-2xl py-4 px-5 text-white outline-none transition-all resize-none placeholder:text-gray-700",
+                "w-full bg-[#0D0D0D] border rounded-2xl py-4 px-5 text-white outline-none transition-all resize-none placeholder:text-gray-700 disabled:opacity-50",
                 error
                   ? "border-red-500/50"
                   : "border-[#1A1A1A] focus:border-[#968B79]/40",
@@ -113,7 +114,8 @@ export default function FireUserModal({
         <div className="flex gap-3 mt-10">
           <button
             onClick={onClose}
-            className="flex-1 py-4 bg-transparent border border-[#1A1A1A] text-gray-400 rounded-2xl font-bold hover:bg-white/5 transition-colors"
+            disabled={isLoading}
+            className="flex-1 py-4 bg-transparent border border-[#1A1A1A] text-gray-400 rounded-2xl font-bold hover:bg-white/5 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Cancel
           </button>

@@ -8,7 +8,7 @@ import { selectCurrentToken } from "@/redux/features/auth/authSlice";
 import {
   useGetProfileQuery,
   useUpdateProfilePhotoMutation,
-} from "@/redux/services/profile/profileApi";
+} from "@/redux/services/admin/profile/profileApi";
 import { Loader2 } from "lucide-react";
 
 export default function AdminProfile() {

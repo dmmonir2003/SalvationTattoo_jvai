@@ -4,8 +4,8 @@
 import { useState } from "react";
 import { Search } from "lucide-react";
 
-import { useGetAttendanceQuery } from "@/redux/services/attendance/attendanceApi";
-import { useGetLocationsQuery } from "@/redux/services/location/locationApi";
+import { useGetAttendanceQuery } from "@/redux/services/admin/attendance/attendanceApi";
+import { useGetLocationsQuery } from "@/redux/services/admin/location/locationApi";
 import AttendanceDetailView from "./AttendanceDetailView";
 import AttendanceSummaryTable from "./AttendanceSummaryTable";
 import Pagination from "./Pagination";

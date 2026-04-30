@@ -109,7 +109,7 @@ import {
   useGenerateQrMutation,
   useGetCurrentQrQuery,
   useGetQrIntervalsQuery,
-} from "@/redux/services/qrsSection/qrBranchManagerApi";
+} from "@/redux/services/admin/qrsSection/qrBranchManagerApi";
 
 const QRGenerator = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);

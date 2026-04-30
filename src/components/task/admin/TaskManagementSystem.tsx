@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // // "use client";
 
 // // import React, { useState, useMemo } from "react";
@@ -974,243 +976,343 @@ import {
   Check,
 } from "lucide-react";
 
-// --- Import your Modal Components here ---
+// --- Import RTK Query Hooks ---
+
+import { useAppSelector } from "@/redux/store";
+import { selectCurrentToken } from "@/redux/features/auth/authSlice";
+
+// --- Import Modal Components ---
 import { TaskActionModal } from "./TaskActionModal";
 import TaskDetailsModal from "./TaskDetailsModal";
 import FireUserModal from "./FireUserModal";
+import RejectModal from "./RejectModal";
+import { useGetLocationsQuery } from "@/redux/services/admin/location/locationApi";
+import {
+  useApproveTaskMutation,
+  useCreateTaskMutation,
+  useDeleteTaskMutation,
+  useEditTaskMutation,
+  useFireUserMutation,
+  useGetTasksQuery,
+  useRejectTaskMutation,
+} from "@/redux/services/admin/tasks/taskApi";
 
 // --- Types ---
 export type Status =
+  | "approved"
+  | "overdue"
+  | "awaiting_review"
+  | "pending"
+  | "rejected"
+  | "completed";
+
+export type DisplayStatus =
   | "Approved"
   | "Overdue"
   | "Awaiting Review"
   | "Pending"
-  | "Rejected";
+  | "Rejected"
+  | "Completed";
 
 export interface Task {
-  id: string;
+  id: number;
   title: string;
   description: string;
   status: Status;
-  assignedBy: string;
-  dueDate: string;
-  completedBy: string;
-  role: string;
-  location: string;
-  frequency: string;
-  email: string;
+  assigned_to_name: string;
+  due_date: string;
+  assigned_to: number;
+  assigned_to_role: string;
+  location_name: string;
+  location: number;
+  frequency: "none" | "daily" | "weekly" | "monthly" | "yearly" | "today";
+  assigned_to_email: string;
+  is_recurring: boolean;
+  photo_url?: string | null;
+  rejection_reason?: string | null;
+  can_fire?: boolean;
+  requires_photo?: boolean;
 }
 
-// --- Complete Dummy Data ---
-const ALL_TASKS: Task[] = [
-  {
-    id: "1",
-    title: "Sanitize Workstations",
-    description: "Wipe down and sanitize all workstations.",
-    status: "Approved",
-    assignedBy: "Super Admin",
-    dueDate: "Feb 25, 2026",
-    completedBy: "Alex Kim",
-    role: "Staff",
-    location: "Downtown",
-    frequency: "Today",
-    email: "alex@studio.com",
-  },
-  {
-    id: "2",
-    title: "Weekly Equipment Inventory",
-    description: "Count and log all needle packs.",
-    status: "Overdue",
-    assignedBy: "Super Admin",
-    dueDate: "Feb 28, 2026",
-    completedBy: "Sarah Chen",
-    role: "Cleaner",
-    location: "Midtown",
-    frequency: "Weekly",
-    email: "sarah@studio.com",
-  },
-  {
-    id: "3",
-    title: "Instagram Content Upload",
-    description: "Post 3 healed tattoo photos.",
-    status: "Awaiting Review",
-    assignedBy: "Super Admin",
-    dueDate: "Feb 25, 2026",
-    completedBy: "Priya Sharma",
-    role: "Staff",
-    location: "Wicker Park",
-    frequency: "Today",
-    email: "priya@studio.com",
-  },
-  {
-    id: "4",
-    title: "Autoclave Sterilization Log",
-    description: "Run and record autoclave cycles.",
-    status: "Pending",
-    assignedBy: "District Manager",
-    dueDate: "Feb 25, 2026",
-    completedBy: "Priya Sharma",
-    role: "Cleaner",
-    location: "Midtown",
-    frequency: "Weekly",
-    email: "priya@studio.com",
-  },
-  {
-    id: "5",
-    title: "Monthly Revenue Report",
-    description: "Submit monthly revenue figures.",
-    status: "Rejected",
-    assignedBy: "Super Admin",
-    dueDate: "Mar 1, 2026",
-    completedBy: "Priya Sharma",
-    role: "Body Piercer",
-    location: "Downtown",
-    frequency: "Monthly",
-    email: "priya@studio.com",
-  },
-  // Generating more data so you can see pagination with 10 items per page
-  ...Array.from({ length: 25 }).map((_, i) => ({
-    id: `extra-${i}`,
-    title: `Additional Task ${i + 6}`,
-    description: "Automated generated task description for pagination testing.",
-    status: (
-      [
-        "Approved",
-        "Pending",
-        "Overdue",
-        "Rejected",
-        "Awaiting Review",
-      ] as Status[]
-    )[i % 5],
-    assignedBy: "Store Manager",
-    dueDate: "Mar 10, 2026",
-    completedBy: "Staff Member",
-    role: "General",
-    location: i % 2 === 0 ? "Downtown" : "Midtown",
-    frequency: "Weekly",
-    email: "staff@studio.com",
-  })),
-];
+// --- Helper Mapping ---
+const mapStatusToDisplay = (status: Status): DisplayStatus => {
+  const statusMap: { [key in Status]: DisplayStatus } = {
+    approved: "Approved",
+    completed: "Approved",
+    overdue: "Overdue",
+    awaiting_review: "Awaiting Review",
+    pending: "Pending",
+    rejected: "Rejected",
+  };
+  return statusMap[status] || "Pending";
+};
 
 export default function TaskManagementSystem() {
-  const [tasks, setTasks] = useState<Task[]>(ALL_TASKS);
+  const token = useAppSelector(selectCurrentToken);
+
+  // --- State ---
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-
-  // UPDATED: Set to 10 items per page
-  const itemsPerPage = 10;
-
-  // Filter States
   const [statusFilter, setStatusFilter] = useState("All Status");
   const [locationFilter, setLocationFilter] = useState("All Locations");
-  const [frequencyFilter, setFrequencyFilter] = useState("Weekly");
+  const [locationFilterId, setLocationFilterId] = useState<number | null>(null);
+  const [frequencyFilter, setFrequencyFilter] = useState("All");
 
   // Modal Control States
   const [isActionOpen, setIsActionOpen] = useState(false);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [isFireOpen, setIsFireOpen] = useState(false);
+  const [isRejectOpen, setIsRejectOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
 
-  // Helper: Map data to Modal format
+  const itemsPerPage = 10;
+
+  // --- API Queries ---
+  const {
+    data: tasksData,
+    isLoading,
+    isError,
+    refetch,
+  } = useGetTasksQuery(
+    {
+      page: currentPage,
+      location: locationFilterId ?? undefined,
+      status:
+        statusFilter !== "All Status"
+          ? (statusFilter.toLowerCase().replace(" ", "_") as any)
+          : undefined,
+      search,
+      period: (frequencyFilter !== "All"
+        ? frequencyFilter.toLowerCase()
+        : undefined) as any,
+    },
+    { skip: !token },
+  );
+
+  const { data: locationsData } = useGetLocationsQuery(undefined, {
+    skip: !token,
+  });
+
+  // --- Mutations ---
+  const [createTask, { isLoading: isCreating }] = useCreateTaskMutation();
+  const [editTask, { isLoading: isEditing }] = useEditTaskMutation();
+  const [deleteTask, { isLoading: isDeleting }] = useDeleteTaskMutation();
+  const [approveTask, { isLoading: isApproving }] = useApproveTaskMutation();
+  const [rejectTask, { isLoading: isRejecting }] = useRejectTaskMutation();
+  const [fireUser, { isLoading: isFiring }] = useFireUserMutation();
+
+  // --- Filter Handlers (Resetting page here avoids the Effect error) ---
+  const handleSearchChange = (val: string) => {
+    setSearch(val);
+    setCurrentPage(1);
+  };
+
+  const handleStatusChange = (val: string) => {
+    setStatusFilter(val);
+    setCurrentPage(1);
+  };
+
+  const handleFrequencyChange = (val: string) => {
+    setFrequencyFilter(val);
+    setCurrentPage(1);
+  };
+
+  const handleLocationFilterChange = (locationName: string) => {
+    setLocationFilter(locationName);
+    setCurrentPage(1);
+    if (locationName === "All Locations") {
+      setLocationFilterId(null);
+    } else {
+      const activeLocations =
+        locationsData?.locations?.filter((loc) => loc.status === "active") ||
+        [];
+      const location = activeLocations.find((loc) => loc.name === locationName);
+      setLocationFilterId(location?.id || null);
+    }
+  };
+
+  // --- Helper: Data Mappers ---
+  const mapApiTaskToDisplay = (apiTask: ApiTask): Task => ({
+    id: apiTask.id,
+    title: apiTask.title,
+    description: apiTask.description,
+    status: apiTask.status as Status,
+    assigned_to_name: apiTask.assigned_to_name,
+    due_date: apiTask.due_date,
+    assigned_to: apiTask.assigned_to,
+    assigned_to_role: apiTask.assigned_to_role,
+    location_name: apiTask.location_name,
+    location: apiTask.location,
+    frequency: (apiTask.frequency as any) || "none",
+    assigned_to_email: apiTask.assigned_to_email,
+    is_recurring: apiTask.is_recurring,
+    photo_url: apiTask.photo_url,
+    rejection_reason: apiTask.rejection_reason,
+    requires_photo: apiTask.requires_photo,
+  });
+
   const mapTaskToModal = (task: Task | null) => {
     if (!task) return null;
     return {
       taskName: task.title,
       description: task.description,
-      location: task.location,
-      assignedTo: task.completedBy,
-      dueDate: task.dueDate,
-      employeeName: task.completedBy,
-      employeeInitials: task.completedBy
+      location: task.location_name,
+      locationId: task.location,
+      assignedTo: task.assigned_to_name,
+      assignedToId: task.assigned_to,
+      dueDate: task.due_date,
+      employeeName: task.assigned_to_name,
+      employeeInitials: task.assigned_to_name
         .split(" ")
         .map((n) => n[0])
         .join(""),
-      role: task.role,
-      status: task.status,
-      imageUrl: null,
-      email: task.email,
+      role: task.assigned_to_role,
+      status: mapStatusToDisplay(task.status),
+      imageUrl: task.photo_url || null,
+      email: task.assigned_to_email,
+      isRecurring: task.is_recurring,
+      frequency: task.frequency,
+      requirePhoto: task.requires_photo || false,
     };
   };
 
-  // Logic: Filtering
-  const filteredTasks = useMemo(() => {
-    return tasks.filter((t) => {
-      const matchesSearch =
-        t.title.toLowerCase().includes(search.toLowerCase()) ||
-        t.location.toLowerCase().includes(search.toLowerCase());
-      const matchesStatus =
-        statusFilter === "All Status" || t.status === statusFilter;
-      const matchesLocation =
-        locationFilter === "All Locations" || t.location === locationFilter;
-      const matchesFrequency =
-        frequencyFilter === "All" || t.frequency === frequencyFilter;
-      return (
-        matchesSearch && matchesStatus && matchesLocation && matchesFrequency
-      );
-    });
-  }, [search, tasks, statusFilter, locationFilter, frequencyFilter]);
-
-  // Logic: Pagination
-  const totalPages = Math.ceil(filteredTasks.length / itemsPerPage);
-  const paginatedTasks = filteredTasks.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage,
-  );
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [search, statusFilter, locationFilter, frequencyFilter]);
-
-  // Handle Logic
+  // --- CRUD Handlers ---
   const handleActionClick = (task: Task) => {
     setSelectedTask(task);
-    if (task.status === "Overdue") setIsFireOpen(true);
-    else if (["Approved", "Awaiting Review", "Rejected"].includes(task.status))
+    if (task.status === "overdue") setIsFireOpen(true);
+    else if (
+      ["approved", "awaiting_review", "rejected", "completed"].includes(
+        task.status,
+      )
+    )
       setIsDetailsOpen(true);
-    else setIsActionOpen(true);
+    else if (task.status === "pending") setIsActionOpen(true);
   };
 
-  const handleDeleteTask = (taskId: string) => {
-    if (confirm("Are you sure you want to delete this pending task?")) {
-      setTasks((prev) => prev.filter((task) => task.id !== taskId));
+  const handleDelete = async (taskId: number) => {
+    if (confirm("Are you sure you want to delete this task?")) {
+      try {
+        await deleteTask(taskId).unwrap();
+        refetch();
+      } catch (err) {
+        alert("Delete failed");
+      }
     }
   };
 
-  const stats = {
-    all: tasks.length,
-    overdue: tasks.filter((t) => t.status === "Overdue").length,
-    completed: tasks.filter((t) => t.status === "Approved").length,
-    rejected: tasks.filter((t) => t.status === "Rejected").length,
+  const handleTaskActionSave = async (formData: any) => {
+    const payload = {
+      title: formData.title,
+      description: formData.description,
+      location: formData.locationId,
+      assigned_to: formData.assignToId,
+      due_date: formData.dueDate,
+      is_recurring: formData.isRecurring,
+      frequency: formData.frequency,
+      requires_photo: formData.requirePhoto,
+    };
+
+    try {
+      if (selectedTask) {
+        await editTask({ id: selectedTask.id, data: payload }).unwrap();
+      } else {
+        await createTask(payload as any).unwrap();
+      }
+      refetch();
+      setIsActionOpen(false);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
+  const handleApprove = async (taskId: number) => {
+    try {
+      await approveTask(taskId).unwrap();
+      refetch();
+      setIsDetailsOpen(false);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleReject = async (taskId: number, reason: string) => {
+    try {
+      await rejectTask({ id: taskId, rejection_reason: reason }).unwrap();
+      refetch();
+      setIsDetailsOpen(false);
+      setIsRejectOpen(false);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleFire = async (taskId: number, reason: string) => {
+    try {
+      await fireUser({ taskId, fire_reason: reason }).unwrap();
+      refetch();
+      setIsFireOpen(false);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  // --- Loading / Error States ---
+  if (isLoading && !tasksData)
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        Loading...
+      </div>
+    );
+  if (isError)
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        Error loading tasks.
+      </div>
+    );
+
+  const tasks = tasksData?.tasks?.results || [];
+  const totalTasks = tasksData?.tasks?.count || 0;
+  const stats = tasksData?.stats || {
+    all_tasks: 0,
+    overdue: 0,
+    completed: 0,
+    rejected: 0,
+  };
+  const locationOptions = [
+    "All Locations",
+    ...(locationsData?.locations
+      ?.filter((l) => l.status === "active")
+      .map((l) => l.name) || []),
+  ];
+
   return (
-    <div className="min-h-screen bg-[#0a0a0b] text-[#e4e4e7] p-4 md:p-8 font-sans selection:bg-[#c4a47c]/30">
+    <div className="min-h-screen bg-[#0a0a0b] text-[#e4e4e7] p-4 md:p-8 font-sans">
       {/* Header & Search */}
       <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4 mb-8">
-        <div className="relative flex-1 ">
+        <div className="relative flex-1">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
           <input
-            className="w-full bg-[#121214] border border-[#2a2a2d] rounded-full py-3 pl-11 pr-4 focus:outline-none focus:ring-1 focus:ring-[#c4a47c]/50 transition-all text-sm"
+            className="w-full bg-[#121214] border border-[#2a2a2d] rounded-full py-3 pl-11 pr-4 focus:outline-none transition-all text-sm"
             placeholder="Search by employee ..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => handleSearchChange(e.target.value)}
           />
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
           <FilterDropdown
             value={frequencyFilter}
-            onChange={setFrequencyFilter}
-            options={["Today", "Weekly", "Monthly", "Yearly"]}
+            onChange={handleFrequencyChange}
+            options={["All", "today", "weekly", "monthly", "yearly"]}
           />
           <FilterDropdown
             value={locationFilter}
-            onChange={setLocationFilter}
-            options={["All Locations", "Downtown", "Wicker Park", "Midtown"]}
+            onChange={handleLocationFilterChange}
+            options={locationOptions}
           />
           <FilterDropdown
             value={statusFilter}
-            onChange={setStatusFilter}
+            onChange={handleStatusChange}
             options={[
               "All Status",
               "Approved",
@@ -1226,7 +1328,7 @@ export default function TaskManagementSystem() {
               setSelectedTask(null);
               setIsActionOpen(true);
             }}
-            className="flex items-center gap-2 bg-white text-black px-6 py-2.5 rounded-full font-bold text-sm hover:bg-gray-200 transition-all active:scale-95 shadow-lg shadow-white/5"
+            className="flex items-center gap-2 bg-white text-black px-6 py-2.5 rounded-full font-bold text-sm hover:bg-gray-200 transition-all"
           >
             <Plus className="w-4 h-4" /> Create Task
           </button>
@@ -1237,141 +1339,137 @@ export default function TaskManagementSystem() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <StatCard
           label="All Tasks"
-          val={stats.all}
+          val={stats.all_tasks}
           color="border-[#c4a47c]/20"
         />
         <StatCard
           label="Overdue"
           val={stats.overdue}
-          color="border-[#f87171]/20"
+          color="border-red-500/20"
         />
         <StatCard
           label="Completed"
           val={stats.completed}
-          color="border-[#4ade80]/20"
+          color="border-green-500/20"
         />
         <StatCard
           label="Rejected"
           val={stats.rejected}
-          color="border-[#f87171]/20"
+          color="border-red-500/20"
         />
       </div>
 
-      {/* Task Table */}
+      {/* Table */}
       <div className="bg-[#121214] border border-[#2a2a2d] rounded-2xl overflow-hidden mb-6">
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead className="bg-[#161618] border-b border-[#2a2a2d]">
-              <tr className="text-[10px] uppercase tracking-[0.1em] text-gray-500 font-bold">
+              <tr className="text-[10px] uppercase text-gray-500 font-bold">
                 <th className="px-6 py-4">Task</th>
-                <th className="px-6 py-4">Assigned By</th>
+                <th className="px-6 py-4">Created At</th>
                 <th className="px-6 py-4">Due Date</th>
-                <th className="px-6 py-4">Completed By</th>
+                <th className="px-6 py-4">Employee</th>
                 <th className="px-6 py-4">Location</th>
                 <th className="px-6 py-4 text-center">Action</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#1e1e20]">
-              {paginatedTasks.map((task) => (
-                <tr
-                  key={task.id}
-                  className="hover:bg-white/[0.02] transition-colors group"
-                >
-                  <td className="px-6 py-5 min-w-[300px]">
-                    <div className="flex gap-4">
-                      <StatusIcon status={task.status} />
-                      <div>
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="font-semibold text-sm text-white">
-                            {task.title}
-                          </span>
-                          <StatusBadge status={task.status} />
-                        </div>
-                        <p className="text-xs text-gray-500 line-clamp-1">
-                          {task.description}
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-5 text-sm">{task.assignedBy}</td>
-                  <td
-                    className={`px-6 py-5 text-sm ${task.status === "Overdue" ? "text-red-500 font-medium" : ""}`}
+              {tasks.map((apiTask) => {
+                const task = mapApiTaskToDisplay(apiTask);
+                const displayStatus = mapStatusToDisplay(task.status);
+                return (
+                  <tr
+                    key={task.id}
+                    className="hover:bg-white/[0.02] transition-colors group"
                   >
-                    {task.dueDate}
-                  </td>
-                  <td className="px-6 py-5">
-                    <div className="text-sm font-medium">
-                      {task.completedBy}
-                    </div>
-                    <div className="text-[10px] text-gray-600 uppercase font-bold">
-                      {task.role}
-                    </div>
-                  </td>
-                  <td className="px-6 py-5 text-sm">{task.location}</td>
-                  <td className="px-6 py-5">
-                    <div className="flex justify-center items-center gap-2">
-                      {task.status === "Pending" ? (
-                        <>
+                    <td className="px-6 py-5 min-w-[300px]">
+                      <div className="flex gap-4">
+                        <StatusIcon status={displayStatus} />
+                        <div>
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="font-semibold text-sm text-white">
+                              {task.title}
+                            </span>
+                            <StatusBadge status={displayStatus} />
+                          </div>
+                          <p className="text-xs text-gray-500 line-clamp-1">
+                            {task.description}
+                          </p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-5 text-sm">
+                      {apiTask.created_at
+                        ? new Date(apiTask.created_at).toLocaleDateString()
+                        : "N/A"}
+                    </td>
+                    <td
+                      className={`px-6 py-5 text-sm ${task.status === "overdue" ? "text-red-500 font-medium" : ""}`}
+                    >
+                      {task.due_date}
+                    </td>
+                    <td className="px-6 py-5">
+                      <div className="text-sm font-medium">
+                        {task.assigned_to_name}
+                      </div>
+                      <div className="text-[10px] text-gray-600 uppercase font-bold">
+                        {task.assigned_to_role}
+                      </div>
+                    </td>
+                    <td className="px-6 py-5 text-sm">{task.location_name}</td>
+                    <td className="px-6 py-5">
+                      <div className="flex justify-center items-center gap-2">
+                        {task.status === "pending" ? (
+                          <>
+                            <button
+                              onClick={() => handleActionClick(task)}
+                              className="p-2 border border-[#2a2a2d] rounded-lg text-gray-400 hover:text-[#c4a47c] transition-all"
+                            >
+                              <Edit2 size={16} />
+                            </button>
+                            <button
+                              onClick={() => handleDelete(task.id)}
+                              disabled={isDeleting}
+                              className="p-2 border border-[#2a2a2d] rounded-lg text-gray-400 hover:text-red-500 transition-all"
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </>
+                        ) : (
                           <button
                             onClick={() => handleActionClick(task)}
-                            className="p-2 border border-[#2a2a2d] rounded-lg text-gray-400 hover:text-[#c4a47c] hover:border-[#c4a47c]/40 transition-all"
+                            className={`px-4 py-1.5 rounded-lg text-xs font-bold border transition-all ${task.status === "overdue" ? "border-red-900/50 text-red-500 hover:bg-red-500/10" : "border-[#c4a47c]/40 text-[#c4a47c] hover:bg-[#c4a47c]/10"}`}
                           >
-                            <Edit2 size={16} />
+                            {task.status === "overdue" ? "Fire" : "View"}
                           </button>
-                          <button
-                            onClick={() => handleDeleteTask(task.id)}
-                            className="p-2 border border-[#2a2a2d] rounded-lg text-gray-400 hover:text-red-500 hover:border-red-500/40 transition-all"
-                          >
-                            <Trash2 size={16} />
-                          </button>
-                        </>
-                      ) : (
-                        <button
-                          onClick={() => handleActionClick(task)}
-                          className={`px-4 py-1.5 rounded-lg text-xs font-bold border transition-all ${
-                            task.status === "Overdue"
-                              ? "border-red-900/50 text-red-500 hover:bg-red-500/10"
-                              : "border-[#c4a47c]/40 text-[#c4a47c] hover:bg-[#c4a47c]/10"
-                          }`}
-                        >
-                          {task.status === "Overdue" ? "Fire" : "View"}
-                        </button>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
       </div>
 
-      {/* Pagination Controls */}
-      <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-500">
+      {/* Pagination */}
+      <div className="flex items-center justify-between gap-4 text-sm text-gray-500">
         <p>
-          Showing {paginatedTasks.length} of {filteredTasks.length} results
+          Showing {tasks.length} of {totalTasks} results
         </p>
         <div className="flex items-center gap-2">
           <button
             disabled={currentPage === 1}
             onClick={() => setCurrentPage((p) => p - 1)}
-            className="p-2 border border-[#2a2a2d] rounded-lg disabled:opacity-20 transition-colors hover:bg-white/5"
+            className="p-2 border border-[#2a2a2d] rounded-lg disabled:opacity-20"
           >
             <ChevronLeft className="w-4 h-4" />
           </button>
-          {Array.from({ length: totalPages }).map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setCurrentPage(i + 1)}
-              className={`w-8 h-8 rounded-lg border transition-all ${currentPage === i + 1 ? "border-[#c4a47c] text-[#c4a47c] bg-[#c4a47c]/10" : "border-[#2a2a2d] hover:bg-white/5"}`}
-            >
-              {i + 1}
-            </button>
-          ))}
           <button
-            disabled={currentPage === totalPages}
+            disabled={currentPage >= Math.ceil(totalTasks / itemsPerPage)}
             onClick={() => setCurrentPage((p) => p + 1)}
-            className="p-2 border border-[#2a2a2d] rounded-lg disabled:opacity-20 transition-colors hover:bg-white/5"
+            className="p-2 border border-[#2a2a2d] rounded-lg disabled:opacity-20"
           >
             <ChevronRight className="w-4 h-4" />
           </button>
@@ -1383,132 +1481,165 @@ export default function TaskManagementSystem() {
         isOpen={isActionOpen}
         onClose={() => setIsActionOpen(false)}
         initialData={mapTaskToModal(selectedTask)}
-        onSave={(data) => setIsActionOpen(false)}
+        onSave={handleTaskActionSave}
+        isLoading={isCreating || isEditing}
       />
-      <TaskDetailsModal
-        isOpen={isDetailsOpen}
-        onClose={() => setIsDetailsOpen(false)}
-        data={mapTaskToModal(selectedTask)}
-      />
+
+      {isDetailsOpen && (
+        <TaskDetailsModalWithApprove
+          isOpen={isDetailsOpen}
+          onClose={() => setIsDetailsOpen(false)}
+          data={mapTaskToModal(selectedTask)}
+          selectedTask={selectedTask}
+          onApprove={handleApprove}
+          onRejectOpen={() => setIsRejectOpen(true)}
+          isApproving={isApproving}
+          isRejecting={isRejecting}
+          onRejectConfirm={handleReject}
+          isRejectOpen={isRejectOpen}
+          onRejectClose={() => setIsRejectOpen(false)}
+        />
+      )}
+
       <FireUserModal
         isOpen={isFireOpen}
         onClose={() => setIsFireOpen(false)}
-        onConfirm={() => setIsFireOpen(false)}
+        onConfirm={(reason) =>
+          selectedTask && handleFire(selectedTask.id, reason)
+        }
         userData={
           selectedTask
-            ? { name: selectedTask.completedBy, email: selectedTask.email }
+            ? {
+                name: selectedTask.assigned_to_name,
+                email: selectedTask.assigned_to_email,
+              }
             : null
         }
+        isLoading={isFiring}
       />
     </div>
   );
 }
 
-// Design Components
-function StatCard({
-  label,
-  val,
-  color,
-}: {
-  label: string;
-  val: number;
-  color: string;
-}) {
+// --- Internal Helper Components ---
+
+function TaskDetailsModalWithApprove({
+  isOpen,
+  onClose,
+  data,
+  selectedTask,
+  onApprove,
+  onRejectOpen,
+  isApproving,
+  onRejectConfirm,
+  isRejectOpen,
+  onRejectClose,
+  isRejecting,
+}: any) {
   return (
-    <div
-      className={`bg-[#121214] border ${color} p-5 rounded-2xl relative group hover:bg-[#161618] transition-all`}
-    >
+    <>
+      <TaskDetailsModal
+        isOpen={isOpen}
+        onClose={onClose}
+        data={data}
+        onApprove={
+          selectedTask && data?.status === "Awaiting Review"
+            ? () => onApprove(selectedTask.id)
+            : undefined
+        }
+        onRejectOpen={onRejectOpen}
+        isApproving={isApproving}
+        isPendingReview={data?.status === "Awaiting Review"}
+      />
+      {selectedTask && (
+        <RejectModal
+          isOpen={isRejectOpen}
+          onClose={onRejectClose}
+          onConfirm={(reason) => onRejectConfirm(selectedTask.id, reason)}
+          isLoading={isRejecting}
+        />
+      )}
+    </>
+  );
+}
+
+function StatCard({ label, val, color }: any) {
+  return (
+    <div className={`bg-[#121214] border ${color} p-5 rounded-2xl`}>
       <p className="text-[10px] uppercase font-bold text-gray-500 mb-1">
         {label}
       </p>
       <h3 className="text-3xl font-bold text-white">{val}</h3>
-      <div className="absolute bottom-4 right-4 opacity-10 group-hover:opacity-20 transition-opacity">
-        <div className="w-8 h-8 rounded-full border-2 border-current" />
-      </div>
     </div>
   );
 }
 
-function StatusIcon({ status }: { status: Status }) {
-  const styles = {
-    Approved: "border-green-500/30 bg-green-500/10 text-green-500",
-    Overdue: "border-red-500/30 bg-red-500/10 text-red-500",
-    "Awaiting Review": "border-yellow-500/30 bg-yellow-500/10 text-yellow-500",
-    Pending: "border-blue-500/30 bg-blue-500/10 text-blue-500",
-    Rejected: "border-red-500/30 bg-red-500/10 text-red-500",
+function StatusIcon({ status }: { status: DisplayStatus }) {
+  const styles: any = {
+    Approved: "text-green-500 bg-green-500/10",
+    Overdue: "text-red-500 bg-red-500/10",
+    "Awaiting Review": "text-yellow-500 bg-yellow-500/10",
+    Pending: "text-blue-500 bg-blue-500/10",
+    Rejected: "text-red-500 bg-red-500/10",
   };
   return (
-    <div className={`mt-1 p-2 rounded-xl border shrink-0 ${styles[status]}`}>
+    <div
+      className={`p-2 rounded-xl border border-current/20 ${styles[status]}`}
+    >
       <div className="w-3.5 h-3.5 border-2 border-current rounded-sm" />
     </div>
   );
 }
 
-function StatusBadge({ status }: { status: Status }) {
-  const styles = {
-    Approved: "border-green-500/30 bg-green-500/10 text-green-500",
-    Overdue: "border-red-500/30 bg-red-500/10 text-red-500",
-    "Awaiting Review": "border-yellow-500/30 bg-yellow-500/10 text-yellow-500",
-    Pending: "border-blue-500/30 bg-blue-500/10 text-blue-500",
-    Rejected: "border-red-500/30 bg-red-500/10 text-red-500",
+function StatusBadge({ status }: { status: DisplayStatus }) {
+  const styles: any = {
+    Approved: "text-green-500 bg-green-500/10",
+    Overdue: "text-red-500 bg-red-500/10",
+    "Awaiting Review": "text-yellow-500 bg-yellow-500/10",
+    Pending: "text-blue-500 bg-blue-500/10",
+    Rejected: "text-red-500 bg-red-500/10",
   };
   return (
     <span
-      className={`text-[9px] px-2 py-0.5 rounded border font-bold uppercase tracking-wider ${styles[status]}`}
+      className={`text-[9px] px-2 py-0.5 rounded border border-current/20 font-bold uppercase ${styles[status]}`}
     >
       {status}
     </span>
   );
 }
 
-function FilterDropdown({
-  value,
-  onChange,
-  options,
-}: {
-  value: string;
-  onChange: (v: string) => void;
-  options: string[];
-}) {
+function FilterDropdown({ value, onChange, options }: any) {
   const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      )
-        setIsOpen(false);
+    const click = (e: any) => {
+      if (ref.current && !ref.current.contains(e.target)) setIsOpen(false);
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", click);
+    return () => document.removeEventListener("mousedown", click);
   }, []);
+
   return (
-    <div className="relative" ref={dropdownRef}>
+    <div className="relative" ref={ref}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-between min-w-[140px] gap-4 px-4 py-2.5 bg-[#121214] border border-[#2a2a2d] rounded-xl text-xs font-medium hover:border-[#c4a47c]/50 transition-all group"
+        className="flex items-center justify-between min-w-[140px] px-4 py-2.5 bg-[#121214] border border-[#2a2a2d] rounded-xl text-xs"
       >
-        <span className={isOpen ? "text-[#c4a47c]" : "text-gray-300"}>
-          {value}
-        </span>
-        <ChevronDown
-          className={`w-3.5 h-3.5 text-gray-500 transition-transform ${isOpen ? "rotate-180 text-[#c4a47c]" : ""}`}
-        />
+        <span>{value}</span>
+        <ChevronDown size={14} className={isOpen ? "rotate-180" : ""} />
       </button>
       {isOpen && (
-        <div className="absolute top-full left-0 mt-2 w-full min-w-[160px] bg-[#121214] border border-[#c4a47c]/30 rounded-xl overflow-hidden z-50 shadow-2xl animate-in fade-in slide-in-from-top-2">
-          {options.map((option) => (
+        <div className="absolute top-full left-0 mt-2 w-full bg-[#121214] border border-[#c4a47c]/30 rounded-xl z-50 overflow-hidden shadow-2xl">
+          {options.map((opt: string) => (
             <button
-              key={option}
+              key={opt}
               onClick={() => {
-                onChange(option);
+                onChange(opt);
                 setIsOpen(false);
               }}
-              className={`w-full flex items-center justify-between px-4 py-3 text-left text-xs transition-colors hover:bg-[#c4a47c]/10 ${value === option ? "bg-[#c4a47c]/20 text-[#c4a47c] font-bold" : "text-gray-400"}`}
+              className={`w-full px-4 py-3 text-left text-xs hover:bg-[#c4a47c]/10 ${value === opt ? "text-[#c4a47c] bg-[#c4a47c]/5" : "text-gray-400"}`}
             >
-              {option}
-              {value === option && <Check className="w-3 h-3" />}
+              {opt}
             </button>
           ))}
         </div>

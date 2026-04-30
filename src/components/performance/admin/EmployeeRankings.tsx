@@ -132,7 +132,7 @@ const ProgressBar = ({ value, color, align = "left" }: ProgressBarProps) => {
       </div>
       <span
         className={cn(
-          "text-xs font-bold min-w-[35px]",
+          "text-xs font-bold min-w-8.75",
           safeValue > 0 ? "text-gray-400" : "text-gray-600",
         )}
       >

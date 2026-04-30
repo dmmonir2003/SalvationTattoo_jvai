@@ -2,7 +2,7 @@
 "use client";
 import React, { useState } from "react";
 import { Plus, Edit2, Trash2, AlertCircle } from "lucide-react";
-import { FAQ } from "@/redux/services/appContent/appContentApi";
+import { FAQ } from "@/redux/services/admin/appContent/appContentApi";
 
 interface FAQManagerProps {
   faqs: FAQ[];

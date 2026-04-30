@@ -140,10 +140,11 @@ import { useState } from "react";
 import Link from "next/link";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useLoginMutation } from "@/redux/services/auth";
+
 import { useAppDispatch } from "@/redux/store";
 import { setCredentials } from "@/redux/features/auth/authSlice";
 import { useDemoLogin } from "@/hooks/useAuth";
+import { useLoginMutation } from "@/redux/services/admin/auth";
 
 export default function SignInPage() {
   const [email, setEmail] = useState("");

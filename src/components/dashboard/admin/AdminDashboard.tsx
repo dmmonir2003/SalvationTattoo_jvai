@@ -12,7 +12,7 @@
 // import { AttendanceChart } from "./AttendanceChart";
 // import { TaskStatus } from "./TaskStatus";
 // import { ActivityFeed } from "./ActivityFeed";
-// import { useGetDashboardOverviewQuery } from "@/redux/services/dashboard/adminDashboardApi";
+// import { useGetDashboardOverviewQuery } from "@/redux/services/admin/dashboard/adminDashboardApi";
 // import EmployeeBreakdown from "./EmployeeBreakdown";
 
 // export default function AdminDashboard() {
@@ -110,8 +110,9 @@ import AdminStatCard from "./AdminStatCard";
 import { AttendanceChart } from "./AttendanceChart";
 import { TaskStatus } from "./TaskStatus";
 import { ActivityFeed } from "./ActivityFeed";
-import { useGetDashboardOverviewQuery } from "@/redux/services/dashboard/adminDashboardApi";
+
 import EmployeeBreakdown from "./EmployeeBreakdown";
+import { useGetDashboardOverviewQuery } from "@/redux/services/admin/dashboard/adminDashboardApi";
 
 export default function AdminDashboard() {
   const [location, setLocation] = useState<string>("all");

@@ -3,7 +3,7 @@
 
 import React, { useState } from "react";
 import { Lock, Eye, EyeOff, AlertCircle } from "lucide-react";
-import { useChangePasswordMutation } from "@/redux/services/profile/profileApi";
+import { useChangePasswordMutation } from "@/redux/services/admin/profile/profileApi";
 
 export const ChangePassword = () => {
   const [showPass, setShowPass] = useState({

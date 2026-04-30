@@ -13,7 +13,7 @@ import {
   useUpdateLocationMutation,
   useDeleteLocationMutation,
   Location,
-} from "@/redux/services/location/locationApi";
+} from "@/redux/services/admin/location/locationApi";
 
 // Map API location to UI format
 const mapApiLocationToUI = (loc: Location) => ({
