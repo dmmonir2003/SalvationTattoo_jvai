@@ -18,7 +18,7 @@
 //   useGetInstructionsQuery,
 //   useDeleteInstructionMutation,
 //   Instruction,
-// } from "@/redux/services/instructions/instructionApi";
+// } from "@/redux/services/admin/instructions/instructionApi";
 // import { useAppSelector } from "@/redux/store";
 // import { selectCurrentToken } from "@/redux/features/auth/authSlice";
 
@@ -300,12 +300,13 @@ import React, { useState, useMemo } from "react";
 import { Search, Plus, Loader, Users, Shield } from "lucide-react";
 import { AddInstructionModal } from "./AddInstructionModal";
 import { InstructionCategory } from "./InstructionCategory";
-import {
-  useGetInstructionsQuery,
-  useDeleteInstructionMutation,
-  InstructionRole,
-} from "@/redux/services/instructions/instructionApi";
+
 import { FilterDropdown } from "./FilterDropdown";
+import {
+  InstructionRole,
+  useDeleteInstructionMutation,
+  useGetInstructionsQuery,
+} from "@/redux/services/admin/instructions/instructionApi";
 
 export default function InstructionsAdmin() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -313,8 +314,7 @@ export default function InstructionsAdmin() {
   const [selectedRole, setSelectedRole] = useState("All Roles");
 
   // 1. Initialize Delete Mutation
-  const [deleteInstruction, { isLoading: isDeleting }] =
-    useDeleteInstructionMutation();
+  const [deleteInstruction] = useDeleteInstructionMutation();
 
   // const roleMap: Record<string, string> = {
   //   "All Roles": "all",

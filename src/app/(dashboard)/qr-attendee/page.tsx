@@ -20,7 +20,7 @@ export default function QrAttendeePage() {
 
   // Verify user has qr_attendee role, otherwise redirect
   useEffect(() => {
-    if (role && role !== "qr_attendee") {
+    if (role && role !== "clock_in_user") {
       router.replace("/dashboard");
     }
   }, [role, router]);
@@ -34,7 +34,7 @@ export default function QrAttendeePage() {
   }
 
   // Only render if user is confirmed qr_attendee
-  if (role !== "qr_attendee") {
+  if (role !== "clock_in_user") {
     return (
       <div className="flex h-[70vh] items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-primary" />
