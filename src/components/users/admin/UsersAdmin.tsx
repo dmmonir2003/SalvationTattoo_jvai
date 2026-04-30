@@ -14,7 +14,7 @@
 //   useUpdateUserMutation,
 //   useDeleteUserMutation,
 //   User,
-// } from "@/redux/services/users/userService";
+// } from "@/redux/services/admin/users/userService";
 
 // const AVATAR_COLORS = [
 //   "bg-purple-600",
@@ -310,7 +310,7 @@ import {
   useAddUserMutation,
   useUpdateUserMutation,
   useDeleteUserMutation,
-} from "@/redux/services/users/userService";
+} from "@/redux/services/admin/users/userService";
 
 // ... (AVATAR_COLORS, formatDate, convertTo24Hour, transformScheduleToAPI, getInitials, mapApiUserToUIUser stay exactly the same)
 

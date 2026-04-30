@@ -46,7 +46,7 @@
 //   </div>
 // );
 
-import { AttendanceSummaryEntry } from "@/redux/services/report/adminReportApi";
+import { AttendanceSummaryEntry } from "@/redux/services/admin/report/adminReportApi";
 import { Calendar, MapPin } from "lucide-react";
 
 export const AttendanceLog = ({ data }: { data: AttendanceSummaryEntry[] }) => {

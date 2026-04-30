@@ -4,12 +4,9 @@ import { baseApi } from "@/redux/store/baseApi";
 
 export interface SplashScreen {
   id: number;
-  image_url: string;
-  updated_at: string;
-}
-export interface AppSplashScreen {
-  id: number;
-  image_url: string;
+  app_image_url: string;
+  web_image_url: string;
+  type: "app" | "web"; // Added based on Postman screenshot
   updated_at: string;
 }
 
@@ -42,51 +39,48 @@ export const appContentApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // --- Splash Screen Endpoints ---
 
-    // GET: Fetch splash screen (image_7a606b.png)
-    // getSplashScreen: builder.query<SplashScreen, void>({
-    //   query: () => ({
-    //     url: "/admin/app-content/splash-screen/",
-    //     method: "GET",
-    //   }),
-    //   providesTags: ["AppContent"],
-    // }),
-
-    getSplashScreen: builder.query<SplashScreen, void>({
-      query: () => ({
+    // Updated to accept type: 'app' or 'web'
+    getSplashScreen: builder.query<SplashScreen, "app" | "web">({
+      query: (type) => ({
         url: "/admin/app-content/splash-screen/",
         method: "GET",
-        // This triggers the skip logic in baseApi
+        params: { type }, // Passing type as a query parameter
         headers: {
           "no-auth": "true",
         },
       }),
-      providesTags: ["AppContent"],
+      providesTags: (result, error, type) => [{ type: "AppContent", id: type }],
     }),
 
-    // POST: Update/Add Splash Screen (image_7a606b.png uses form-data)
+    // Updated to handle multipart form-data as shown in Postman
+    // updateSplashScreen: builder.mutation<SplashScreen, FormData>({
+    //   query: (formData) => ({
+    //     url: "/admin/app-content/splash-screen/",
+    //     method: "POST",
+    //     body: formData,
+    //     // Note: When passing FormData, do not set Content-Type header manually;
+    //     // the browser/fetch will set it with the correct boundary.
+    //   }),
+    //   // Invalidates both to ensure UI stays in sync
+    //   invalidatesTags: ["AppContent"],
+    // }),
+
     updateSplashScreen: builder.mutation<SplashScreen, FormData>({
       query: (formData) => ({
         url: "/admin/app-content/splash-screen/",
-        method: "POST", // Note: Your image shows a GET with body, but standard creation is POST/PUT.
-        body: formData, // Based on image_7a606b, it uses form-data for the 'image' file
-      }),
-      invalidatesTags: ["AppContent"],
-    }),
-
-
-    updateMobileSplashScreen: builder.mutation<AppSplashScreen, FormData>({
-      query: (formData) => ({
-        url: "/admin/app-content/splash-screen/mobile/",
         method: "POST",
         body: formData,
+        // FIX: Tell the baseApi NOT to set Content-Type so boundary is preserved
+        prepareHeaders: (headers: Headers) => {
+          headers.delete("Content-Type");
+          return headers;
+        },
       }),
       invalidatesTags: ["AppContent"],
     }),
-
 
     // --- FAQ Endpoints ---
 
-    // GET: List FAQs with pagination (image_7a63f1.png)
     getFAQs: builder.query<FAQListResponse, FAQQueryParams>({
       query: (params) => ({
         url: "/admin/app-content/faqs/",
@@ -98,7 +92,6 @@ export const appContentApi = baseApi.injectEndpoints({
       providesTags: ["FAQs"],
     }),
 
-    // POST: Create FAQ (image_7a60c7.png)
     createFAQ: builder.mutation<
       { message: string; faq: FAQ },
       CreateFAQRequest
@@ -106,12 +99,11 @@ export const appContentApi = baseApi.injectEndpoints({
       query: (newFaq) => ({
         url: "/admin/app-content/faqs/",
         method: "POST",
-        body: newFaq, // JSON format
+        body: newFaq,
       }),
       invalidatesTags: ["FAQs"],
     }),
 
-    // PATCH: Edit FAQ (image_7a6447.png)
     updateFAQ: builder.mutation<
       { message: string; faq: FAQ },
       { id: number; data: Partial<CreateFAQRequest> }
@@ -124,7 +116,6 @@ export const appContentApi = baseApi.injectEndpoints({
       invalidatesTags: ["FAQs"],
     }),
 
-    // DELETE: Remove FAQ (image_7a64c9.png)
     deleteFAQ: builder.mutation<{ message: string }, number>({
       query: (id) => ({
         url: `/admin/app-content/faqs/${id}/`,
@@ -138,7 +129,6 @@ export const appContentApi = baseApi.injectEndpoints({
 export const {
   useGetSplashScreenQuery,
   useUpdateSplashScreenMutation,
-  useUpdateMobileSplashScreenMutation,
   useGetFAQsQuery,
   useCreateFAQMutation,
   useUpdateFAQMutation,

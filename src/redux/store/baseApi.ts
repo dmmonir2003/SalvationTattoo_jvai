@@ -3,8 +3,8 @@ import { RootState } from ".";
 
 //TODO: Move all report-related types here and export them for
 // Base URL for API - configurable via environment variable
-const BASE_URL = "https://stm9wlhp-8000.inc1.devtunnels.ms/api";
-// const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "/api";
+// const BASE_URL = "https://stm9wlhp-8000.inc1.devtunnels.ms/api";
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "/api";
 
 // Create the base API with RTK Query
 export const baseApi = createApi({
@@ -51,7 +51,10 @@ export const baseApi = createApi({
         }
       }
 
-      headers.set("Content-Type", "application/json");
+      if (!headers.has("Content-Type")) {
+        headers.set("Content-Type", "application/json");
+      }
+      // headers.set("Content-Type", "application/json");
       return headers;
     },
   }),
@@ -69,6 +72,8 @@ export const baseApi = createApi({
     "AdminDashboard",
     "BranchManagerTasks",
     "Attendance",
+    "Notifications",
+    "AdminQrSession",
   ],
   endpoints: () => ({}),
 });

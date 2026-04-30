@@ -78,7 +78,7 @@
 import React, { useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
 import { Loader2, Inbox } from "lucide-react";
-import { useGetQrHistoryQuery } from "@/redux/services/qrsSection/qrBranchManagerApi";
+import { useGetQrHistoryQuery } from "@/redux/services/admin/qrsSection/qrBranchManagerApi";
 
 const QRHistory = () => {
   const [page, setPage] = useState(1);

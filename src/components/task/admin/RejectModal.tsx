@@ -5,9 +5,15 @@ interface RejectModalProps {
   isOpen: boolean;
   onClose: () => void;
   onConfirm?: (reason: string) => void;
+  isLoading?: boolean;
 }
 
-const RejectModal = ({ isOpen, onClose, onConfirm }: RejectModalProps) => {
+const RejectModal = ({
+  isOpen,
+  onClose,
+  onConfirm,
+  isLoading = false,
+}: RejectModalProps) => {
   const [reason, setReason] = useState("");
 
   if (!isOpen) return null;
@@ -50,7 +56,8 @@ const RejectModal = ({ isOpen, onClose, onConfirm }: RejectModalProps) => {
             value={reason}
             onChange={(e) => setReason(e.target.value)}
             placeholder="Explain why the task was rejected..."
-            className="w-full bg-[#141414] border border-[#262626] rounded-2xl p-4 text-sm text-white focus:outline-none focus:border-red-500/50 min-h-35 resize-none transition-colors placeholder:text-gray-700"
+            disabled={isLoading}
+            className="w-full bg-[#141414] border border-[#262626] rounded-2xl p-4 text-sm text-white focus:outline-none focus:border-red-500/50 min-h-35 resize-none transition-colors placeholder:text-gray-700 disabled:opacity-50"
           />
         </div>
 
@@ -58,16 +65,17 @@ const RejectModal = ({ isOpen, onClose, onConfirm }: RejectModalProps) => {
         <div className="flex gap-4 w-full">
           <button
             onClick={onClose}
-            className="flex-1 py-4 bg-[#141414] text-gray-400 rounded-2xl font-bold hover:bg-[#1A1A1A] transition-colors border border-[#262626]"
+            disabled={isLoading}
+            className="flex-1 py-4 bg-[#141414] text-gray-400 rounded-2xl font-bold hover:bg-[#1A1A1A] transition-colors border border-[#262626] disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Cancel
           </button>
           <button
             onClick={handleSend}
-            disabled={!reason.trim()}
+            disabled={!reason.trim() || isLoading}
             className="flex-1 py-4 bg-red-500 text-white rounded-2xl font-bold hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-red-500/20"
           >
-            Send Feedback
+            {isLoading ? "Sending..." : "Send Feedback"}
           </button>
         </div>
       </div>

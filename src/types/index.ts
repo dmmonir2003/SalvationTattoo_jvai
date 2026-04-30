@@ -3,7 +3,7 @@ export type UserRole =
   | "super_admin"
   | "district_manager"
   | "branch_manager"
-  | "qr_attendee";
+  | "clock_in_user";
 
 export interface User {
   id: number;

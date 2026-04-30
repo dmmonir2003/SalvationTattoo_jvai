@@ -10,7 +10,7 @@ import { Loader2 } from "lucide-react";
 import ManagerView from "@/components/task/manager/ManagerView";
 import BranchManagerView from "@/components/task/branchManager/BranchManagerView";
 import { useAppSelector } from "@/redux/store";
-import TaskManagementSystem from "@/components/demoTask/TaskManagementSystem";
+import TaskManagementSystem from "@/components/task/admin/TaskManagementSystem";
 
 export default function TaskPage() {
   const role = useAppSelector(selectUserRole);

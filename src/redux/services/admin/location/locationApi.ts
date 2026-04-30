@@ -46,7 +46,7 @@ export const locationApi = baseApi.injectEndpoints({
         method: "POST",
         body: newLocation,
       }),
-      invalidatesTags: ["Locations"],
+      invalidatesTags: ["Locations", "AdminQrSession"],
     }),
 
     // PATCH: Edit location (status or other details)

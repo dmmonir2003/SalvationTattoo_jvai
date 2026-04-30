@@ -99,7 +99,7 @@ export const ROLE_PERMISSIONS: RolePermissions[] = [
     ],
   },
   {
-    role: "qr_attendee",
+    role: "clock_in_user",
     permissions: [
       // QR Attendees can only view QR codes for attendance
       "qr-section",

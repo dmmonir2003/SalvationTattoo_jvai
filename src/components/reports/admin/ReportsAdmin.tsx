@@ -309,8 +309,8 @@ import {
 } from "recharts";
 import { ReportFilters } from "./ReportFilters";
 import { PerformanceComparison } from "./PerformanceComparison";
-import { AttendanceLog } from "./AttendanceLog";
-import { useGetAdminReportsQuery } from "@/redux/services/report/adminReportApi";
+
+import { useGetAdminReportsQuery } from "@/redux/services/admin/report/adminReportApi";
 
 export default function ReportsAdmin() {
   const [period, setPeriod] = useState<

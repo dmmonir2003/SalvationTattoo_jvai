@@ -1,4 +1,5 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+// /* eslint-disable react-hooks/exhaustive-deps */
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
@@ -7,8 +8,8 @@ import { X, ChevronDown, RotateCcw, Camera } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAppSelector } from "@/redux/store";
 import { selectCurrentToken } from "@/redux/features/auth/authSlice";
-import { useGetLocationsQuery } from "@/redux/services/location/locationApi";
-import { useGetEmployeesForDropdownQuery } from "@/redux/services/tasks/taskApi";
+import { useGetLocationsQuery } from "@/redux/services/admin/location/locationApi";
+import { useGetEmployeesForDropdownQuery } from "@/redux/services/admin/tasks/taskApi";
 
 interface TaskActionModalProps {
   isOpen: boolean;
@@ -34,68 +35,62 @@ export const TaskActionModal = ({
   const { data: locationsResponse } = useGetLocationsQuery(undefined, {
     skip: !token,
   });
+
   const activeLocations =
     locationsResponse?.locations?.filter((loc) => loc.status === "active") ||
     [];
 
-  console.log("Active Locations Loaded:", activeLocations);
-
   const [formData, setFormData] = useState({
-    title: initialData?.taskName || "",
-    description: initialData?.description || "",
-    location: initialData?.location || "", // Store location name for display
-    locationId: 0, // Store location ID for API calls
-    assignTo: initialData?.assignedTo || "", // Employee name for display
-    assignToId: 0, // Employee ID for backend
-    dueDate: initialData?.dueDate || "",
-    isRecurring: initialData?.isRecurring || false,
-    // Add frequency here
-    frequency: initialData?.frequency || "today",
-    requirePhoto: initialData?.requirePhoto || false,
+    title: "",
+    description: "",
+    location: "",
+    locationId: 0,
+    assignTo: "",
+    assignToId: 0,
+    dueDate: "",
+    isRecurring: false,
+    frequency: "today",
+    requirePhoto: false,
   });
+
+  // --- CRITICAL FIX: Sync initialData to local state when modal opens ---
+  useEffect(() => {
+    if (isOpen) {
+      setFormData({
+        title: initialData?.taskName || "",
+        description: initialData?.description || "",
+        location: initialData?.location || "",
+        locationId: initialData?.locationId || 0,
+        assignTo: initialData?.assignedTo || "",
+        assignToId: initialData?.assignedToId || 0,
+        dueDate: initialData?.dueDate || "",
+        isRecurring: initialData?.isRecurring || false,
+        frequency: initialData?.frequency || "today",
+        requirePhoto: initialData?.requirePhoto || false,
+      });
+    }
+  }, [initialData, isOpen]);
 
   // Fetch employees for selected location using locationId
-  const {
-    data: employeesResponse,
-    isLoading: isLoadingEmployees,
-    error: employeeError,
-  } = useGetEmployeesForDropdownQuery(formData.locationId, {
-    skip: !formData.locationId, // Skip query if no location ID selected
-  });
+  const { data: employeesResponse, isLoading: isLoadingEmployees } =
+    useGetEmployeesForDropdownQuery(formData.locationId, {
+      skip: !formData.locationId || !isOpen,
+    });
 
   const employees = employeesResponse?.employees || [];
-
-  // Debug logging
-  useEffect(() => {
-    console.log("Form Data:", {
-      location: formData.location,
-      locationId: formData.locationId,
-      activeLocationsCount: activeLocations.length,
-    });
-    console.log("Employees Response:", employeesResponse);
-    console.log("Employee Error:", employeeError);
-    console.log("Loading Employees:", isLoadingEmployees);
-  }, [
-    formData.locationId,
-    employeesResponse,
-    employeeError,
-    isLoadingEmployees,
-    activeLocations.length,
-  ]);
 
   if (!isOpen) return null;
 
   const handleSave = () => {
-    // Validate required fields
     if (!formData.title.trim()) {
       alert("Task title is required");
       return;
     }
-    if (!formData.location) {
+    if (!formData.locationId) {
       alert("Location is required");
       return;
     }
-    if (!formData.assignTo) {
+    if (!formData.assignToId) {
       alert("Assign to is required");
       return;
     }
@@ -167,11 +162,11 @@ export const TaskActionModal = ({
               }
               placeholder="Describe what needs to be done..."
               disabled={isLoading}
-              className="w-full bg-black border border-[#262626] rounded-xl p-3.5 text-sm text-white min-h-[100px] resize-none outline-none focus:border-[#404040] disabled:opacity-50"
+              className="w-full bg-black border border-[#262626] rounded-xl p-3.5 text-sm text-white min-h-25 resize-none outline-none focus:border-[#404040] disabled:opacity-50"
             />
           </div>
 
-          {/* Location Select - Real Locations from API */}
+          {/* Location Select */}
           <div className="space-y-1.5 relative">
             <label className="text-[10px] uppercase font-bold text-gray-500 tracking-widest ml-1">
               Select Store *
@@ -180,20 +175,16 @@ export const TaskActionModal = ({
               <select
                 value={formData.location}
                 onChange={(e) => {
-                  const selectedLocationName = e.target.value;
-                  const selectedLocation = activeLocations.find(
-                    (loc) => loc.name === selectedLocationName,
+                  const selectedName = e.target.value;
+                  const selectedLoc = activeLocations.find(
+                    (loc) => loc.name === selectedName,
                   );
-                  console.log("Location Changed:", {
-                    selectedLocationName,
-                    selectedLocation,
-                    allLocations: activeLocations,
-                  });
                   setFormData({
                     ...formData,
-                    location: selectedLocationName,
-                    locationId: selectedLocation?.id || 0,
-                    assignTo: "", // Reset assignee when location changes
+                    location: selectedName,
+                    locationId: selectedLoc?.id || 0,
+                    assignTo: "",
+                    assignToId: 0,
                   });
                 }}
                 disabled={isLoading}
@@ -213,24 +204,24 @@ export const TaskActionModal = ({
             </div>
           </div>
 
-          {/* Two Column Row: Date & Assignee */}
           <div className="grid grid-cols-2 gap-4">
+            {/* Due Date */}
             <div className="space-y-1.5">
               <label className="text-[10px] uppercase font-bold text-gray-500 tracking-widest ml-1">
                 Due Date *
               </label>
-              <div className="relative">
-                <input
-                  type="date"
-                  value={formData.dueDate}
-                  onChange={(e) =>
-                    setFormData({ ...formData, dueDate: e.target.value })
-                  }
-                  disabled={isLoading}
-                  className="w-full bg-black border border-[#262626] rounded-xl p-3.5 text-sm text-white outline-none focus:border-[#404040] [color-scheme:dark] disabled:opacity-50"
-                />
-              </div>
+              <input
+                type="date"
+                value={formData.dueDate}
+                onChange={(e) =>
+                  setFormData({ ...formData, dueDate: e.target.value })
+                }
+                disabled={isLoading}
+                className="w-full bg-black border border-[#262626] rounded-xl p-3.5 text-sm text-white outline-none focus:border-[#404040] scheme-dark disabled:opacity-50"
+              />
             </div>
+
+            {/* Assign To */}
             <div className="space-y-1.5">
               <label className="text-[10px] uppercase font-bold text-gray-500 tracking-widest ml-1">
                 Assign To *
@@ -239,33 +230,31 @@ export const TaskActionModal = ({
                 <select
                   value={formData.assignTo}
                   onChange={(e) => {
-                    const selectedEmployeeName = e.target.value;
-                    const selectedEmployee = employees.find(
+                    const selectedName = e.target.value;
+                    const selectedEmp = employees.find(
                       (emp) =>
-                        `${emp.first_name} ${emp.last_name}` ===
-                        selectedEmployeeName,
+                        `${emp.first_name} ${emp.last_name}` === selectedName,
                     );
                     setFormData({
                       ...formData,
-                      assignTo: selectedEmployeeName,
-                      assignToId: selectedEmployee?.id || 0,
+                      assignTo: selectedName,
+                      assignToId: selectedEmp?.id || 0,
                     });
                   }}
-                  disabled={isLoading || !formData.location}
-                  className="w-full bg-black border border-[#262626] rounded-xl p-3.5 text-sm text-white appearance-none outline-none cursor-pointer pr-10 disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={
+                    isLoading || !formData.locationId || isLoadingEmployees
+                  }
+                  className="w-full bg-black border border-[#262626] rounded-xl p-3.5 text-sm text-white appearance-none outline-none cursor-pointer pr-10 disabled:opacity-50"
                 >
                   <option value="">
-                    {formData.location
-                      ? "Select employee..."
-                      : "Select location first"}
+                    {isLoadingEmployees ? "Loading..." : "Select employee..."}
                   </option>
                   {employees.map((emp) => (
                     <option
                       key={emp.id}
                       value={`${emp.first_name} ${emp.last_name}`}
                     >
-                      {emp.first_name} {emp.last_name} (
-                      {emp.role_display || emp.role})
+                      {emp.first_name} {emp.last_name}
                     </option>
                   ))}
                 </select>
@@ -280,49 +269,11 @@ export const TaskActionModal = ({
           {/* Toggle Options */}
           <div className="space-y-3 pt-2">
             {/* Recurring Task */}
-            {/* <div
-              className={cn(
-                "flex items-center justify-between p-4 rounded-2xl border transition-all cursor-pointer",
-                formData.isRecurring
-                  ? "bg-white/[0.03] border-white/10"
-                  : "bg-black border-[#262626]",
-              )}
-              onClick={() =>
-                !isLoading &&
-                setFormData({ ...formData, isRecurring: !formData.isRecurring })
-              }
-            >
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-[#1A1A1A] flex items-center justify-center border border-white/5">
-                  <RotateCcw size={18} className="text-gray-400" />
-                </div>
-                <div>
-                  <p className="text-sm font-bold text-white">Recurring Task</p>
-                  <p className="text-xs text-gray-500">Repeat automatically</p>
-                </div>
-              </div>
-              <div
-                className={cn(
-                  "w-12 h-6 rounded-full relative transition-colors duration-300",
-                  formData.isRecurring ? "bg-white" : "bg-[#262626]",
-                )}
-              >
-                <div
-                  className={cn(
-                    "absolute top-1 w-4 h-4 rounded-full transition-all duration-300 shadow-sm",
-                    formData.isRecurring
-                      ? "left-7 bg-black"
-                      : "left-1 bg-gray-500",
-                  )}
-                />
-              </div>
-            </div> */}
-            {/* Recurring Task Toggle */}
             <div
               className={cn(
                 "flex items-center justify-between p-4 rounded-2xl border transition-all cursor-pointer",
                 formData.isRecurring
-                  ? "bg-white/[0.03] border-white/10"
+                  ? "bg-white/3 border-white/10"
                   : "bg-black border-[#262626]",
               )}
               onClick={() =>
@@ -341,8 +292,8 @@ export const TaskActionModal = ({
               </div>
               <div
                 className={cn(
-                  "w-12 h-6 rounded-full relative transition-colors duration-300",
-                  formData.isRecurring ? "bg-emerald-500" : "bg-[#262626]", // Using emerald to match your toggle image
+                  "w-12 h-6 rounded-full relative transition-all duration-300",
+                  formData.isRecurring ? "bg-emerald-500" : "bg-[#262626]",
                 )}
               >
                 <div
@@ -356,7 +307,7 @@ export const TaskActionModal = ({
               </div>
             </div>
 
-            {/* Frequency Selection - Only shows if isRecurring is true */}
+            {/* Frequency Selection */}
             {formData.isRecurring && (
               <div className="grid grid-cols-3 gap-2 mt-3 animate-in fade-in slide-in-from-top-2 duration-300">
                 {["today", "weekly", "monthly"].map((freq) => (
@@ -369,8 +320,8 @@ export const TaskActionModal = ({
                     className={cn(
                       "py-3 rounded-xl text-xs font-bold capitalize transition-all border",
                       formData.frequency === freq
-                        ? "bg-[#A39171] text-white border-[#A39171]" // Brownish/Gold color from your image
-                        : "bg-transparent text-gray-500 border-[#262626] hover:border-[#404040]",
+                        ? "bg-[#A39171] text-white border-[#A39171]"
+                        : "bg-transparent text-gray-500 border-[#262626]",
                     )}
                   >
                     {freq}
@@ -384,7 +335,7 @@ export const TaskActionModal = ({
               className={cn(
                 "flex items-center justify-between p-4 rounded-2xl border transition-all cursor-pointer",
                 formData.requirePhoto
-                  ? "bg-white/[0.03] border-white/10"
+                  ? "bg-white/3 border-white/10"
                   : "bg-black border-[#262626]",
               )}
               onClick={() =>
@@ -401,16 +352,14 @@ export const TaskActionModal = ({
                 </div>
                 <div>
                   <p className="text-sm font-bold text-white">
-                    Require Photo Verification
+                    Photo Verification
                   </p>
-                  <p className="text-xs text-gray-500">
-                    Employee must submit a photo to complete
-                  </p>
+                  <p className="text-xs text-gray-500">Must submit photo</p>
                 </div>
               </div>
               <div
                 className={cn(
-                  "w-12 h-6 rounded-full relative transition-colors duration-300",
+                  "w-12 h-6 rounded-full relative transition-all duration-300",
                   formData.requirePhoto ? "bg-white" : "bg-[#262626]",
                 )}
               >
@@ -432,14 +381,14 @@ export const TaskActionModal = ({
           <button
             onClick={onClose}
             disabled={isLoading}
-            className="flex-1 py-4 border border-[#262626] text-white rounded-2xl font-bold hover:bg-[#1A1A1A] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 py-4 border border-[#262626] text-white rounded-2xl font-bold hover:bg-[#1A1A1A] transition-all disabled:opacity-50"
           >
             Cancel
           </button>
           <button
             onClick={handleSave}
             disabled={isLoading}
-            className="flex-1 py-4 bg-white text-black rounded-2xl font-bold hover:bg-gray-200 shadow-lg active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 py-4 bg-white text-black rounded-2xl font-bold hover:bg-gray-200 shadow-lg active:scale-95 transition-all disabled:opacity-50"
           >
             {isLoading
               ? "Processing..."

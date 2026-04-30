@@ -382,7 +382,6 @@ import { useAppSelector } from "@/redux/store";
 import DashboardAdmin from "@/components/dashboard/admin/AdminDashboard";
 import DashboardManager from "@/components/dashboard/manager/DashboardManager";
 import DashboardBranchManager from "@/components/dashboard/branchManager/DashboardBranchManager";
-import TaskDashboard from "@/components/demoTask/TaskManagementSystem";
 
 export default function DashboardPage() {
   const role = useAppSelector(selectUserRole);
@@ -391,12 +390,12 @@ export default function DashboardPage() {
 
   useEffect(() => {
     // Redirect QR Attendees to their dedicated page
-    if (role === "qr_attendee") {
+    if (role === "clock_in_user") {
       router.replace("/qr-attendee");
     }
   }, [role, router]);
 
-  if (!role || role === "qr_attendee") {
+  if (!role || role === "clock_in_user") {
     return (
       <div className="flex h-[70vh] items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-primary" />

@@ -41,17 +41,17 @@
 
 import Image from "next/image";
 import bg_image from "../../../public/auth/auth_image.png";
-import { useGetSplashScreenQuery } from "@/redux/services/appContent/appContentApi";
+import { useGetSplashScreenQuery } from "@/redux/services/admin/appContent/appContentApi";
 
 export default function AuthLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { data } = useGetSplashScreenQuery();
+  const { data } = useGetSplashScreenQuery("web");
 
   // Logic: Use API image if available, otherwise fallback to local bg_image
-  const backgroundUrl = data?.image_url || bg_image;
+  const backgroundUrl = data?.web_image_url || bg_image;
 
   return (
     <div className="min-h-screen flex items-center justify-center relative overflow-hidden">

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Award, Target, Clock, Users, Calendar, Loader2 } from "lucide-react";
-import { useGetPerformanceRankingsQuery } from "@/redux/services/performance/performanceApi";
+import { useGetPerformanceRankingsQuery } from "@/redux/services/admin/performance/performanceApi";
 import { TopPerformer } from "./TopPerformer";
 import { EmployeeRankings } from "./EmployeeRankings";
 
@@ -51,16 +51,16 @@ export default function PerformanceAdmin() {
 
   const topPerformerData = data
     ? {
-        name: data.top_performer.name,
-        initials: data.top_performer.name
+        name: data.top_performer?.name,
+        initials: data.top_performer?.name
           .split(" ")
           .map((n) => n[0])
           .join("")
           .toUpperCase(),
-        score: data.top_performer.performance_score,
-        tasks: data.top_performer.tasks_completed,
-        attendance: data.top_performer.attendance ?? 0,
-        completion: data.top_performer.completion_rate,
+        score: data.top_performer?.performance_score,
+        tasks: data.top_performer?.tasks_completed,
+        attendance: data.top_performer?.attendance ?? 0,
+        completion: data.top_performer?.completion_rate,
       }
     : null;
 

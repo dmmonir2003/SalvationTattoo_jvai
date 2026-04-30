@@ -307,9 +307,9 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
-  useCreateInstructionMutation,
   CreateInstructionRequest,
-} from "@/redux/services/instructions/instructionApi";
+  useCreateInstructionMutation,
+} from "@/redux/services/admin/instructions/instructionApi";
 
 export const AddInstructionModal = ({
   isOpen,
@@ -450,10 +450,7 @@ export const AddInstructionModal = ({
         <div className="p-8 space-y-6 overflow-y-auto custom-scrollbar">
           {(submitError || error) && (
             <div className="p-4 rounded-xl border border-red-500/30 bg-red-500/10 flex gap-3">
-              <AlertCircle
-                size={18}
-                className="text-red-500 flex-shrink-0 mt-0.5"
-              />
+              <AlertCircle size={18} className="text-red-500 shrink-0 mt-0.5" />
               <div>
                 <p className="text-sm font-medium text-red-400">
                   {submitError || "Failed to create instruction"}

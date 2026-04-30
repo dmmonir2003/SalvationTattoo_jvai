@@ -3,7 +3,7 @@
 // import React, { useState, useRef } from "react";
 // import Image from "next/image"; // Import Next.js Image component
 // import { Upload, AlertCircle } from "lucide-react";
-// import { useUpdateSplashScreenMutation } from "@/redux/services/appContent/appContentApi";
+// import { useUpdateSplashScreenMutation } from "@/redux/services/admin/appContent/appContentApi";
 
 // export const SplashScreenManager = ({
 //   currentImage,
@@ -201,22 +201,20 @@
 //     </div>
 //   );
 // };
+
 "use client";
 
 import React, { useState, useRef } from "react";
 import Image from "next/image";
 import { Upload, Loader2, CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import {
-  useUpdateMobileSplashScreenMutation,
-  useUpdateSplashScreenMutation,
-} from "@/redux/services/appContent/appContentApi";
+import { useUpdateSplashScreenMutation } from "@/redux/services/admin/appContent/appContentApi";
 
 interface SectionProps {
   title: string;
   desc: string;
   current: string | undefined;
-  type: "website" | "mobile";
+  type: "web" | "app"; // Aligned with API types
   onRefresh?: () => void;
 }
 
@@ -232,13 +230,8 @@ const UploadSection = ({
   const [success, setSuccess] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Individual mutations
-  const [updateWeb, { isLoading: isWebSaving }] =
-    useUpdateSplashScreenMutation();
-  const [updateMobile, { isLoading: isMobileSaving }] =
-    useUpdateMobileSplashScreenMutation();
-
-  const isLoading = type === "website" ? isWebSaving : isMobileSaving;
+  // Single mutation used for both, passing 'type' in FormData
+  const [updateSplash, { isLoading }] = useUpdateSplashScreenMutation();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.files?.[0];
@@ -259,10 +252,10 @@ const UploadSection = ({
     if (!file) return;
     try {
       const formData = new FormData();
-      formData.append("image", file); // Key expected by backend
+      formData.append("image", file);
+      formData.append("type", type); // KEY: Send "web" or "app" to backend
 
-      if (type === "website") await updateWeb(formData).unwrap();
-      else await updateMobile(formData).unwrap();
+      await updateSplash(formData).unwrap();
 
       setSuccess(true);
       setTimeout(() => {
@@ -271,7 +264,7 @@ const UploadSection = ({
         if (onRefresh) onRefresh();
       }, 2000);
     } catch (err) {
-      console.error(err);
+      console.error("Upload failed:", err);
     }
   };
 
@@ -300,7 +293,7 @@ const UploadSection = ({
         className="hidden"
       />
 
-      <div className="relative w-full aspect-16/16 rounded-[24px] overflow-hidden border border-[#262626] bg-[#0A0A0A] shadow-2xl flex items-center justify-center">
+      <div className="relative w-full aspect-square rounded-[24px] overflow-hidden border border-[#262626] bg-[#0A0A0A] shadow-2xl flex items-center justify-center">
         {preview || current ? (
           <Image
             src={preview || current || ""}
@@ -332,7 +325,6 @@ const UploadSection = ({
         )}
       </div>
 
-      {/* Individual Buttons */}
       <div
         className={cn(
           "flex gap-3 transition-all duration-300",
@@ -373,18 +365,17 @@ export const SplashScreenManager = ({
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-12 animate-in fade-in duration-700">
       <UploadSection
-        title="Splash Screen Image (For Website)"
-        desc="Upload a splash screen image that will appear when the Website launches. Recommended portrait format."
+        title="Splash Screen (Website)"
+        desc="Upload a splash screen image for the web version."
         current={currentWebsiteImage}
-        type="website"
+        type="web"
         onRefresh={onRefresh}
       />
-
       <UploadSection
-        title="Splash Screen Image (For Mobile App)"
-        desc="Upload a splash screen image that will appear when the App launches. Recommended portrait format."
+        title="Splash Screen (Mobile App)"
+        desc="Upload a splash screen image for the mobile app version."
         current={currentMobileImage}
-        type="mobile"
+        type="app"
         onRefresh={onRefresh}
       />
     </div>
